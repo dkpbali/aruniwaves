@@ -1648,7 +1648,13 @@ function renderBeritaFeed(list) {
     if (!groupMap[g.id]) groupMap[g.id] = { ...g, news: [] };
     groupMap[g.id].news.push(b);
   });
-  const activeGroups = recGroups.filter(g => groupMap[g.id]);
+  const activeGroups = recGroups
+    .filter(g => groupMap[g.id])
+    .sort((a, b) => {
+      const da = parseTanggal(groupMap[a.id].news[0].tgl_publikasi || groupMap[a.id].news[0].tgl_analisis) || new Date(0);
+      const db = parseTanggal(groupMap[b.id].news[0].tgl_publikasi || groupMap[b.id].news[0].tgl_analisis) || new Date(0);
+      return db - da;
+    });
 
   // Build HTML — grouped table style
   let globalIdx = 0;
