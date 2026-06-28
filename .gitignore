@@ -1,0 +1,23 @@
+# Credentials & Secrets
+*.json
+!manifest.json
+!package.json
+!composer.json
+!tsconfig.json
+!jsconfig.json
+*.key
+*.pem
+.env*
+
+# Internal Reference Documents (not for public repo)
+references/
+
+# Python Bytecode Cache
+__pycache__/
+*.pyc
+
+# Temporary NetCDF downloads (Copernicus satellite data)
+*.nc
+
+# Office Temporary Files
+~$*
