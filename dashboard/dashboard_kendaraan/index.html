@@ -990,9 +990,9 @@
       <!-- Left Column: Bidang Accordions -->
       <div class="fleet-list-panel">
         <div id="vehicles-list-container">
-          <div class="loading-state">
-            <div class="spin"></div>
-            <span>Memuat data armada...</span>
+          <div style="padding:32px 16px; text-align:center;">
+            <div style="font-size:26px; margin-bottom:8px;">🔄</div>
+            <div style="font-size:11px; color:var(--muted); font-family:var(--mono);">Memuat data armada dari server...</div>
           </div>
         </div>
       </div>
@@ -1240,159 +1240,62 @@ function formatTanggal(str) {
 
 async function loadDashboardData() {
   try {
-    if (window.location.protocol === "file:" || !CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL.includes("GANTI_DENGAN")) {
-      // Mock data fallback
-      allBbm = [
-        {
-          id_bbm: "BBM-00001",
-          tgl_submit: "19/06/2026 09:12",
-          nama_penerima: "PANDE GDE KRISHNADANA",
-          id_pegawai: "P0002",
-          bidang: "SEKRETARIAT - SUNPROG",
-          jenis_voucher: "5 liter",
-          jumlah: 2,
-          jumlah_digunakan: 2,
-          jumlah_dikembalikan: 0,
-          status: "DISETUJUI",
-          lokasi_tujuan: "Dinas Kelautan Cabang Buleleng",
-          kecamatan: "Buleleng",
-          tgl_kegiatan: "2026-06-20",
-          deskripsi_kegiatan: "Koordinasi program kerja triwulan II kelautan cabang buleleng.",
-          nopol_kendaraan: "DK 1111 AA",
-          foto_geotag: "",
-          dokumen_laporan: "",
-          surat: "",
-          nota_bensin: ""
-        },
-        {
-          id_bbm: "BBM-00002",
-          tgl_submit: "18/06/2026 14:30",
-          nama_penerima: "DEWA YOJANA",
-          id_pegawai: "P0005",
-          bidang: "BIDANG P2HP",
-          jenis_voucher: "10 liter",
-          jumlah: 1,
-          jumlah_digunakan: 0,
-          jumlah_dikembalikan: 0,
-          status: "DISETUJUI",
-          lokasi_tujuan: "Pasar Ikan Kedonganan Badung",
-          kecamatan: "Kuta Selatan",
-          tgl_kegiatan: "2026-06-19",
-          deskripsi_kegiatan: "Monitoring mutu hasil perikanan tangkap dan kestabilan harga pasar.",
-          nopol_kendaraan: "DK 2222 BB",
-          foto_geotag: "",
-          dokumen_laporan: "",
-          surat: "",
-          nota_bensin: ""
-        },
-        {
-          id_bbm: "BBM-00003",
-          tgl_submit: "18/06/2026 08:45",
-          nama_penerima: "WAYAN SAPUTRA",
-          id_pegawai: "P0008",
-          bidang: "BIDANG PERIKANAN",
-          jenis_voucher: "3 liter",
-          jumlah: 4,
-          jumlah_digunakan: 0,
-          jumlah_dikembalikan: 0,
-          status: "PENDING",
-          lokasi_tujuan: "Kelompok Nelayan Serangan Denpasar",
-          kecamatan: "Denpasar Selatan",
-          tgl_kegiatan: "2026-06-20",
-          deskripsi_kegiatan: "Penyuluhan budidaya perikanan air laut terpadu.",
-          nopol_kendaraan: "DK 3333 CC",
-          foto_geotag: "",
-          dokumen_laporan: "",
-          surat: "",
-          nota_bensin: ""
-        },
-        {
-          id_bbm: "BBM-00004",
-          tgl_submit: "17/06/2026 11:20",
-          nama_penerima: "GEDE RYAN HADINATA",
-          id_pegawai: "P0012",
-          bidang: "BIDANG KELAUTAN",
-          jenis_voucher: "5 liter",
-          jumlah: 3,
-          jumlah_digunakan: 2,
-          jumlah_dikembalikan: 1,
-          status: "DISETUJUI",
-          lokasi_tujuan: "Pantai Sanur Denpasar",
-          kecamatan: "Denpasar Timur",
-          tgl_kegiatan: "2026-06-18",
-          deskripsi_kegiatan: "Sosialisasi konservasi terumbu karang daerah pesisir sanur.",
-          nopol_kendaraan: "DK 4444 DD",
-          foto_geotag: "",
-          dokumen_laporan: "",
-          surat: "",
-          nota_bensin: ""
-        }
-      ];
+    // Always fetch from Apps Script (no mock fallback in production)
+    const [resBbm, resVeh] = await Promise.all([
+      fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm`).then(r => r.json()),
+      fetch(`${CFG.APPS_SCRIPT_URL}?action=getVehicles`).then(r => r.json())
+    ]);
 
-      allVehicles = [
-        {
-          ID_KENDARAAN: "KND-001",
-          MERK: "Avanza G M/T",
-          NO_POLISI: "DK 1111 AA",
-          JENIS: "Roda 4",
-          TAHUN: "2021",
-          WARNA: "Silver Metallic",
-          FOTO_DEPAN: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=400",
-          FOTO_BELAKANG: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=400",
-          TGL_PAJAK: "2026-07-22",
-          TGL_STNK: "2029-07-22",
-          TGL_SERVICE_TERAKHIR: "2026-05-15",
-          INTERVAL_SERVICE: 6,
-          SUPIR: "Wayan Sukra",
-          BIDANG: "SEKRETARIAT"
-        },
-        {
-          ID_KENDARAAN: "KND-002",
-          MERK: "Innova Reborn",
-          NO_POLISI: "DK 2222 BB",
-          JENIS: "Roda 4",
-          TAHUN: "2019",
-          WARNA: "Hitam",
-          FOTO_DEPAN: "",
-          FOTO_BELAKANG: "",
-          TGL_PAJAK: "2026-03-12",
-          TGL_STNK: "2028-03-12",
-          TGL_SERVICE_TERAKHIR: "2025-08-10",
-          INTERVAL_SERVICE: 6,
-          SUPIR: "Kadek Mertayasa",
-          BIDANG: "SEKRETARIAT"
-        },
-        {
-          ID_KENDARAAN: "KND-003",
-          MERK: "Honda PCX 160",
-          NO_POLISI: "DK 3333 CC",
-          JENIS: "Roda 2",
-          TAHUN: "2022",
-          WARNA: "Matte Blue",
-          FOTO_DEPAN: "",
-          FOTO_BELAKANG: "",
-          TGL_PAJAK: "2026-06-30",
-          TGL_STNK: "2027-06-30",
-          TGL_SERVICE_TERAKHIR: "2026-04-20",
-          INTERVAL_SERVICE: 3,
-          SUPIR: "Wayan Saputra",
-          BIDANG: "BIDANG PERIKANAN"
-        }
-      ];
+    if (resBbm.success && Array.isArray(resBbm.data)) {
+      allBbm = resBbm.data;
+      console.log("[DEBUG] BBM data loaded:", allBbm.length, "rows");
+      if (allBbm.length > 0) {
+        console.log("[DEBUG] BBM sample row:", JSON.stringify(allBbm[0]));
+      }
     } else {
-      const resBbm = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm`);
-      const jsonBbm = await resBbm.json();
-      if (jsonBbm.success) allBbm = jsonBbm.data || [];
-
-      const resVeh = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getVehicles`);
-      const jsonVeh = await resVeh.json();
-      if (jsonVeh.success) allVehicles = jsonVeh.data || [];
+      console.warn("getBbm failed:", resBbm.message || "unknown error");
+      console.log("[DEBUG] getBbm response:", JSON.stringify(resBbm));
     }
+
+    if (resVeh.success && Array.isArray(resVeh.data)) {
+      // Normalize fields: Apps Script returns UPPERCASE keys, map to expected casing
+      allVehicles = resVeh.data.map(v => ({
+        ID_KENDARAAN:        v.ID_KENDARAAN || v.id_kendaraan || "",
+        MERK:                v.MERK        || v.merk         || "",
+        NO_POLISI:           v.NO_POLISI   || v.no_polisi    || "",
+        JENIS:               v.JENIS       || v.jenis        || "",
+        TAHUN:               v.TAHUN       || v.tahun        || "",
+        WARNA:               v.WARNA       || v.warna        || "",
+        FOTO_DEPAN:          v.FOTO_DEPAN  || v.foto_depan   || "",
+        FOTO_BELAKANG:       v.FOTO_BELAKANG || v.foto_belakang || "",
+        TGL_PAJAK:           v.TGL_PAJAK   || v.tgl_pajak    || "",
+        TGL_STNK:            v.TGL_STNK    || v.tgl_stnk     || "",
+        TGL_SERVICE_TERAKHIR: v.TGL_SERVICE_TERAKHIR || v.tgl_service_terakhir || "",
+        INTERVAL_SERVICE:    v.INTERVAL_SERVICE || v.interval_service || 6,
+        SUPIR:               v.SUPIR       || v.supir        || "",
+        BIDANG:              v.BIDANG      || v.bidang       || "",
+      }));
+      console.log("[DEBUG] Vehicles loaded:", allVehicles.length, "rows");
+      if (allVehicles.length > 0) {
+        console.log("[DEBUG] Vehicle sample:", JSON.stringify(allVehicles[0]));
+      }
+    } else {
+      console.warn("getVehicles failed:", resVeh.message || "unknown error");
+      console.log("[DEBUG] getVehicles response:", JSON.stringify(resVeh));
+    }
+
   } catch (err) {
     console.error("loadDashboardData error:", err);
+    // Show user-facing error
+    const vContainer = document.getElementById("vehicles-list-container");
+    if (vContainer) {
+      vContainer.innerHTML = `<div style="padding:20px; text-align:center; font-size:12px; color:var(--red);">
+        Gagal memuat data armada. Periksa koneksi atau URL Apps Script.<br/>
+        <code style="font-size:10px; color:var(--muted);">${err.message}</code>
+      </div>`;
+    }
   }
 }
-
 // ── TAB SWITCHER ──
 function switchTab(tabName) {
   currentTab = tabName;
@@ -1812,13 +1715,19 @@ function populateYearFilter() {
   if (!selectEl) return;
   const years = new Set();
   allBbm.forEach(b => {
-    const d = parseTanggal(b.tgl_submit || b.tgl_kegiatan);
-    if (d) {
-      years.add(d.getFullYear());
+    // Try tgl_kegiatan first (most reliable), then tgl_submit
+    const dateStr = b.tgl_kegiatan || b.tgl_submit || "";
+    const d = parseTanggal(dateStr);
+    if (d && !isNaN(d.getTime())) {
+      const yr = d.getFullYear();
+      // Sanity check: only accept years between 2020-2035
+      if (yr >= 2020 && yr <= 2035) {
+        years.add(yr);
+      }
     }
   });
   const sortedYears = Array.from(years).sort((a, b) => b - a);
-  selectEl.innerHTML = '<option value="">Semua Tahun</option>' + 
+  selectEl.innerHTML = '<option value="">Semua Tahun</option>' +
     sortedYears.map(yr => `<option value="${yr}">Tahun ${yr}</option>`).join("");
 }
 
