@@ -1886,17 +1886,9 @@ async function submitBbmReport(e) {
     return;
   }
   
-  const isStok = (document.getElementById("rep-stok-adjust-fields").style.display === "flex");
-  if (isStok) {
-    if (!filesData.geotag.base64 || !filesData.surat.base64) {
-      alert('Dokumen Geotag dan Surat Tugas wajib diunggah untuk Laporan Stok Cadangan.');
-      return;
-    }
-  } else {
-    if (!filesData.geotag.base64 || !filesData.surat.base64 || !filesData.laporan.base64 || !filesData.nota.base64) {
-      alert('Untuk laporan jenis normal, semua 4 bukti dukung (Foto Geotag, Surat Tugas, Laporan Kegiatan, dan Nota Bensin) wajib diunggah secara lengkap.');
-      return;
-    }
+  if (!filesData.geotag.base64 || !filesData.surat.base64 || !filesData.laporan.base64 || !filesData.nota.base64) {
+    alert('Semua 4 bukti dukung (Foto Geotag, Surat Tugas, Laporan Kegiatan, dan Nota Bensin) wajib diunggah secara lengkap.');
+    return;
   }
 
   const btn = document.getElementById('btn-submit-report');
