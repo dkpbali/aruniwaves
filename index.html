@@ -2091,9 +2091,8 @@ function renderSelectedDayBookings(dateStr, bookings) {
           <div class="cal-booking-item" style="background: var(--ink2); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); border-radius: 12px; padding: 16px; transition: all 0.2s ease; cursor: default;" onmouseover="this.style.borderColor='var(--border2)'; this.style.boxShadow='0 6px 16px rgba(0, 0, 0, 0.06)';" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.03)';">
             
             <!-- A. Nama Ruangan -->
-            <div style="font-size: 11px; font-weight: 700; color: var(--wave); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">
-              <span>📍</span>
-              <span>${escHtml(formatRuanganName(b.ruangan))}</span>
+            <div style="font-size: 11px; font-weight: 700; color: var(--wave); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+              ${escHtml(formatRuanganName(b.ruangan))}
             </div>
 
             <!-- B. Judul Acara dan Waktu -->
