@@ -2080,35 +2080,39 @@ function renderSelectedDayBookings(dateStr, bookings) {
       ${bookings.map(b => {
         const actionsHtml = `
           <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start;">
-            <button class="act-btn" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); editBookingHome('${b.id}')">Edit</button>
-            <button class="act-btn act-btn-danger" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); cancelBookingHome('${b.id}')">Hapus</button>
+            <button class="act-btn" style="padding: 4px 10px; font-size: 11px;" onclick="editBookingHome('${b.id}')">Edit</button>
+            <button class="act-btn act-btn-danger" style="padding: 4px 10px; font-size: 11px;" onclick="cancelBookingHome('${b.id}')">Hapus</button>
           </div>
         `;
 
         return `
-          <div class="cal-booking-item" style="background: rgba(0, 119, 230, 0.02); border: 1px solid var(--border); border-left: 4px solid var(--wave); border-radius: 12px; padding: 12px 14px; transition: all 0.2s ease; cursor: pointer;" onclick="window.location.href='rapat/index.html?tab=jadwal&date=${dateStr}'" onmouseover="this.style.borderColor='var(--wave)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-              <div style="flex: 1; min-width: 0;">
-                <div class="cal-booking-title" style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">${escHtml(b.acara || b.keterangan || "Acara Rapat")}</div>
-                <div style="font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px;">
-                  📍 Lokasi: ${escHtml(formatRuanganName(b.ruangan))}
-                </div>
-                <div class="cal-booking-meta" style="font-size: 11px; color: var(--muted);">
-                  Pemohon: <span style="font-weight: 600; color: var(--text);">${escHtml(b.pemohon || "-")}</span> (${escHtml(b.bidang || "-")})
-                </div>
-              </div>
-              <div style="text-align: right; flex-shrink: 0;">
-                <span class="cal-booking-time" style="font-size: 11px; font-weight: 700; color: var(--wave); background: rgba(0, 119, 230, 0.08); border-radius: 6px; padding: 4px 8px; font-family: var(--mono); display: inline-block;">
-                  ${escHtml(b.mulai || "--:--")} - ${escHtml(b.selesai || "--:--")}
-                </span>
+          <div class="cal-booking-item" style="background: var(--card); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0, 119, 230, 0.04); border-radius: 12px; padding: 16px; transition: all 0.2s ease; cursor: default;" onmouseover="this.style.borderColor='var(--wave)'; this.style.boxShadow='0 6px 16px rgba(0, 119, 230, 0.08)';" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='0 4px 12px rgba(0, 119, 230, 0.04)';">
+            
+            <!-- A. Nama Ruangan -->
+            <div style="font-size: 11px; font-weight: 700; color: var(--wave); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">
+              <span>📍</span>
+              <span>${escHtml(formatRuanganName(b.ruangan))}</span>
+            </div>
+
+            <!-- B. Judul Acara dan Waktu -->
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px;">
+              <div style="font-size: 15px; font-weight: 700; color: var(--text);">${escHtml(b.acara || b.keterangan || "Acara Rapat")}</div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--wave); background: rgba(0, 119, 230, 0.08); border-radius: 6px; padding: 4px 8px; font-family: var(--mono); white-space: nowrap;">
+                ${escHtml(b.mulai || "--:--")} - ${escHtml(b.selesai || "--:--")}
               </div>
             </div>
-            ${b.kebutuhan ? `
-              <div style="font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 4px;">
-                <span style="color: var(--wave); display: inline-flex; align-items: center;"><svg style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
-                <span style="font-style: italic;">Kebutuhan: ${escHtml(b.kebutuhan)}</span>
-              </div>
-            ` : ""}
+
+            <!-- C. Nama Pemohon -->
+            <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">
+              Pemohon: <span style="font-weight: 600; color: var(--text);">${escHtml(b.pemohon || "-")}</span> (${escHtml(b.bidang || "-")})
+            </div>
+
+            <!-- D. Fasilitas yang diinginkan -->
+            <div style="font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 4px;">
+              <span style="color: var(--wave); display: inline-flex; align-items: center;"><svg style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+              <span>Fasilitas: <span style="font-style: italic; font-weight: 500; color: var(--text);">${escHtml(b.kebutuhan || "-")}</span></span>
+            </div>
+
             ${actionsHtml}
           </div>
         `;
