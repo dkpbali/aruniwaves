@@ -2403,7 +2403,7 @@ async function submitEditBooking(e) {
         <div class="upload-grid">
           <!-- Foto Geotag -->
           <div class="upload-card" id="zone-rep-geotag" onclick="triggerUpload('f-rep-geotag')">
-            <div class="upload-title">Foto Geotag *</div>
+            <div class="upload-title">Foto Geotag <span style="color:var(--red)">*</span></div>
             <div class="upload-limit">Gambar - Maks 5MB</div>
             <input type="file" id="f-rep-geotag" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'geotag', 'image', 5)"/>
             <div class="file-preview" id="prev-rep-geotag">
@@ -2414,7 +2414,7 @@ async function submitEditBooking(e) {
 
           <!-- Surat Tugas -->
           <div class="upload-card" id="zone-rep-surat" onclick="triggerUpload('f-rep-surat')">
-            <div class="upload-title">Surat Tugas *</div>
+            <div class="upload-title">Surat Tugas <span style="color:var(--red)">*</span></div>
             <div class="upload-limit">PDF Saja - Maks 10MB</div>
             <input type="file" id="f-rep-surat" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'surat', 'pdf', 10)"/>
             <div class="file-preview" id="prev-rep-surat">
@@ -2425,7 +2425,7 @@ async function submitEditBooking(e) {
 
           <!-- Laporan Kegiatan -->
           <div class="upload-card" id="zone-rep-laporan" onclick="triggerUpload('f-rep-laporan')">
-            <div class="upload-title">Laporan Kegiatan</div>
+            <div class="upload-title">Laporan Kegiatan <span style="color:var(--red)">*</span></div>
             <div class="upload-limit">PDF Saja - Maks 10MB</div>
             <input type="file" id="f-rep-laporan" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'laporan', 'pdf', 10)"/>
             <div class="file-preview" id="prev-rep-laporan">
@@ -2436,7 +2436,7 @@ async function submitEditBooking(e) {
 
           <!-- Nota Bensin -->
           <div class="upload-card" id="zone-rep-nota" onclick="triggerUpload('f-rep-nota')">
-            <div class="upload-title">Nota Bensin</div>
+            <div class="upload-title">Nota Bensin <span style="color:var(--red)">*</span></div>
             <div class="upload-limit">Gambar - Maks 3MB</div>
             <input type="file" id="f-rep-nota" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'nota', 'image', 3)"/>
             <div class="file-preview" id="prev-rep-nota">
