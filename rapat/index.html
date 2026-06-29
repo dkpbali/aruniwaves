@@ -1218,21 +1218,12 @@ async function submitBooking(e) {
 }
 
 function showSuccess(id, isUpdate = false) {
-  document.getElementById("form-booking").style.display  = "none";
-  document.getElementById("success-screen").style.display= "flex";
-  document.getElementById("result-booking-id").textContent = id;
-  
-  const titleEl = document.querySelector("#success-screen h2");
-  const pEl = document.querySelector("#success-screen p");
   if (isUpdate) {
-    if (titleEl) titleEl.textContent = "Booking Diperbarui!";
-    if (pEl) pEl.innerHTML = "Perubahan Anda telah disimpan.<br/>Nomor booking Anda:";
+    alert("Pemesanan ruang rapat berhasil diperbarui! Nomor booking: " + id);
   } else {
-    if (titleEl) titleEl.textContent = "Permintaan Terkirim!";
-    if (pEl) pEl.innerHTML = "Admin DKP Bali sudah diberitahu.<br/>Nomor booking Anda:";
+    alert("Pemesanan ruang rapat berhasil dikirim! Simpan Nomor Booking Anda: " + id);
   }
-  
-  window.scrollTo({ top:0, behavior:"smooth" });
+  window.location.href = "../index.html?actTab=rapat";
 }
 
 function resetBooking() {

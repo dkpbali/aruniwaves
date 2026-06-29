@@ -1061,10 +1061,8 @@ async function submitHumas(e) {
 }
 
 function showSuccess(id) {
-  document.getElementById("form-humas").style.display   = "none";
-  document.getElementById("success-screen").style.display = "flex";
-  document.getElementById("result-hum-id").textContent   = id;
-  window.scrollTo({ top:0, behavior:"smooth" });
+  alert("Laporan berhasil dikirim! Simpan Nomor Konten Anda: " + id);
+  window.location.href = "../index.html?actTab=humas";
 }
 
 function resetForm() {

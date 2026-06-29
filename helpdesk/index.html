@@ -928,10 +928,8 @@ async function submitLaporan(e) {
 }
 
 function showSuccess(id) {
-  document.getElementById("form-helpdesk").style.display  = "none";
-  document.getElementById("success-screen").style.display = "flex";
-  document.getElementById("result-tiket-id").textContent  = id;
-  window.scrollTo({ top:0, behavior:"smooth" });
+  alert("Laporan berhasil dikirim! Simpan Nomor Tiket Anda: " + id);
+  window.location.href = "../index.html?actTab=helpdesk";
 }
 
 function resetForm() {
