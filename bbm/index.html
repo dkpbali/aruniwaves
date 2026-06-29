@@ -1241,15 +1241,14 @@ async function submitFormBbm(event) {
           nopol_kendaraan: nopol,
           status: "PENDING"
         });
-        showToast(`Sukses! Permohonan BBM ${mockId} disubmit (mode demo).`);
-        alert("Permohonan berhasil dikirim. Silakan ambil voucher fisik Anda di Gedung Sekretariat.");
+        alert("Permohonan berhasil dikirim (mode demo). Silakan ambil voucher fisik Anda di Gedung Sekretariat.");
       }
       resetForm();
       if (editingBbmId) {
         editingBbmId = null;
         $("btn-submit").querySelector("span").textContent = "Kirim Permohonan";
       }
-      switchTab('laporan');
+      window.location.href = "../index.html?actTab=bbm";
     } else {
       const res = await fetch(CFG.APPS_SCRIPT_URL, {
         method: "POST",
@@ -1258,9 +1257,8 @@ async function submitFormBbm(event) {
       const json = await res.json();
       if (json.success) {
         if (editingBbmId) {
-          showToast("Permohonan BBM berhasil diperbarui!");
+          alert("Permohonan BBM berhasil diperbarui!");
         } else {
-          showToast(`Sukses! Permohonan BBM disubmit dengan ID: ${json.id_bbm}`);
           alert("Permohonan berhasil dikirim. Silakan ambil voucher fisik Anda di Gedung Sekretariat.");
         }
         resetForm();
@@ -1269,7 +1267,7 @@ async function submitFormBbm(event) {
           $("btn-submit").querySelector("span").textContent = "Kirim Permohonan";
         }
         allBbm = []; // Reset locally so it fetches fresh
-        switchTab('laporan');
+        window.location.href = "../index.html?actTab=bbm";
       } else {
         showToast(`Gagal: ${json.message}`, true);
       }

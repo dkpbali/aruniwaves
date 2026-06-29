@@ -2044,7 +2044,21 @@ function renderSelectedDayBookings(dateStr, bookings) {
 
 
 
-loadStats(); loadAktivitasTerkini();
+(async function initHomepage() {
+  await loadStats();
+  await loadAktivitasTerkini();
+  const urlParams = new URLSearchParams(window.location.search);
+  const actTabParam = urlParams.get("actTab");
+  if (actTabParam) {
+    switchActTab(actTabParam);
+    const actWidget = document.querySelector(".activity-list");
+    if (actWidget) {
+      setTimeout(() => {
+        actWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 500);
+    }
+  }
+})();
   if (typeof google !== 'undefined') { initGIS(); }
   else { document.querySelector('script[src*="accounts.google.com"]').addEventListener('load', initGIS); }
 
