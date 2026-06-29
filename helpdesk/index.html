@@ -664,16 +664,16 @@ body.keyboard-open .more-drawer {
       <div class="divider">Detail Kerusakan</div>
 
       <div class="form-grid">
-        <!-- Nama Barang/Perangkat -->
-        <div class="field">
-          <label>Nama Barang/Perangkat <span class="req">*</span></label>
-          <input type="text" id="f-aset" placeholder="Contoh: AC Aula, TV Lobby, Laptop IT, dsb" required/>
-        </div>
-
         <div class="field">
           <label>Judul Laporan <span class="req">*</span></label>
           <input type="text" id="f-judul"
                  placeholder="Contoh: Ac Bocor, Komputer Tidak Bisa Hidup" required/>
+        </div>
+
+        <!-- Nama Barang/Perangkat -->
+        <div class="field">
+          <label>Nama Barang/Perangkat <span class="req">*</span></label>
+          <input type="text" id="f-aset" placeholder="Contoh: AC Aula, TV Lobby, Laptop IT, dsb" required/>
         </div>
 
         <div class="field full-width">
@@ -873,6 +873,7 @@ async function submitLaporan(e) {
   e.preventDefault();
 
   if (!hasFoto) {
+    alert("Foto kondisi kerusakan wajib diunggah/diambil.");
     document.getElementById("foto-required").style.display = "block";
     document.getElementById("foto-zone").scrollIntoView({ behavior:"smooth" });
     return;
