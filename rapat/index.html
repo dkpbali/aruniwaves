@@ -1494,7 +1494,10 @@ function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback)
 
   await Promise.all([loadPegawai(), loadBooking()]);
 
-
+  const editId = new URLSearchParams(window.location.search).get("editBooking");
+  if (editId) {
+    setTimeout(() => { editBooking(editId); }, 200);
+  }
 })();
 
 // Keyboard visual viewport handler

@@ -452,12 +452,12 @@ main{max-width:520px;margin:0 auto;padding:20px 16px 100px}
 .date-day { font-size: 9px; text-transform: uppercase; color: var(--muted); font-family: var(--sans); font-weight: 700; }
 .date-num { font-size: 14px; font-weight: 700; font-family: var(--mono); margin-top: 2px; }
 .date-btn.has-meeting {
-  border-color: rgba(0, 119, 230, 0.3);
-  background: rgba(0, 119, 230, 0.08);
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
 }
-.date-btn.has-meeting .date-num { color: var(--pink); }
+.date-btn.has-meeting .date-num { color: var(--red); }
 .date-btn.active.has-meeting {
-  background: var(--wave);
+  background: var(--red);
   border-color: transparent;
 }
 .date-btn.active.has-meeting .date-num { color: #fff; }
@@ -2070,28 +2070,67 @@ function renderSelectedDayBookings(dateStr, bookings) {
     return;
   }
   
+  const isUserLogged = !!currentUser;
+  const loggedPegId = isUserLogged ? currentUser.id_pegawai : '';
+  const isLoggedAdmin = isUserLogged ? currentUser.is_admin : false;
+
   container.innerHTML = `
     <div style="font-size:11px; font-weight:700; color:var(--muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase;">JADWAL ${formattedDate} (${bookings.length})</div>
     <div style="display:flex; flex-direction:column; gap:8px;">
-      ${bookings.map(b => `
-        <div class="cal-booking-item" style="border-left: 4px solid var(--wave); padding-left: 10px;" onclick="window.location.href='rapat/index.html?tab=jadwal&date=${dateStr}'">
-          <div class="cal-booking-title" style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px;">${escHtml(b.acara || b.keterangan || "Acara Rapat")}</div>
-          <div style="font-size:11px; color:var(--muted); font-weight:600; margin-bottom: 4px;">
-            Lokasi: ${escHtml(formatRuanganName(b.ruangan))}
+      ${bookings.map(b => {
+        let actionsHtml = "";
+        if (isUserLogged) {
+          const isOwner = (loggedPegId === b.idPemohon);
+          if (isLoggedAdmin || isOwner) {
+            actionsHtml = `
+              <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start;">
+                <button class="act-btn" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); editBookingHome('${b.id}')">Edit</button>
+                <button class="act-btn act-btn-danger" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); cancelBookingHome('${b.id}')">Hapus</button>
+              </div>
+            `;
+          }
+        }
+
+        return `
+          <div class="cal-booking-item" style="background: rgba(0, 119, 230, 0.02); border: 1px solid var(--border); border-left: 4px solid var(--wave); border-radius: 12px; padding: 12px 14px; transition: all 0.2s ease; cursor: pointer;" onclick="window.location.href='rapat/index.html?tab=jadwal&date=${dateStr}'" onmouseover="this.style.borderColor='var(--wave)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+              <div style="flex: 1; min-width: 0;">
+                <div class="cal-booking-title" style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">${escHtml(b.acara || b.keterangan || "Acara Rapat")}</div>
+                <div style="font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px;">
+                  📍 Lokasi: ${escHtml(formatRuanganName(b.ruangan))}
+                </div>
+                <div class="cal-booking-meta" style="font-size: 11px; color: var(--muted);">
+                  Pemohon: <span style="font-weight: 600; color: var(--text);">${escHtml(b.pemohon || "-")}</span> (${escHtml(b.bidang || "-")})
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0;">
+                <span class="cal-booking-time" style="font-size: 11px; font-weight: 700; color: var(--wave); background: rgba(0, 119, 230, 0.08); border-radius: 6px; padding: 4px 8px; font-family: var(--mono); display: inline-block;">
+                  ${escHtml(b.mulai || "--:--")} - ${escHtml(b.selesai || "--:--")}
+                </span>
+              </div>
+            </div>
+            ${b.kebutuhan ? `
+              <div style="font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 4px;">
+                <span style="color: var(--wave); display: inline-flex; align-items: center;"><svg style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                <span style="font-style: italic;">Kebutuhan: ${escHtml(b.kebutuhan)}</span>
+              </div>
+            ` : ""}
+            ${actionsHtml}
           </div>
-          <div class="cal-booking-meta" style="font-size:11px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-            <span>Pemohon: ${escHtml(b.pemohon || "-")}</span>
-            <span class="cal-booking-time" style="font-weight:600; color:var(--wave); font-family:var(--mono);">Mulai: ${escHtml(b.mulai || "--:--")} · Selesai: ${escHtml(b.selesai || "--:--")}</span>
-          </div>
-          ${b.kebutuhan ? `
-            <div style="font-size:11px; color:var(--muted); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); display: flex; align-items: center; gap: 4px;">
-              <span style="color:var(--wave); display: inline-flex; align-items: center;"><svg style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
-              <span style="font-style: italic;">Kebutuhan: ${escHtml(b.kebutuhan)}</span>
-            </div>` : ""}
-        </div>
-      `).join("")}
+        `;
+      }).join("")}
     </div>
   `;
+}
+
+function editBookingHome(id) {
+  window.location.href = `rapat/index.html?editBooking=${id}`;
+}
+
+async function cancelBookingHome(id) {
+  if (confirm("Apakah Anda yakin ingin membatalkan booking ruang rapat ini?")) {
+    await postAction({ action: "cancelBooking", id_booking: id });
+  }
 }
 
 
