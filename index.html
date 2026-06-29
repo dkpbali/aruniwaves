@@ -804,7 +804,7 @@ main { padding-bottom: 40px !important; }
 #login-bar .login-bar-sub{color:rgba(255,255,255,0.8);font-size:12px;line-height:1.4;}
 #gis-btn-container{flex-shrink:0;}
 #gis-btn-container>div{border-radius:8px!important;overflow:hidden;}
-#user-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
+#user-bar{display:none;align-items:center;gap:10px;background:rgba(16, 185, 129, 0.08);border:1px solid rgba(16, 185, 129, 0.18);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
 #user-bar .user-name{font-weight:600;font-size:13px;color:var(--text);}
 #user-bar .user-email{font-size:11px;color:var(--muted);}
 .btn-logout{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;}
@@ -1853,7 +1853,7 @@ function updateReturnedInfo(val, maxV) {
   
   if (val > 0 && val < maxV) {
     const returnedQty = maxV - val;
-    warningEl.innerHTML = `⚠️ <strong>Pemberitahuan Pengembalian Voucher:</strong><br/>Anda melaporkan penggunaan <strong>${val} pcs</strong> voucher. Sisa <strong>${returnedQty} pcs</strong> voucher yang tidak digunakan wajib dikembalikan secara fisik ke Admin / Sekretariat.`;
+    warningEl.innerHTML = `<strong>Pemberitahuan Pengembalian Voucher:</strong><br/>Anda melaporkan penggunaan <strong>${val} pcs</strong> voucher. Sisa <strong>${returnedQty} pcs</strong> voucher yang tidak digunakan wajib dikembalikan secara fisik ke Admin / Sekretariat.`;
     warningEl.style.display = "block";
   } else {
     warningEl.style.display = "none";
@@ -1931,8 +1931,14 @@ async function submitBbmReport(e) {
     return;
   }
   
-  if (!filesData.geotag.base64 || !filesData.surat.base64 || !filesData.laporan.base64 || !filesData.nota.base64) {
-    alert('Semua 4 bukti dukung (Foto Geotag, Surat Tugas, Laporan Kegiatan, dan Nota Bensin) wajib diunggah secara lengkap.');
+  const missingFiles = [];
+  if (!filesData.geotag.base64) missingFiles.push("Foto Geotag");
+  if (!filesData.surat.base64) missingFiles.push("Surat Tugas");
+  if (!filesData.laporan.base64) missingFiles.push("Laporan Kegiatan");
+  if (!filesData.nota.base64) missingFiles.push("Nota Bensin");
+
+  if (missingFiles.length > 0) {
+    alert(`Bukti dukung berikut wajib diunggah: ${missingFiles.join(", ")}.`);
     return;
   }
 
@@ -2329,7 +2335,6 @@ async function submitEditBooking(e) {
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jumlah Voucher yang Digunakan (pcs) <span style="color:var(--red)">*</span></label>
           <input type="number" id="f-rep-used" class="form-control" min="0" oninput="validateReportedVouchers(this)" required/>
           <div id="rep-returned-warning" style="display:none; font-size:11px; color:var(--yellow); background:rgba(202,138,4,0.08); border:1px solid rgba(202,138,4,0.15); border-radius:8px; padding:10px; margin-top:8px; line-height:1.4;"></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Sisa voucher akan otomatis dikembalikan ke admin.</div>
         </div>
 
         <!-- Extra Fields for Stok Internal / Tugas Mendadak -->
