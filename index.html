@@ -1766,10 +1766,11 @@ function onEditPlatformChange() {
   const p = document.getElementById("edit-hum-platform").value;
   const jSel = document.getElementById("edit-hum-jenis");
   const options = {
-    "Instagram": ["Infografis", "Reels", "Feeds Video", "Story"],
-    "YouTube":   ["Video Panjang (Vlog)", "Shorts", "Live Streaming"],
-    "TikTok":    ["Video Pendek"],
-    "Facebook":  ["Infografis", "Video", "Lainnya"]
+    "Website":   ["Berita"],
+    "Instagram": ["Post", "Story", "Reels"],
+    "YouTube":   ["Video", "Shorts"],
+    "TikTok":    ["Video"],
+    "Facebook":  ["Post", "Reels"]
   };
   const list = options[p] || [];
   jSel.innerHTML = list.map(j => `<option value="${j}">${j}</option>`).join("");
@@ -2429,6 +2430,7 @@ async function submitEditBooking(e) {
           <div>
             <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Platform</label>
             <select id="edit-hum-platform" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;" onchange="onEditPlatformChange()">
+              <option value="Website">Website</option>
               <option value="Instagram">Instagram</option>
               <option value="YouTube">YouTube</option>
               <option value="TikTok">TikTok</option>
