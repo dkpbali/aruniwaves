@@ -1244,4 +1244,21 @@ function scrollToPage(pageIndex) {
       document.body.classList.remove("keyboard-open");
     }
   });
+
+  // Expose IIFE local functions to window object for inline HTML event handlers
+  window.installPWA = installPWA;
+  window.scrollToPage = scrollToPage;
+  window.switchActTab = switchActTab;
+  window.closeModal = closeModal;
+  window.triggerUpload = triggerUpload;
+  window.clearRepFile = clearRepFile;
+  window.editHelpdeskRedirect = editHelpdeskRedirect;
+  window.deleteHelpdesk = deleteHelpdesk;
+  window.editBbmRedirect = editBbmRedirect;
+  window.deleteBbm = deleteBbm;
+  window.reportBbmRedirect = reportBbmRedirect;
+  window.editBookingRedirect = editBookingRedirect;
+  window.cancelBooking = cancelBooking;
+  window.editHumasRedirect = editHumasRedirect;
+  window.deleteHumas = deleteHumas;
 })();
