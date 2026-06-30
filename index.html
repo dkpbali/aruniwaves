@@ -1560,7 +1560,7 @@ function renderActTab(tab) {
       const statusLabel = isStatusOpen ? 'BARU' : t.status;
       const isOwner = isUserLogged && (
         (t.idPelapor && t.idPelapor === loggedPegId) ||
-        (t.nama && currentUser.nama && t.nama.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+        (t.nama && currentUser.name && t.nama.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
       );
 
       let actions = '';
@@ -1623,7 +1623,7 @@ function renderActTab(tab) {
 
         const isOwner = isUserLogged && (
           (h.idPegawai && h.idPegawai === loggedPegId) ||
-          (h.namaPegawai && currentUser.nama && h.namaPegawai.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+          (h.namaPegawai && currentUser.name && h.namaPegawai.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
         );
 
         if (isUserLogged && isLoggedAdmin) {
@@ -1686,7 +1686,7 @@ function renderActTab(tab) {
       const itemsHtml = list.map(b => {
         const isOwner = isUserLogged && (
           (b.id_pegawai && b.id_pegawai === loggedPegId) ||
-          (b.nama_penerima && currentUser.nama && b.nama_penerima.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+          (b.nama_penerima && currentUser.name && b.nama_penerima.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
         );
         const isStatusOpen = b.status.toUpperCase() === 'OPEN';
         const isStatusApproved = b.status.toUpperCase() === 'DISETUJUI';
@@ -2245,7 +2245,7 @@ function renderSelectedDayBookings(dateStr, bookings) {
       ${bookings.map(b => {
         const isOwner = isUserLogged && (
           (b.id_pemohon && b.id_pemohon === loggedPegId) ||
-          (b.pemohon && currentUser.nama && b.pemohon.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+          (b.pemohon && currentUser.name && b.pemohon.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
         );
         const actionsHtml = (isLoggedAdmin || isOwner) ? `
           <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start; margin-left: 0;">
