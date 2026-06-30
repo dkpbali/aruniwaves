@@ -1014,6 +1014,9 @@ async function submitForm(e) {
     });
     const json = await res.json();
     if (json.success) {
+      if (json.ba_error) {
+        alert("Peringatan: Dokumen BA gagal dibuat secara otomatis.\nDetail Error: " + json.ba_error + "\n\nPermohonan tetap terdaftar di spreadsheet, tetapi tautan dokumen BA kosong.");
+      }
       document.getElementById("result-ba-id").textContent = json.no_ba || "BA/KND/2026/0001";
       document.getElementById("form-container").style.display = "none";
       document.getElementById("success-screen").style.display = "block";
