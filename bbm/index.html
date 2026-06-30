@@ -959,6 +959,17 @@ window.addEventListener('error', function(e) {
 
 let allBbm = [];
 let editingBbmId = null;
+let currentUser = null;
+
+const cachedUser = sessionStorage.getItem("aruniwaves_user");
+if (cachedUser) {
+  try {
+    currentUser = JSON.parse(cachedUser);
+  } catch (e) {
+    console.error("Error parsing cached user:", e);
+  }
+}
+
 const CFG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec"
 };
@@ -1198,9 +1209,17 @@ async function submitFormBbm(event) {
 
 
 
+  if (editingBbmId) {
+    if (!currentUser) {
+      alert("Login Google diperlukan untuk menyimpan perubahan.");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = "<span>Kirim Permohonan</span>";
+      return;
+    }
+  }
+
   const payload = {
     action: editingBbmId ? "updateBbm" : "submitBbm",
-    
     id_bbm: editingBbmId || "",
     nama_penerima: namaPenerima,
     id_pegawai: idPegawai,
@@ -1214,6 +1233,10 @@ async function submitFormBbm(event) {
     pribadi: pribadi,
     deskripsi_kegiatan: deskripsi
   };
+
+  if (currentUser) {
+    payload.id_token = currentUser.id_token;
+  }
 
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL.includes("GANTI_DENGAN")) {
