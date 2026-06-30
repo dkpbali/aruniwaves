@@ -1618,7 +1618,7 @@ function renderActTab(tab) {
         } else {
           if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
             actions = `<div class="act-actions">
-              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}', '${h.platform}', '${h.jenisKonten}', '${h.screenshotUrl}')">Edit</button>
+              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumasRedirect('${h.id}')">Edit</button>
               <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHumas('${h.id}')">Hapus</button>
             </div>`;
           }
@@ -1682,7 +1682,7 @@ function renderActTab(tab) {
               actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
             } else if (isOwner) {
               actions = `<div class="act-actions">
-                <button class="act-btn" onclick="editBbm('${b.id_bbm}', '${b.jenis_voucher}', '${b.jumlah}', '${escHtml(b.lokasi_tujuan)}')">Edit</button>
+                <button class="act-btn" onclick="editBbmRedirect('${b.id_bbm}')">Edit</button>
                 <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}')">Hapus</button>
               </div>`;
             }
@@ -1799,45 +1799,12 @@ function getDriveViewUrl(url) {
   return url;
 }
 
-function editHumas(id, nama, tanggal, link, platform, jenis, screenshotUrl) {
+function editHumasRedirect(id) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah konten Humas.");
     return;
   }
-  document.getElementById('edit-hum-id').value = id;
-  document.getElementById('edit-hum-nama').value = nama;
-  document.getElementById('edit-hum-tanggal').value = tanggal;
-  document.getElementById('edit-hum-link').value = link;
-  
-  if (platform) {
-    document.getElementById('edit-hum-platform').value = platform;
-  }
-  onEditPlatformChange();
-  if (jenis) {
-    document.getElementById('edit-hum-jenis').value = jenis;
-  }
-  
-  editHumasFotoB64 = null;
-  const previewContainer = document.getElementById("edit-hum-ss-preview-container");
-  const previewImg = document.getElementById("edit-hum-ss-preview");
-  const ssLink = document.getElementById("edit-hum-ss-link");
-  
-  previewImg.style.display = "block"; // Reset standard display
-  
-  if (screenshotUrl && screenshotUrl !== 'undefined' && screenshotUrl !== 'null' && screenshotUrl.trim() !== '') {
-    previewImg.src = screenshotUrl;
-    ssLink.href = getDriveViewUrl(screenshotUrl);
-    ssLink.style.display = "block";
-    previewContainer.style.display = "block";
-  } else {
-    previewImg.src = "";
-    ssLink.href = "#";
-    ssLink.style.display = "none";
-    previewContainer.style.display = "none";
-  }
-  document.getElementById("edit-hum-ss-file").value = "";
-  
-  openModal('edit-humas-modal');
+  window.location.href = `humas/index.html?editHumas=${id}`;
 }
 async function deleteHumas(id) {
   if (!currentUser) {
@@ -1883,12 +1850,12 @@ function showDetailHumas(id) {
   openModal("detail-humas-modal");
 }
 
-function editBbm(id, jenis, jumlah, tujuan) {
-  document.getElementById('edit-bbm-id').value = id;
-  document.getElementById('edit-bbm-jenis').value = jenis;
-  document.getElementById('edit-bbm-jumlah').value = jumlah;
-  document.getElementById('edit-bbm-tujuan').value = tujuan;
-  openModal('edit-bbm-modal');
+function editBbmRedirect(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk mengubah permohonan BBM.");
+    return;
+  }
+  window.location.href = `bbm/index.html?editBbm=${id}`;
 }
 async function deleteBbm(id) {
   if (!currentUser) {
@@ -2435,84 +2402,7 @@ async function submitEditBooking(e) {
 }
 </script>
 
-  <!-- Modal Edit Humas -->
-  <div id="edit-humas-modal" class="modal-overlay">
-    <div class="modal-content-card" style="max-width: 500px;">
-      <button type="button" onclick="closeModal('edit-humas-modal')" class="modal-close-btn">✕</button>
-      <div class="modal-header-title">Edit Konten Humas</div>
-      <form id="edit-humas-form" onsubmit="submitEditHumas(event)">
-        <input type="hidden" id="edit-hum-id"/>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Judul / Nama Konten *</label>
-          <input type="text" id="edit-hum-nama" class="form-control"/>
-        </div>
-        
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Platform (Website, Instagram, YouTube, TikTok, Facebook)</label>
-          <select id="edit-hum-platform" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;" onchange="onEditPlatformChange()">
-            <option value="Website">Website</option>
-            <option value="Instagram">Instagram</option>
-            <option value="YouTube">YouTube</option>
-            <option value="TikTok">TikTok</option>
-            <option value="Facebook">Facebook</option>
-          </select>
-        </div>
 
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Konten</label>
-          <select id="edit-hum-jenis" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;">
-            <!-- Populated dynamically -->
-          </select>
-        </div>
-
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Posting</label>
-          <input type="date" id="edit-hum-tanggal" class="form-control"/>
-        </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten</label>
-          <input type="url" id="edit-hum-link" class="form-control"/>
-        </div>
-        <div class="field" style="margin-bottom: 16px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Screenshot/Bukti Konten</label>
-          <input type="file" id="edit-hum-ss-file" class="form-control" accept="image/*" onchange="handleEditHumasFile(event)"/>
-          <div id="edit-hum-ss-preview-container" style="margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: none; text-align: center; background: var(--light);">
-            <a id="edit-hum-ss-link" href="#" target="_blank" style="display:none; font-size:12px; color:var(--wave); font-weight:600; text-decoration:underline; margin-bottom:8px; text-align:center;">Lihat Screenshot Terunggah (Buka Tab Baru)</a>
-            <img id="edit-hum-ss-preview" src="" alt="SS Preview" onerror="this.style.display='none';" style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px;" />
-          </div>
-        </div>
-        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Edit BBM -->
-  <div id="edit-bbm-modal" class="modal-overlay">
-    <div class="modal-content-card">
-      <button type="button" onclick="closeModal('edit-bbm-modal')" class="modal-close-btn">✕</button>
-      <div class="modal-header-title">Edit Pengajuan BBM</div>
-      <form id="edit-bbm-form" onsubmit="submitEditBbm(event)">
-        <input type="hidden" id="edit-bbm-id"/>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Voucher</label>
-          <select id="edit-bbm-jenis" class="form-control" required>
-            <option value="PERTALITE">PERTALITE</option>
-            <option value="PERTAMAX">PERTAMAX</option>
-            <option value="DEXLITE">DEXLITE</option>
-          </select>
-        </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jumlah Voucher</label>
-          <input type="number" id="edit-bbm-jumlah" class="form-control" min="1" required/>
-        </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Lokasi Tujuan</label>
-          <input type="text" id="edit-bbm-tujuan" class="form-control" required/>
-        </div>
-        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
-      </form>
-    </div>
-  </div>
 
   <!-- Modal Lapor BBM -->
   <div id="report-bbm-modal" class="modal-overlay">

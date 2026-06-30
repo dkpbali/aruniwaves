@@ -967,10 +967,16 @@ if (tabParam === "form") {
 }
 
 (async function init() {
-
   await loadPegawai();
-
-
+  
+  const editId = new URLSearchParams(window.location.search).get("editBbm");
+  if (editId) {
+    await loadBbmStatus();
+    loadBbmLaporan();
+    setTimeout(() => {
+      editBbm(editId, true);
+    }, 200);
+  }
 })();
 
 // Helper shorthand selector
@@ -1960,11 +1966,11 @@ function filterBbmStatus() {
   renderBbmStatus(filtered);
 }
 
-function editBbm(id) {
+function editBbm(id, skipConfirm) {
   const b = allBbm.find(x => x.id_bbm === id);
   if (!b) return;
 
-  if (!confirm("Apakah Anda yakin ingin mengedit permohonan BBM ini?")) return;
+  if (!skipConfirm && !confirm("Apakah Anda yakin ingin mengedit permohonan BBM ini?")) return;
 
   editingBbmId = b.id_bbm;
 

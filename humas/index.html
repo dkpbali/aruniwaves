@@ -880,10 +880,18 @@ const CFG = { APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpc
 
 // ── State ───────────────────────────────────
 let allPegawai   = [];
+let allKonten    = [];
 let selectedPlatform = "";
 let selectedJenis    = "";
 let fotoB64 = null;
 let hasFoto = false;
+let editingHumasId = null;
+
+let currentUser = null;
+try {
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) currentUser = JSON.parse(cached);
+} catch (e) { console.error(e); }
 
 
 // Jenis konten per platform
@@ -1046,6 +1054,7 @@ function removeFoto() {
 }
 
 // ── Submit ───────────────────────────────────
+// ── Submit / Update ───────────────────────────
 async function submitHumas(e) {
   e.preventDefault();
   if (!selectedPlatform) { alert("Pilih platform terlebih dahulu."); return; }
@@ -1056,47 +1065,79 @@ async function submitHumas(e) {
   }
 
   const btn = document.getElementById("btn-submit");
-  btn.disabled = true; btn.textContent = "⏳ Mengirim...";
+  btn.disabled = true; btn.textContent = "⏳ Menyimpan...";
 
   const pegId  = document.getElementById("f-pegawai").value;
   if (!pegId) {
     alert("Pilih nama Anda dari daftar yang muncul saat mengetik.");
     btn.disabled = false;
-    btn.textContent = "Kirim untuk Divalidasi";
+    btn.textContent = editingHumasId ? "Simpan Perubahan" : "Kirim untuk Divalidasi";
     return;
   }
   const peg    = allPegawai.find(p => p.id === pegId);
   const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
 
-
-
-  const payload = {
-    action:           "submitHumas",
-    
-    id_pegawai:       pegId,
-    nama_pegawai:     peg?.nama || "",
-    bidang,
-    platform:         selectedPlatform,
-    jenis_konten:     selectedJenis,
-    nama_konten:      document.getElementById("f-nama-konten").value,
-    tanggal_posting:  document.getElementById("f-tanggal-posting").value,
-    link_konten:      document.getElementById("f-link").value,
-    screenshot_base64:fotoB64,
-  };
+  let payload;
+  if (editingHumasId) {
+    if (!currentUser) {
+      alert("Login Google diperlukan untuk menyimpan perubahan.");
+      btn.disabled = false; btn.textContent = "Simpan Perubahan";
+      return;
+    }
+    payload = {
+      action:           "updateHumas",
+      id_konten:        editingHumasId,
+      id_token:         currentUser.id_token,
+      nama_konten:      document.getElementById("f-nama-konten").value,
+      tanggal_posting:  document.getElementById("f-tanggal-posting").value,
+      link_konten:      document.getElementById("f-link").value,
+      platform:         selectedPlatform,
+      jenis_konten:     selectedJenis,
+    };
+    if (fotoB64) {
+      payload.screenshot_base64 = fotoB64;
+    }
+  } else {
+    payload = {
+      action:           "submitHumas",
+      id_pegawai:       pegId,
+      nama_pegawai:     peg?.nama || "",
+      bidang,
+      platform:         selectedPlatform,
+      jenis_konten:     selectedJenis,
+      nama_konten:      document.getElementById("f-nama-konten").value,
+      tanggal_posting:  document.getElementById("f-tanggal-posting").value,
+      link_konten:      document.getElementById("f-link").value,
+      screenshot_base64:fotoB64,
+    };
+  }
 
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
       await new Promise(r => setTimeout(r, 1100));
-      const id = "HUM-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
-      showSuccess(id); return;
+      if (editingHumasId) {
+        alert("Perubahan berhasil disimpan (mode demo).");
+        window.location.href = "../index.html?actTab=humas";
+      } else {
+        const id = "HUM-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
+        showSuccess(id);
+      }
+      return;
     }
     const res  = await fetch(CFG.APPS_SCRIPT_URL, { method:"POST", body:JSON.stringify(payload) });
     const data = await res.json();
-    if (data.success) showSuccess(data.konten_id);
-    else throw new Error(data.message);
+    if (data.success) {
+      if (editingHumasId) {
+        alert("Perubahan berhasil disimpan!");
+        window.location.href = "../index.html?actTab=humas";
+      } else {
+        showSuccess(data.konten_id);
+      }
+    } else throw new Error(data.message);
   } catch(err) {
     alert("Gagal: " + err.message);
-    btn.disabled = false; btn.textContent = "Kirim untuk Divalidasi";
+    btn.disabled = false;
+    btn.textContent = editingHumasId ? "Simpan Perubahan" : "Kirim untuk Divalidasi";
   }
 }
 
@@ -1320,9 +1361,99 @@ if (tabParam === "submit") {
   switchTab("submit");
 }
 
+function normalizeDate(dateStr) {
+  if (!dateStr) return "";
+  dateStr = dateStr.toString().trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+  if (/^\d{4}-\d{2}-\d{2}\b/.test(dateStr)) return dateStr.substring(0, 10);
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateStr)) {
+    const [d, m, y] = dateStr.split("/");
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  return dateStr;
+}
+
+async function handleEditParam() {
+  const editId = new URLSearchParams(window.location.search).get("editHumas");
+  if (!editId) return;
+  
+  editingHumasId = editId;
+  
+  if (!allPegawai.length) {
+    await loadPegawai();
+  }
+  await loadKonten();
+  
+  const item = allKonten.find(k => k.id === editId);
+  if (!item) {
+    alert("Data konten tidak ditemukan.");
+    return;
+  }
+  
+  // Populate Form Fields
+  const peg = allPegawai.find(p => p.nama === item.namaPegawai || p.id === item.idPegawai);
+  if (peg) {
+    document.getElementById("f-pegawai-search").value = peg.nama;
+    document.getElementById("f-pegawai").value = peg.id;
+    onPegawaiChange();
+  }
+  
+  document.getElementById("f-nama-konten").value = item.namaKonten || "";
+  if (item.tanggalPosting) {
+    document.getElementById("f-tanggal-posting").value = normalizeDate(item.tanggalPosting);
+  }
+  document.getElementById("f-link").value = item.linkKonten || "";
+  
+  if (item.platform) {
+    const platformCards = document.querySelectorAll(".platform-card");
+    let foundCard = null;
+    platformCards.forEach(c => {
+      if (c.textContent.trim().includes(item.platform)) {
+        foundCard = c;
+      }
+    });
+    selectPlatform(item.platform, foundCard);
+  }
+  
+  if (item.jenisKonten) {
+    const jenisGrid = document.getElementById("jenis-grid");
+    setTimeout(() => {
+      const buttons = jenisGrid.querySelectorAll(".jenis-btn");
+      buttons.forEach(btn => {
+        if (btn.textContent.trim() === item.jenisKonten) {
+          selectJenis(item.jenisKonten, btn);
+        }
+      });
+    }, 150);
+  }
+  
+  if (item.screenshotUrl && item.screenshotUrl.trim() !== "" && item.screenshotUrl !== "undefined" && item.screenshotUrl !== "null") {
+    const preview = document.getElementById("foto-preview");
+    const img = document.getElementById("foto-img");
+    img.src = item.screenshotUrl;
+    preview.style.display = "block";
+    document.getElementById("foto-zone").style.display = "none";
+    hasFoto = true;
+  }
+  
+  // Change button label and page header
+  const btn = document.getElementById("btn-submit");
+  if (btn) btn.textContent = "Simpan Perubahan";
+  
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "EDIT KONTRIBUSI HUMAS";
+  if (heroTitle) heroTitle.textContent = "Ubah Data Konten";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan data konten medsos Anda.";
+}
+
 // ── Init ─────────────────────────────────────
 
-loadPegawai();
+(async function initPage() {
+  await loadPegawai();
+  await handleEditParam();
+})();
 
 
 
