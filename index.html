@@ -1790,6 +1790,15 @@ async function handleEditHumasFile(e) {
   }
 }
 
+function getDriveViewUrl(url) {
+  if (!url) return "#";
+  const match = url.match(/id=([^&]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/file/d/${match[1]}/view`;
+  }
+  return url;
+}
+
 function editHumas(id, nama, tanggal, link, platform, jenis, screenshotUrl) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah konten Humas.");
@@ -1811,11 +1820,19 @@ function editHumas(id, nama, tanggal, link, platform, jenis, screenshotUrl) {
   editHumasFotoB64 = null;
   const previewContainer = document.getElementById("edit-hum-ss-preview-container");
   const previewImg = document.getElementById("edit-hum-ss-preview");
+  const ssLink = document.getElementById("edit-hum-ss-link");
+  
+  previewImg.style.display = "block"; // Reset standard display
+  
   if (screenshotUrl && screenshotUrl !== 'undefined' && screenshotUrl !== 'null' && screenshotUrl.trim() !== '') {
     previewImg.src = screenshotUrl;
+    ssLink.href = getDriveViewUrl(screenshotUrl);
+    ssLink.style.display = "block";
     previewContainer.style.display = "block";
   } else {
     previewImg.src = "";
+    ssLink.href = "#";
+    ssLink.style.display = "none";
     previewContainer.style.display = "none";
   }
   document.getElementById("edit-hum-ss-file").value = "";
@@ -2423,7 +2440,7 @@ async function submitEditBooking(e) {
         <input type="hidden" id="edit-hum-id"/>
         <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Judul / Nama Konten *</label>
-          <input type="text" id="edit-hum-nama" class="form-control" required/>
+          <input type="text" id="edit-hum-nama" class="form-control"/>
         </div>
         
         <div class="field" style="margin-bottom: 12px;">
@@ -2446,7 +2463,7 @@ async function submitEditBooking(e) {
 
         <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Posting</label>
-          <input type="date" id="edit-hum-tanggal" class="form-control" required/>
+          <input type="date" id="edit-hum-tanggal" class="form-control"/>
         </div>
         <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten</label>
@@ -2455,8 +2472,9 @@ async function submitEditBooking(e) {
         <div class="field" style="margin-bottom: 16px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Screenshot/Bukti Konten</label>
           <input type="file" id="edit-hum-ss-file" class="form-control" accept="image/*" onchange="handleEditHumasFile(event)"/>
-          <div id="edit-hum-ss-preview-container" style="margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 6px; display: none; text-align: center; background: var(--light);">
-            <img id="edit-hum-ss-preview" src="" alt="SS Preview" style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px;" />
+          <div id="edit-hum-ss-preview-container" style="margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: none; text-align: center; background: var(--light);">
+            <a id="edit-hum-ss-link" href="#" target="_blank" style="display:none; font-size:12px; color:var(--wave); font-weight:600; text-decoration:underline; margin-bottom:8px; text-align:center;">Lihat Screenshot Terunggah (Buka Tab Baru)</a>
+            <img id="edit-hum-ss-preview" src="" alt="SS Preview" onerror="this.style.display='none';" style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px;" />
           </div>
         </div>
         <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
