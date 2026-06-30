@@ -212,7 +212,7 @@ nav.topnav {
   gap: 8px;
   text-decoration: none;
 }
-.nav-mark {
+.nav-mark, .nav-logo-mark {
   width: 32px;
   height: 32px;
   border-radius: 8px;
@@ -223,17 +223,21 @@ nav.topnav {
   justify-content: center;
   font-size: 15px;
 }
-.nav-title {
+.nav-title, .nav-logo-text {
   font-family: var(--title-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
+  letter-spacing: .02em;
 }
-.nav-sub {
+.nav-sub, .nav-logo-sub {
   font-size: 9px;
   color: var(--muted);
   font-family: var(--mono);
   letter-spacing: .06em;
+}
+.nav-spacer {
+  flex: 1;
 }
 
 /* ── BACK BUTTON (Header) ── */
@@ -887,6 +891,7 @@ nav.topnav {
 .more-item-icon  { font-size: 22px; }
 .more-item-label { font-size: 10px; color: var(--muted); font-family: var(--mono); text-align: center; }
 .more-item.active { border-color: var(--wave); background: rgba(0, 119, 230, 0.08); }
+.more-item.active .more-item-icon svg { stroke: var(--wave) !important; }
 .more-item.active .more-item-label { color: var(--wave); font-weight: 700; }
 
 /* ── DESKTOP NAV ── */
