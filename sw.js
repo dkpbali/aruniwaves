@@ -3,7 +3,7 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v21";
+const CACHE_NAME = "aruniwaves-v12";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [
@@ -17,32 +17,11 @@ const PRECACHE_URLS = [
   "helpdesk/index.html",
   "rapat/index.html",
   "humas/index.html",
-  "kendaraan/index.html",
   "dashboard/dashboard_kendaraan/index.html",
   "dashboard/dashboard_ekspor/index.html",
   "dashboard/dashboard_ews/index.html",
   "dashboard/dashboard_ews/verifikasi.html",
   "dashboard/dashboard_ews/kabupaten-bali.geojson",
-  "assets/css/main.css",
-  "assets/css/component.css",
-  "assets/css/form.css",
-  "assets/css/table.css",
-  "assets/css/portal.css",
-  "assets/js/config.js",
-  "assets/js/utils.js",
-  "assets/js/api.js",
-  "assets/js/auth.js",
-  "assets/js/ui.js",
-  "assets/js/aset.js",
-  "assets/js/bbm.js",
-  "assets/js/helpdesk.js",
-  "assets/js/humas.js",
-  "assets/js/kendaraan.js",
-  "assets/js/rapat.js",
-  "assets/js/dashboard_ekspor.js",
-  "assets/js/dashboard_ews.js",
-  "assets/js/dashboard_ews_verifikasi.js",
-  "assets/js/dashboard_kendaraan.js"
 ];
 
 // ── Install: cache semua file utama ─────────
@@ -91,7 +70,6 @@ self.addEventListener("fetch", event => {
 
   // Jangan cache request ke Apps Script / Telegram API (data selalu fresh)
   if (url.hostname.includes("script.google.com") ||
-      url.hostname.includes("script.googleusercontent.com") ||
       url.hostname.includes("api.telegram.org")) {
     event.respondWith(fetch(event.request));
     return;
@@ -115,10 +93,8 @@ self.addEventListener("fetch", event => {
           // Jika offline/gagal network, gunakan cache (abaikan query parameters seperti ?tab=)
           return caches.match(event.request, { ignoreSearch: true }).then(cached => {
             if (cached) return cached;
-            // Offline fallback hanya untuk navigasi halaman HTML
-            if (event.request.mode === "navigate" || (event.request.headers.get("accept") && event.request.headers.get("accept").includes("text/html"))) {
-              return caches.match("index.html", { ignoreSearch: true });
-            }
+            // Offline fallback
+            return caches.match("index.html", { ignoreSearch: true });
           });
         })
     );

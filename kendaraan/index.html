@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#061120"/>
+<meta name="description" content="Peminjaman Kendaraan Dinas Sekretariat - ARUNIWAVES DKP Provinsi Bali"/>
+<link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+<title>Pinjam Kendaraan - ARUNIWAVES</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
+  --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
+  --foam:   #3399FF; --sand: #E6F2FF; --light: #F8FAFD;
+  --text:   #1E293B; --muted:#64748B;
+  --border: #CBD5E1; --border2:#94A3B8;
+  --orange: #0077E6; --orange2:#3399FF;
+  --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
+  --mono: 'Fira Code', monospace; --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:var(--sans);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--ink2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--wave); }
+
+/* Navigation */
+nav.topnav {
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height:56px;display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-mark{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--wave),var(--foam));
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.nav-title{font-family:var(--title-sans);font-size:13px;font-weight:700;color:var(--text)}
+.nav-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+
+.desktop-nav{display:none;gap:16px;margin-left:24px}
+@media(min-width: 768px) {
+  .desktop-nav{display:flex;align-items:center}
+}
+.desktop-nav-item{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;padding:6px 12px;border-radius:6px}
+.desktop-nav-item:hover{color:var(--text);background:var(--ink2)}
+.desktop-nav-item.active{color:var(--wave);background:rgba(0,119,230,.08)}
+
+.desktop-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.desktop-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.desktop-dropdown-btn:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--ink);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-top: 4px;
+}
+.desktop-dropdown-content a {
+  color: var(--text);
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .2s;
+}
+.desktop-dropdown-content a:hover {
+  background-color: var(--ink2);
+}
+.desktop-dropdown:hover .desktop-dropdown-content {
+  display: block;
+}
+
+.btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back-header:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 100px 16px;
+}
+
+/* Hero Section */
+.bbm-hero {
+  background: linear-gradient(135deg, rgba(0, 85, 170, 0.04), rgba(51, 153, 255, 0.08));
+  border: 1px solid rgba(0, 85, 170, 0.05);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.bbm-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wave);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.bbm-title {
+  font-family: var(--title-sans);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.bbm-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Card */
+.form-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+.divider {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin: 20px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+}
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  opacity: 0.6;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media(min-width: 500px) {
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+}
+.field label span.req {
+  color: var(--wave);
+  margin-left: 2px;
+}
+
+/* Form Controls */
+.form-control, .autocomplete-input, input[type="text"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--ink2);
+  color: var(--text);
+  font-family: var(--sans);
+  transition: all 0.2s ease;
+}
+.form-control:focus, .autocomplete-input:focus, input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--wave);
+  background: var(--ink);
+  box-shadow: 0 0 0 3px rgba(0, 119, 230, 0.08);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 0.6s linear infinite;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.autofill {
+  min-height: 38px;
+  padding: 10px 14px;
+  font-size: 13px;
+  background: rgba(0, 119, 230, 0.04);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--wave);
+}
+
+/* Autocomplete styling */
+.field-autocomplete {
+  position: relative;
+}
+.autocomplete-wrap {
+  position: relative;
+}
+.autocomplete-list {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  background: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: none;
+}
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid var(--ink2);
+  transition: background 0.15s ease;
+}
+.autocomplete-item:hover {
+  background: var(--ink2);
+}
+.autocomplete-item-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Radio Cards */
+.radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.radio-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: var(--ink2);
+  transition: all 0.2s ease;
+}
+.radio-card:hover {
+  border-color: var(--border2);
+}
+.radio-card input {
+  accent-color: var(--wave);
+}
+.radio-card.selected {
+  border-color: var(--wave);
+  background: var(--sand);
+}
+.radio-card-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Signature Pad */
+.ttd-wrap {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #FFFFFF;
+  overflow: hidden;
+  position: relative;
+}
+#ttd-canvas {
+  display: block;
+  background: #FFFFFF;
+  cursor: crosshair;
+  touch-action: none;
+}
+.ttd-btn-clear {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--red);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.ttd-btn-clear:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Agreement Checklist */
+.agree-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(202, 138, 4, 0.05);
+  border: 1px solid rgba(202, 138, 4, 0.15);
+  border-radius: 8px;
+}
+.agree-wrap input {
+  accent-color: var(--yellow);
+  margin-top: 2px;
+}
+.agree-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* Buttons */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: var(--wave);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--title-sans);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 24px;
+}
+.btn-submit:hover {
+  background: var(--sea2);
+  box-shadow: 0 4px 12px rgba(0, 85, 170, 0.2);
+}
+
+/* Bottom Navigation */
+nav.bottomnav {
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  height:60px;display:flex;justify-content:space-around;align-items:center;
+}
+.nav-item {
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  text-decoration:none;color:var(--muted);width:60px;transition:color .2s;
+}
+.nav-item.active { color:var(--wave); }
+.nav-icon { display:flex;align-items:center;justify-content:center; }
+.nav-label { font-size:9px;font-weight:700; }
+
+/* Success Screen */
+#success-screen {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
+}
+.suc-ring {
+  width: 60px; height: 60px;
+  border-radius: 30px;
+  background: rgba(13, 148, 136, 0.1);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+#success-screen h2 {
+  font-family: var(--title-sans);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+#success-screen p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.ba-badge {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--sand);
+  color: var(--wave);
+  border: 1px dashed var(--wave);
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.btn-new {
+  padding: 10px 20px;
+  background: var(--ink2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-new:hover { background: var(--border); }
+
+/* Navigation Drawer */
+.more-drawer{
+  position:fixed;bottom:-100%;left:0;right:0;z-index:190;
+  background:rgba(255,255,255,.98);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  transition:bottom .35s cubic-bezier(0.4, 0, 0.2, 1);
+  padding:24px;box-shadow:0 -10px 25px rgba(0,0,0,0.08);
+}
+.more-drawer.open{bottom:60px}
+.more-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.more-item{
+  display:flex;align-items:center;gap:12px;padding:14px;
+  border:1px solid var(--border);border-radius:12px;
+  text-decoration:none;color:var(--text);background:var(--ink);
+  transition:all .2s ease;
+}
+.more-item:hover{border-color:var(--wave);background:var(--sand)}
+.more-item-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--ink2);display:flex;align-items:center;justify-content:center;
+  color:var(--wave);flex-shrink:0;
+}
+.more-item-label{font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-mark">🌊</div>
+    <div>
+      <div class="nav-title">ARUNIWAVES</div>
+      <div class="nav-sub">DKP BALI</div>
+    </div>
+  </a>
+  <div class="desktop-nav">
+    <a href="../aset/index.html" class="desktop-nav-item">Aset</a>
+    <a href="../helpdesk/index.html" class="desktop-nav-item">Helpdesk</a>
+    <a href="../rapat/index.html" class="desktop-nav-item">Rapat</a>
+    <a href="../humas/index.html" class="desktop-nav-item">Humas</a>
+    <a href="../bbm/index.html" class="desktop-nav-item">BBM</a>
+    <div class="desktop-dropdown">
+      <button class="desktop-dropdown-btn">Dashboard <span>▼</span></button>
+      <div class="desktop-dropdown-content">
+        <a href="../dashboard/dashboard_ews/index.html">Dashboard EWS</a>
+        <a href="../dashboard/dashboard_ekspor/index.html">Dashboard Ekspor</a>
+        <a href="../dashboard/dashboard_kendaraan/index.html">Dashboard Kendaraan</a>
+      </div>
+    </div>
+  </div>
+  <div style="flex: 1"></div>
+  <a href="../index.html" class="btn-back-header">Beranda</a>
+</nav>
+
+<main>
+  <!-- Success screen -->
+  <div id="success-screen">
+    <div class="suc-ring">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Peminjaman Kendaraan Berhasil Diajukan!</h2>
+    <p>Pengajuan peminjaman kendaraan Anda sudah masuk ke sistem.<br/>Silakan simpan nomor Berita Acara Anda:</p>
+    <div class="ba-badge" id="result-ba-id">BA/KND/2026/0000</div>
+    <p style="font-size:11px;color:var(--muted)">
+      Nomor BA ini digunakan untuk mengambil kunci fisik kendaraan di Sekretariat. Anda dapat mengunduh Berita Acara dari dashboard riwayat.
+    </p>
+    <button class="btn-new" onclick="resetForm()">+ Peminjaman Baru</button>
+  </div>
+
+  <!-- Form card wrapper -->
+  <div id="form-container">
+    <div class="bbm-hero">
+      <div class="bbm-content">
+        <div class="bbm-eyebrow">PINJAM KENDARAAN</div>
+        <div class="bbm-title">Peminjaman Kendaraan Dinas</div>
+        <div class="bbm-sub">Silakan isi formulir di bawah ini dengan lengkap untuk meminjam kendaraan dinas milik Bidang Sekretariat.</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <form id="vehicle-form" onsubmit="submitForm(event)">
+        <div class="divider">Informasi Peminjam</div>
+
+        <div class="form-grid">
+          <div class="field field-autocomplete">
+            <label>Nama Pegawai <span class="req">*</span></label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="f-pegawai-search" class="autocomplete-input" placeholder="Ketik nama Pegawai untuk mencari..." autocomplete="off" required/>
+              <input type="hidden" id="f-pegawai"/>
+              <div class="autocomplete-list" id="f-pegawai-list"></div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label>Bidang / Bagian</label>
+              <div class="autofill" id="display-bidang">
+                <span style="display: inline-flex; align-items: center; justify-content: center; margin-right: 4px; color: var(--muted);"><svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h2v2H8z"/><path d="M14 6h2v2h-2z"/><path d="M8 11h2v2H8z"/><path d="M14 11h2v2h-2z"/></svg></span><span id="val-bidang">-</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Jabatan</label>
+              <div class="autofill" id="display-jabatan">
+                <span style="display: inline-flex; align-items: center; justify-content: center; margin-right: 4px; color: var(--muted);"><svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span id="val-jabatan">-</span>
+              </div>
+              <input type="hidden" id="f-jabatan"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider">Detail Peminjaman</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Kendaraan yang Dipinjam <span class="req">*</span></label>
+            <select id="f-kendaraan" required>
+              <option value="">- Memuat kendaraan... -</option>
+            </select>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label>Tanggal Pinjam <span class="req">*</span></label>
+              <input type="date" id="f-tanggal" required/>
+            </div>
+
+            <div class="field">
+              <label>Tanggal Pengembalian <span class="req">*</span></label>
+              <input type="date" id="f-tanggal-kembali" required/>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Jenis Peminjaman <span class="req">*</span></label>
+            <div class="radio-group">
+              <div class="radio-card selected" id="rc-dinas" onclick="selectRadio('Dinas')">
+                <input type="radio" id="f-jenis-dinas" name="f-jenis" value="Dinas" checked/>
+                <span class="radio-card-label">Tugas Dinas</span>
+              </div>
+              <div class="radio-card" id="rc-pribadi" onclick="selectRadio('Pribadi')">
+                <input type="radio" id="f-jenis-pribadi" name="f-jenis" value="Pribadi"/>
+                <span class="radio-card-label">Keperluan Pribadi</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Tujuan / Keperluan Peminjaman <span class="req">*</span></label>
+            <textarea id="f-keperluan" rows="3" placeholder="Jelaskan secara detail tujuan peminjaman kendaraan..." required></textarea>
+          </div>
+        </div>
+
+        <div class="divider">Tanggung Jawab &amp; Tanda Tangan</div>
+
+        <div class="form-grid">
+          <div class="agree-wrap">
+            <input type="checkbox" id="f-agree" required/>
+            <label for="f-agree" class="agree-text">
+              Saya menyatakan bertanggung jawab penuh atas keamanan, kebersihan, kepatuhan lalu lintas, dan pengisian bahan bakar kendaraan dinas selama masa peminjaman ini, serta bersedia mengembalikan tepat waktu dalam kondisi baik.
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Tanda Tangan Elektronik <span class="req">*</span></label>
+            <div class="ttd-wrap">
+              <canvas id="ttd-canvas"></canvas>
+              <button type="button" class="ttd-btn-clear" onclick="clearSignature()">Bersihkan TTD</button>
+            </div>
+            <p style="font-size:10.5px;color:var(--muted)">*Gunakan jari Anda (pada handphone) atau mouse untuk membuat tanda tangan di atas.</p>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit"><span>Kirim Pengajuan Peminjaman</span></button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<nav class="bottomnav">
+  <a class="nav-item" href="../index.html">
+    <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+    <span class="nav-label">Beranda</span>
+  </a>
+  <a class="nav-item" href="../helpdesk/index.html">
+    <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+    <span class="nav-label">Helpdesk</span>
+  </a>
+  <a class="nav-item" href="../rapat/index.html">
+    <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+    <span class="nav-label">Rapat</span>
+  </a>
+  <div class="nav-item" onclick="toggleMore()" style="cursor: pointer;">
+    <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+    <span class="nav-label">Lainnya</span>
+  </div>
+</nav>
+
+<!-- Drawer -->
+<div class="more-drawer" id="more-drawer">
+  <div class="more-grid">
+    <a class="more-item" href="../dashboard/dashboard_ews/index.html">
+      <span class="more-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      <span class="more-item-label">Dashboard EWS</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_ekspor/index.html">
+      <span class="more-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      <span class="more-item-label">Dashboard Ekspor</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_kendaraan/index.html">
+      <span class="more-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V2h10v20H3z"/><path d="M17 9h4v8h-4z"/><circle cx="8" cy="7" r="2"/><path d="M13 5h4v4h-4z"/></svg></span>
+      <span class="more-item-label">Dashboard Kendaraan</span>
+    </a>
+    <a class="more-item" href="../humas/index.html">
+      <span class="more-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg></span>
+      <span class="more-item-label">Humas</span>
+    </a>
+    <a class="more-item" href="../bbm/index.html">
+      <span class="more-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V2h10v20H3z"/><path d="M17 9h4v8h-4z"/><circle cx="8" cy="7" r="2"/><path d="M13 5h4v4h-4z"/></svg></span>
+      <span class="more-item-label">Voucher BBM</span>
+    </a>
+    <a class="more-item" href="#" style="border-color: var(--wave); background: var(--sand);">
+      <span class="more-item-icon" style="color:var(--wave)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v10c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="15" cy="17" r="2"/></svg></span>
+      <span class="more-item-label">Pinjam Kendaraan</span>
+    </a>
+  </div>
+</div>
+
+<script>
+const CFG = {
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec"
+};
+
+let allPegawai = [];
+let allVehicles = [];
+let selectedRadioVal = "Dinas";
+
+// Fallback mock vehicles
+const MOCK_VEHICLES = [
+  { id: "KND0001", merk: "Toyota Avanza", no_polisi: "DK 1001 AB", jenis: "Mobil" },
+  { id: "KND0002", merk: "Mitsubishi Triton", no_polisi: "DK 2002 CD", jenis: "Mobil" },
+  { id: "KND0003", merk: "Honda Vario", no_polisi: "DK 3003 EF", jenis: "Motor" }
+];
+
+function selectRadio(val) {
+  selectedRadioVal = val;
+  document.querySelectorAll(".radio-card").forEach(c => c.classList.remove("selected"));
+  if (val === "Dinas") {
+    document.getElementById("rc-dinas").classList.add("selected");
+    document.getElementById("f-jenis-dinas").checked = true;
+  } else {
+    document.getElementById("rc-pribadi").classList.add("selected");
+    document.getElementById("f-jenis-pribadi").checked = true;
+  }
+}
+
+// ── Load Pegawai ──────────────────────────────
+async function loadPegawai() {
+  try {
+    const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getPegawai`);
+    const json = await res.json();
+    if (json.success) {
+      allPegawai = json.data || [];
+      initAutocomplete(
+        "f-pegawai-search",
+        "f-pegawai-list",
+        "f-pegawai",
+        allPegawai,
+        onPegawaiSelect
+      );
+    }
+  } catch (err) {
+    console.error("Gagal memuat data pegawai:", err);
+  }
+}
+
+function onPegawaiSelect(id) {
+  const valBidang = document.getElementById("val-bidang");
+  const valJabatan = document.getElementById("val-jabatan");
+  const fJabatan = document.getElementById("f-jabatan");
+  
+  if (!id) {
+    valBidang.textContent = "-";
+    valJabatan.textContent = "-";
+    fJabatan.value = "";
+    return;
+  }
+  const peg = allPegawai.find(p => p.id === id);
+  if (peg) {
+    valBidang.textContent = peg.bidang || "SEKRETARIAT";
+    valJabatan.textContent = peg.jabatan || "Staf";
+    fJabatan.value = peg.jabatan || "Staf";
+  }
+}
+
+// ── Load Vehicles ─────────────────────────────
+async function loadVehicles() {
+  const select = document.getElementById("f-kendaraan");
+  try {
+    const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getSecretariatVehicles`);
+    const json = await res.json();
+    if (json.success && json.data && json.data.length > 0) {
+      allVehicles = json.data;
+    } else {
+      console.warn("Menggunakan fallback master kendaraan...");
+      allVehicles = MOCK_VEHICLES;
+    }
+  } catch (err) {
+    console.error("Error loading vehicles, using fallback:", err);
+    allVehicles = MOCK_VEHICLES;
+  }
+  
+  // Render options
+  select.innerHTML = '<option value="">- Pilih Kendaraan -</option>' + 
+    allVehicles.map(v => `<option value="${v.id}">${v.merk} (${v.no_polisi}) [${v.jenis}]</option>`).join("");
+}
+
+// ── Signature Pad Logic ────────────────────────
+let canvas, ctx;
+let isDrawing = false;
+let lastX = 0, lastY = 0;
+let hasUserSigned = false;
+
+function initSignature() {
+  canvas = document.getElementById("ttd-canvas");
+  if (!canvas) return;
+  ctx = canvas.getContext("2d");
+  
+  // Responsive size
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+  
+  ctx.strokeStyle = "#001B44";
+  ctx.lineWidth = 3;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  
+  // Mouse events
+  canvas.addEventListener("mousedown", startDrawing);
+  canvas.addEventListener("mousemove", draw);
+  canvas.addEventListener("mouseup", stopDrawing);
+  canvas.addEventListener("mouseout", stopDrawing);
+  
+  // Touch events
+  canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+  canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+  canvas.addEventListener("touchend", stopDrawing, { passive: false });
+}
+
+function resizeCanvas() {
+  const container = canvas.parentElement;
+  const oldData = canvas.toDataURL(); // Save drawings on resize
+  canvas.width = container.clientWidth;
+  canvas.height = 160;
+  
+  // Re-apply properties
+  if (ctx) {
+    ctx.strokeStyle = "#001B44";
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+  }
+  
+  // Restore drawing
+  const img = new Image();
+  img.onload = () => ctx.drawImage(img, 0, 0);
+  img.src = oldData;
+}
+
+function startDrawing(e) {
+  isDrawing = true;
+  const rect = canvas.getBoundingClientRect();
+  lastX = e.clientX - rect.left;
+  lastY = e.clientY - rect.top;
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  
+  lastX = x;
+  lastY = y;
+  hasUserSigned = true;
+}
+
+function handleTouchStart(e) {
+  if (e.touches.length !== 1) return;
+  e.preventDefault();
+  isDrawing = true;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  lastX = touch.clientX - rect.left;
+  lastY = touch.clientY - rect.top;
+}
+
+function handleTouchMove(e) {
+  if (!isDrawing || e.touches.length !== 1) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+  
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  
+  lastX = x;
+  lastY = y;
+  hasUserSigned = true;
+}
+
+function stopDrawing() {
+  isDrawing = false;
+}
+
+function clearSignature() {
+  if (!ctx || !canvas) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hasUserSigned = false;
+}
+
+function isSignatureEmpty() {
+  return !hasUserSigned;
+}
+
+// ── Autocomplete Helper ───────────────────────
+function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback) {
+  const searchInput = document.getElementById(inputId);
+  const dropdownList = document.getElementById(listId);
+  const hiddenInput = document.getElementById(hiddenId);
+
+  document.addEventListener("click", e => {
+    if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) {
+      dropdownList.style.display = "none";
+    }
+  });
+
+  searchInput.addEventListener("focus", () => filterList());
+  searchInput.addEventListener("input", () => {
+    hiddenInput.value = "";
+    if (onSelectCallback) onSelectCallback("");
+    filterList();
+  });
+
+  function filterList() {
+    const query = searchInput.value.toLowerCase().trim();
+    const filtered = dataList.filter(item => 
+      item.nama.toLowerCase().includes(query) || 
+      item.id.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      dropdownList.innerHTML = '<div style="padding:10px 14px;color:var(--muted);font-size:13px;">Tidak ditemukan</div>';
+      dropdownList.style.display = "block";
+      return;
+    }
+
+    dropdownList.innerHTML = filtered.map(item => `
+      <div class="autocomplete-item" data-id="${item.id}" data-nama="${item.nama}">
+        <div>${item.nama}</div>
+        <div class="autocomplete-item-sub">${item.id} · ${item.bidang || ""}</div>
+      </div>
+    `).join("");
+
+    dropdownList.style.display = "block";
+
+    dropdownList.querySelectorAll(".autocomplete-item").forEach(el => {
+      el.addEventListener("mousedown", e => {
+        e.preventDefault();
+        const id = el.dataset.id;
+        const nama = el.dataset.nama;
+        searchInput.value = nama;
+        hiddenInput.value = id;
+        dropdownList.style.display = "none";
+        if (onSelectCallback) onSelectCallback(id);
+      });
+    });
+  }
+}
+
+// ── Submit Form ───────────────────────────────
+async function submitForm(e) {
+  e.preventDefault();
+  
+  const idPegawai = document.getElementById("f-pegawai").value;
+  const namaPegawai = document.getElementById("f-pegawai-search").value;
+  const jabatan = document.getElementById("f-jabatan").value;
+  const idKendaraan = document.getElementById("f-kendaraan").value;
+  const tanggal = document.getElementById("f-tanggal").value;
+  const tanggalKembali = document.getElementById("f-tanggal-kembali").value;
+  const keperluan = document.getElementById("f-keperluan").value;
+  const agree = document.getElementById("f-agree").checked;
+  
+  if (!idPegawai) {
+    alert("Silakan pilih Pegawai dari autocomplete dropdown!");
+    return;
+  }
+  if (!agree) {
+    alert("Anda harus menyetujui pernyataan pertanggungjawaban!");
+    return;
+  }
+  if (isSignatureEmpty()) {
+    alert("Silakan tanda tangan terlebih dahulu!");
+    return;
+  }
+  
+  const ttdBase64 = canvas.toDataURL("image/png");
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin"></span> <span>Mengirim...</span>`;
+  
+  const payload = {
+    action: "submitBookingCar",
+    id_pegawai: idPegawai,
+    nama_peminjam: namaPegawai,
+    jabatan: jabatan,
+    id_kendaraan: idKendaraan,
+    tanggal: tanggal,
+    tanggal_kembali: tanggalKembali,
+    jenis_pinjam: selectedRadioVal,
+    keperluan: keperluan,
+    ttd_base64: ttdBase64
+  };
+  
+  try {
+    const res = await fetch(CFG.APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+    if (json.success) {
+      if (json.ba_error) {
+        alert("Peringatan: Dokumen BA gagal dibuat secara otomatis.\nDetail Error: " + json.ba_error + "\n\nPermohonan tetap terdaftar di spreadsheet, tetapi tautan dokumen BA kosong.");
+      }
+      document.getElementById("result-ba-id").textContent = json.no_ba || "BA/KND/2026/0001";
+      document.getElementById("form-container").style.display = "none";
+      document.getElementById("success-screen").style.display = "block";
+      window.scrollTo(0, 0);
+    } else {
+      alert("Gagal mengirim pengajuan: " + (json.message || "Error server"));
+      btn.disabled = false;
+      btn.innerHTML = "<span>Kirim Pengajuan Peminjaman</span>";
+    }
+  } catch (err) {
+    alert("Koneksi gagal: " + err.message);
+    btn.disabled = false;
+    btn.innerHTML = "<span>Kirim Pengajuan Peminjaman</span>";
+  }
+}
+
+function resetForm() {
+  document.getElementById("vehicle-form").reset();
+  clearSignature();
+  document.getElementById("val-bidang").textContent = "-";
+  document.getElementById("val-jabatan").textContent = "-";
+  document.getElementById("f-jabatan").value = "";
+  document.getElementById("f-pegawai").value = "";
+  selectRadio("Dinas");
+  
+  // Set default dates
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("f-tanggal").value = today;
+  document.getElementById("f-tanggal-kembali").value = today;
+  
+  document.getElementById("success-screen").style.display = "none";
+  document.getElementById("form-container").style.display = "block";
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function toggleMore() {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer) drawer.classList.toggle("open");
+}
+
+document.addEventListener("click", e => {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer && drawer.classList.contains("open") &&
+      !drawer.contains(e.target) &&
+      !e.target.closest(".nav-item") &&
+      !e.target.closest("[onclick='toggleMore()']")) {
+    drawer.classList.remove("open");
+  }
+});
+
+// Init on load
+(async () => {
+  await Promise.all([loadPegawai(), loadVehicles()]);
+  initSignature();
+  
+  // Set default date to today
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("f-tanggal").value = today;
+  document.getElementById("f-tanggal-kembali").value = today;
+})();
+</script>
+</body>
+</html>

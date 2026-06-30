@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#061120"/>
+<meta name="description" content="Helpdesk IT - Laporan kerusakan dan permintaan layanan IT - ARUNIWAVES DKP Provinsi Bali"/>
+<link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+<title>Helpdesk - ARUNIWAVES</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
+  --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
+  --foam:   #3399FF; --sand: #E6F2FF; --light: #F8FAFD;
+  --text:   #1E293B; --muted:#64748B;
+  --border: #CBD5E1; --border2:#94A3B8;
+  --orange: #0077E6; --orange2:#3399FF;
+  --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
+  --mono: 'Fira Code', monospace; --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:var(--sans);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--wave);
+}
+
+/* ── SHIMMER SKELETON ── */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.shimmer, .shimmer-card {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ink2);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 85, 170, 0.05);
+}
+.shimmer::after, .shimmer-card::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.7) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+  content: '';
+}
+
+/* NAV */
+nav.topnav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height:54px;display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-mark{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--orange),var(--orange2));
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.nav-title{font-family:var(--title-sans);font-size:13px;font-weight:700;color:var(--text)}
+.nav-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+
+/* TABS (Segmented Control Style) */
+.tabs{
+  display:flex;background:var(--ink2);
+  border:1px solid var(--border);
+  border-radius:12px;padding:3px;
+  margin-bottom:20px;gap:2px;
+}
+.tab{
+  flex:1;padding:8px 12px;font-family:var(--title-sans);font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;white-space:nowrap;
+  background:transparent;border:1px solid transparent;border-radius:9px;
+  text-align:center;transition:all .2s ease;
+}
+.tab.active{
+  background:rgba(0, 119, 230, 0.08);
+  color:var(--orange);
+  border-color:rgba(0, 119, 230, 0.15);
+  font-weight:700;
+}
+
+/* MAIN */
+main{max-width:560px;margin:0 auto;padding:20px 16px 100px}
+.section{display:none}
+.section.active{display:block}
+
+/* FORM ELEMENTS */
+.field{margin-bottom:14px;animation:fadeUp .3s ease both}
+.field:focus-within {
+  position: relative;
+  z-index: 50;
+}
+.field:nth-child(1){animation-delay:.05s}
+.field:nth-child(2){animation-delay:.1s}
+.field:nth-child(3){animation-delay:.15s}
+.field:nth-child(4){animation-delay:.2s}
+.field:nth-child(5){animation-delay:.25s}
+.field:nth-child(6){animation-delay:.3s}
+.field:nth-child(7){animation-delay:.35s}
+
+.field label{
+  display:block;font-size:10px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+  font-family:var(--mono);
+}
+.req{color:var(--orange);margin-left:2px}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 14px;
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);
+  font-family:var(--sans);font-size:14px;
+  transition:border-color .2s;-webkit-appearance:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--orange);
+}
+.field textarea{resize:vertical;min-height:90px;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+
+/* Autofill display */
+.autofill{
+  display:none;padding:10px 14px;
+  background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.15);
+  border-radius:10px;font-size:13px;color:var(--foam);
+  font-family:var(--mono);
+}
+.autofill.show{display:flex;align-items:center;gap:8px}
+
+/* Aset info chip */
+.aset-chip{
+  margin-top:6px;padding:8px 12px;
+  background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.15);
+  border-radius:8px;font-size:11px;color:var(--muted);display:none;
+}
+.aset-chip.show{display:block}
+.aset-chip strong{color:var(--green)}
+
+/* DIVIDER */
+.divider{
+  font-size:9px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin:20px 0 14px;display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FOTO UPLOAD */
+.foto-zone{
+  border:2px dashed var(--border2);border-radius:14px;
+  padding:28px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;
+}
+.foto-zone:hover,.foto-zone.drag{
+  border-color:var(--orange);background:rgba(249,115,22,.04);
+}
+.foto-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.foto-zone-icon{font-size:32px;margin-bottom:8px}
+.foto-zone p{font-size:13px;color:var(--muted);margin-bottom:4px}
+.foto-zone em{font-size:11px;color:var(--border2);font-style:normal}
+
+.foto-preview{
+  display:none;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border2);position:relative;
+}
+.foto-preview img{width:100%;display:block;max-height:220px;object-fit:cover}
+.foto-remove{
+  position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,.75);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;cursor:pointer;
+  font-size:14px;display:flex;align-items:center;justify-content:center;
+}
+.foto-required{
+  font-size:11px;color:var(--red);margin-top:6px;display:none;
+}
+
+/* SUBMIT */
+.btn-submit{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--sea),var(--wave));
+  color:#fff;font-family:var(--sans);font-size:15px;font-weight:700;
+  cursor:pointer;transition:opacity .2s;margin-top:8px;
+}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:1}
+
+#success-screen{
+  display:none;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:56px 20px;gap:14px;
+}
+.suc-ring{
+  width:76px;height:76px;border-radius:50%;
+  background:rgba(45,212,191,.1);
+  border:2px solid var(--green);
+  font-size:34px;display:flex;align-items:center;justify-content:center;
+}
+#success-screen h2{font-size:20px;font-weight:700}
+#success-screen p{font-size:13px;color:var(--muted);line-height:1.6}
+.tiket-badge{
+  font-family:var(--mono);font-size:20px;
+  color:var(--orange);font-weight:700;letter-spacing:.04em;
+  background:rgba(249,115,22,.08);
+  border:1px solid rgba(249,115,22,.2);
+  padding:10px 20px;border-radius:10px;
+}
+.btn-new{
+  padding:12px 28px;background:var(--ink2);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:var(--sans);
+  font-size:13px;font-weight:600;cursor:pointer;
+  transition:border-color .2s;
+}
+.btn-new:hover{border-color:var(--orange);color:var(--orange)}
+
+/* STATUS TAB */
+.search-box{margin-bottom:14px}
+.tiket-card{
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  transition:border-color .2s;cursor:default;
+}
+.tiket-card:hover{border-color:var(--border2)}
+.tiket-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.tiket-id{font-family:var(--mono);font-size:11px;color:var(--orange)}
+.chip{
+  font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:99px;
+  font-family:var(--mono);
+}
+.chip-open    {background:rgba(249,115,22,.12);color:var(--orange)}
+.chip-proses  {background:rgba(0,180,216,.12); color:var(--wave)}
+.chip-selesai {background:rgba(45,212,191,.12);color:var(--green)}
+.chip-ditolak {background:rgba(248,113,113,.12);color:var(--red)}
+.tiket-judul{font-size:14px;font-weight:600;margin-bottom:4px}
+.tiket-meta{font-size:11px;color:var(--muted)}
+.tiket-tag{
+  margin-top:8px;font-size:10px;color:var(--wave);
+  font-family:var(--mono);
+}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state span{font-size:36px;display:block;margin-bottom:10px}
+.loading-row{display:flex;align-items:center;gap:10px;padding:20px;color:var(--muted);font-size:13px}
+.spin{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  display:flex;padding:8px 0 env(safe-area-inset-bottom);
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 4px;cursor:pointer;text-decoration:none;
+  color:var(--muted);
+  transition:color 0.2s, opacity 0.2s;
+}
+.nav-item:hover{opacity:.8}
+.nav-icon{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
+.nav-label{font-size:9px;font-weight:600;color:inherit;font-family:var(--mono)}
+.nav-item.active{color:var(--wave)}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 5px var(--wave))}
+
+/* MORE DRAWER */
+.more-drawer{
+  position:fixed;bottom:64px;left:0;right:0;z-index:150;
+  background:var(--ink2);border-top:1px solid var(--border);
+  padding:12px 16px;display:none;animation:slideUp .2s ease;
+}
+.more-drawer.open{display:block}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.more-item{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;background:var(--ink3);border:1px solid var(--border);
+  border-radius:12px;cursor:pointer;text-decoration:none;transition:border-color .2s;
+}
+.more-item:hover{border-color:var(--border2)}
+.more-item-icon{font-size:22px}
+.more-item-label{font-size:10px;color:var(--muted);font-family:var(--mono);text-align:center}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* Autocomplete styles */
+.autocomplete-wrap {
+  position: relative;
+}
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--ink3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+}
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(26,58,82,0.5);
+  text-align: left;
+}
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+.autocomplete-item:hover {
+  background: rgba(249,115,22,0.12);
+  color: var(--orange);
+}
+.autocomplete-item-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── DESKTOP & KEYBOARD STYLES ── */
+.svg-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: inline-block;
+  vertical-align: middle;
+}
+.desktop-nav {
+  display: none;
+  gap: 16px;
+  margin-left: 24px;
+}
+.desktop-nav-item {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+.desktop-nav-item:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-nav-item.active {
+  color: var(--orange);
+  background: rgba(234, 88, 12, 0.08);
+}
+body.keyboard-open .bottom-nav {
+  display: none !important;
+}
+body.keyboard-open .more-drawer {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+  .bottom-nav {
+    display: none !important;
+  }
+  main {
+    max-width: 1000px;
+    padding-bottom: 40px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .form-grid .full-width {
+    grid-column: span 2;
+  }
+}
+.logo-mark .svg-icon, .nav-logo-mark .svg-icon, .nav-mark .svg-icon, .monitor-icon .svg-icon {
+  stroke: #ffffff !important;
+}
+.btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back-header:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+
+.more-item.active {
+  border-color: var(--wave, #0077E6);
+  background: rgba(0, 119, 230, 0.08);
+}
+.more-item.active .more-item-icon svg {
+  stroke: var(--wave, #0077E6);
+}
+.more-item.active .more-item-label {
+  color: var(--wave, #0077E6);
+  font-weight: 700;
+}
+
+
+
+/* Hero Banner Styles (BBM Style) */
+.bbm-hero{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(0,119,230,0.12);
+  border-radius:20px;padding:24px 20px;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.bbm-hero::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(0,119,230,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.bbm-content{position:relative;z-index:2}
+.bbm-eyebrow{font-size:10px;color:var(--wave);font-family:var(--mono);letter-spacing:.1em;margin-bottom:6px;font-weight:700;}
+.bbm-title{font-family:var(--title-sans);font-size:22px;font-weight:800;margin-bottom:6px;line-height:1.2}
+.bbm-sub{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* Navigation overrides for 6-item mobile bottom nav & centered desktop nav */
+.bottom-nav { padding: 6px 0 env(safe-area-inset-bottom) !important; }
+.nav-item { padding: 4px 2px !important; gap: 2px !important; }
+.bottom-nav .svg-icon { width: 18px !important; height: 18px !important; }
+.nav-label { font-size: 8px !important; }
+.more-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+@media (min-width: 768px) {
+  .site-header, .topnav { position: relative !important; }
+  .desktop-nav {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-left: 0 !important;
+  }
+  .desktop-nav-item {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+}
+@media (min-width: 1024px) {
+  .desktop-nav {
+    gap: 16px !important;
+  }
+  .desktop-nav-item {
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+  }
+}
+
+
+
+
+/* Dropdown style on desktop */
+.desktop-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.desktop-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.desktop-dropdown-btn:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-dropdown-btn.active {
+  color: var(--wave);
+  background: rgba(0, 119, 182, 0.08);
+}
+.desktop-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0, 85, 170, 0.12);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  z-index: 300;
+  margin-top: 4px;
+}
+.desktop-dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: transparent;
+}
+.desktop-dropdown-content a {
+  color: var(--muted);
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
+  text-align: left;
+}
+.desktop-dropdown-content a:hover {
+  color: var(--wave);
+  background-color: var(--ink2);
+}
+.desktop-dropdown-content a.active {
+  color: var(--wave);
+  background-color: var(--ink2);
+}
+.desktop-dropdown:hover .desktop-dropdown-content {
+  display: block;
+}
+.desktop-dropdown:hover .desktop-dropdown-btn {
+  color: var(--text);
+  background: var(--ink2);
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-mark">
+      <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    </div>
+    <div>
+      <div class="nav-title">Helpdesk</div>
+      <div class="nav-sub">ARUNIWAVES</div>
+    </div>
+  </a>
+    <div class="desktop-nav">
+    <a href="../aset/index.html" class="desktop-nav-item">Aset</a>
+    <a href="../rapat/index.html" class="desktop-nav-item">Rapat</a>
+    <a href="../humas/index.html" class="desktop-nav-item">Humas</a>
+    <a href="../bbm/index.html" class="desktop-nav-item">BBM</a>
+    <div class="desktop-dropdown">
+      <button class="desktop-dropdown-btn">Dashboard <span style="font-size:9px;">▼</span></button>
+      <div class="desktop-dropdown-content">
+        <a href="../dashboard/dashboard_ews/index.html">Dashboard EWS</a>
+        <a href="../dashboard/dashboard_ekspor/index.html">Dashboard Ekspor</a>
+        <a href="../dashboard/dashboard_kendaraan/index.html">Dashboard Kendaraan</a>
+      </div>
+    </div>
+  </div>
+  
+  <div style="flex: 1"></div>
+  <a href="../index.html" class="btn-back-header">Beranda</a>
+</nav>
+
+<main>
+
+  <div class="bbm-hero">
+    <div class="bbm-content">
+      <div class="bbm-eyebrow">HELPDESK SARPRAS</div>
+      <div class="bbm-title">Laporan &amp; Layanan Sarpras</div>
+      <div class="bbm-sub">Silakan buat laporan kendala kerusakan barang/perangkat (IT, AC, TV, dsb) atau pantau status penanganan tiket Anda di bawah ini.</div>
+    </div>
+  </div>
+
+  
+  </div>
+
+
+  <!-- ══ TAB FORM ══ -->
+  <div id="section-form" class="section active">
+
+    <!-- Success screen -->
+    <div id="success-screen">
+      <div class="suc-ring" style="display: inline-flex; align-items: center; justify-content: center;"><svg style="width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 3;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2>Laporan Terkirim!</h2>
+      <p>Tim DKP Bali sudah diberitahu.<br/>Simpan nomor tiket Anda:</p>
+      <div class="tiket-badge" id="result-tiket-id">TKT-0000</div>
+      <p style="font-size:11px;color:var(--muted)">
+        Nomor tiket ini dikirim ke admin via Telegram. Pantau status di Beranda.
+      </p>
+      <button class="btn-new" onclick="resetForm()">+ Laporan Baru</button>
+    </div>
+
+    <!-- Form -->
+    <form id="form-helpdesk" onsubmit="submitLaporan(event)">
+
+      <div class="divider">Informasi Pelapor</div>
+
+      <div class="form-grid">
+        <div class="field field-autocomplete">
+          <label>Nama Pegawai <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="f-pegawai-search" class="autocomplete-input" placeholder="Ketik nama Pegawai untuk mencari..." autocomplete="off" required/>
+            <input type="hidden" id="f-pegawai"/>
+            <div class="autocomplete-list" id="f-pegawai-list"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Lokasi Kerja</label>
+          <div class="autofill" id="display-bidang">
+            <span style="display: inline-flex; align-items: center; justify-content: center; margin-right: 4px; color: var(--muted);"><svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h2v2H8z"/><path d="M14 6h2v2h-2z"/><path d="M8 11h2v2H8z"/><path d="M14 11h2v2h-2z"/></svg></span><span id="val-bidang">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider">Detail Kerusakan</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Judul Laporan <span class="req">*</span></label>
+          <input type="text" id="f-judul"
+                 placeholder="Contoh: Ac Bocor, Komputer Tidak Bisa Hidup" required/>
+        </div>
+
+        <!-- Nama Barang/Perangkat -->
+        <div class="field">
+          <label>Nama Barang/Perangkat <span class="req">*</span></label>
+          <input type="text" id="f-aset" placeholder="Contoh: AC Aula, TV Lobby, Laptop IT, dsb" required/>
+        </div>
+
+        <div class="field full-width">
+          <label>Deskripsi Masalah <span class="req">*</span></label>
+          <textarea id="f-deskripsi"
+                    placeholder="Kapan terjadi? Apa yang sudah dicoba? Ada pesan error?"
+                    required></textarea>
+        </div>
+
+        <div class="field full-width">
+          <label>Foto Kondisi Kerusakan <span class="req">*</span></label>
+          <div class="foto-zone" id="foto-zone"
+               onclick="document.getElementById('f-foto').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="handleDrop(event)">
+            <input type="file" id="f-foto" accept="image/*"
+                   capture="environment" onchange="previewFoto(event)"
+                   style="display:none"/>
+            <div class="foto-zone-icon" style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;"><svg style="width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.5; opacity: 0.6;" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+            <p>Tap untuk ambil / pilih foto</p>
+            <em>JPG, PNG · Maks. 5MB · Wajib dilampirkan</em>
+          </div>
+          <div class="foto-preview" id="foto-preview">
+            <img id="foto-img" src="" alt="Preview"/>
+            <button type="button" class="foto-remove" onclick="removeFoto()" style="display: inline-flex; align-items: center; justify-content: center;"><svg style="width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.5;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div class="foto-required" id="foto-required" style="display: none; align-items: center; gap: 4px;">
+            <svg style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: middle; display: inline-block;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Foto wajib dilampirkan sebelum mengirim.
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btn-submit">
+        Kirim Laporan
+      </button>
+
+    </form>
+  </div>
+
+
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="../aset/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+    <span class="nav-label">Aset</span>
+  </a>
+  <a class="nav-item active" href="../helpdesk/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+    <span class="nav-label">Helpdesk</span>
+  </a>
+  <a class="nav-item" href="../rapat/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+    <span class="nav-label">Rapat</span>
+  </a>
+  <a class="nav-item" href="../humas/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg></span>
+    <span class="nav-label">Humas</span>
+  </a>
+  <a class="nav-item" href="../bbm/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V2h10v20H3z"/><path d="M17 9h4v8h-4z"/><circle cx="8" cy="7" r="2"/><path d="M13 5h4v4h-4z"/></svg></span>
+    <span class="nav-label">BBM</span>
+  </a>
+  <div class="nav-item" onclick="toggleMore()" style="cursor: pointer;">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+    <span class="nav-label">Lainnya</span>
+  </div>
+</nav>
+<!-- Bottom Navigation Drawer for Dashboards -->
+<div class="more-drawer" id="more-drawer">
+  <div class="more-grid">
+    <a class="more-item" href="../dashboard/dashboard_ews/index.html" id="drawer-item-ews">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard EWS</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_ekspor/index.html" id="drawer-item-ekspor">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Ekspor</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_kendaraan/index.html" id="drawer-item-bbm">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Kendaraan</span>
+    </a>
+  </div>
+</div>
+
+
+<script>
+window.addEventListener('error', function(e) {
+  console.error("Global Error Caught:", e);
+  const errMsg = document.createElement('div');
+  errMsg.style.cssText = "position:fixed;top:10px;left:10px;background:#fee2e2;color:#991b1b;border:1px solid #f87171;padding:12px;border-radius:8px;z-index:9999;font-size:12px;max-width:300px;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-family:sans-serif;";
+  errMsg.innerHTML = `<strong>JavaScript Error:</strong> ${e.message}<br/><small style="color:#7f1d1d;">File: ${e.filename ? e.filename.split('/').pop() : 'unknown'}:${e.lineno || 0}</small>`;
+  document.body.appendChild(errMsg);
+});
+
+// ═══════════════════════════════════════════
+// KONFIGURASI
+// ═══════════════════════════════════════════
+const CFG = {
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec",
+};
+
+// ── State ───────────────────────────────────
+let allPegawai   = [];
+let allTiket     = [];
+let fotoB64      = null;
+let hasFoto      = false;
+let editingHelpdeskId = null;
+
+let currentUser = null;
+try {
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) currentUser = JSON.parse(cached);
+} catch (e) { console.error(e); }
+
+
+// ── Tabs ────────────────────────────────────
+function switchTab(tab) {
+  ["form"].forEach(t => {
+    document.getElementById(`section-${t}`)?.classList.toggle("active", t === tab);
+    document.getElementById(`tab-${t}`)?.classList.toggle("active", t === tab);
+  });
+}
+
+// ── Load Pegawai ────────────────────────────
+async function loadPegawai() {
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      allPegawai = [
+        { id:"P0001", nama:"NI PUTU ADELIA",        bidang:"SEKRETARIAT", subBidang:"SUNPROG" },
+        { id:"P0002", nama:"PANDE GDE KRISHNADANA",  bidang:"SEKRETARIAT", subBidang:"SUNPROG" },
+        { id:"P0003", nama:"WAYAN DENI KORIAWAN",    bidang:"SEKRETARIAT", subBidang:"KEUANGAN" },
+        { id:"P0004", nama:"MADE SARI DEWI",         bidang:"SEKRETARIAT", subBidang:"UMPEG" },
+        { id:"P0005", nama:"IDA BAGUS SUARDANA",     bidang:"KEPALA DINAS",subBidang:"" },
+      ];
+    } else {
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getPegawai`);
+      const json = await res.json();
+      if (json.success) allPegawai = json.data;
+    }
+    initAutocomplete("f-pegawai-search", "f-pegawai-list", "f-pegawai", allPegawai, id => {
+      onPegawaiChange();
+    });
+  } catch (e) { console.error(e); }
+}
+
+// ── Pegawai change ──────────────────────────
+function onPegawaiChange() {
+  const id  = document.getElementById("f-pegawai").value;
+  const peg = allPegawai.find(p => p.id === id);
+  const el  = document.getElementById("display-bidang");
+  const val = document.getElementById("val-bidang");
+
+  if (peg) {
+    val.textContent = peg.lokasiKerja || peg.bidang || "-";
+    el.classList.add("show");
+  } else {
+    el.classList.remove("show");
+  }
+}
+
+// ── Foto ────────────────────────────────────
+function compressImage(file, maxWidth, maxHeight, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = event => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = err => reject(err);
+    };
+    reader.onerror = err => reject(err);
+  });
+}
+
+async function previewFoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const previewImg = document.getElementById("foto-img");
+  previewImg.src = "";
+  
+  try {
+    const compressedDataUrl = await compressImage(file, 1600, 1600, 0.8);
+    fotoB64  = compressedDataUrl;
+    hasFoto  = true;
+    previewImg.src = compressedDataUrl;
+    document.getElementById("foto-preview").style.display = "block";
+    document.getElementById("foto-zone").style.display    = "none";
+    document.getElementById("foto-required").style.display= "none";
+  } catch (err) {
+    console.error("Compression error:", err);
+    alert("Gagal memproses foto.");
+  }
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById("foto-zone").classList.remove("drag");
+  const file = e.dataTransfer.files[0];
+  if (file?.type.startsWith("image/")) {
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    document.getElementById("f-foto").files = dt.files;
+    previewFoto({ target: { files: [file] } });
+  }
+}
+
+function removeFoto() {
+  fotoB64 = null; hasFoto = false;
+  document.getElementById("foto-preview").style.display = "none";
+  document.getElementById("foto-zone").style.display    = "block";
+  document.getElementById("f-foto").value = "";
+}
+
+// ── Submit / Update ──────────────────────────
+async function submitLaporan(e) {
+  e.preventDefault();
+
+  if (!hasFoto) {
+    alert("Foto kondisi kerusakan wajib diunggah/diambil.");
+    document.getElementById("foto-required").style.display = "block";
+    document.getElementById("foto-zone").scrollIntoView({ behavior:"smooth" });
+    return;
+  }
+
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; width: 16px; height: 16px; display: inline-block;"></span> <span>Menyimpan...</span>';
+
+  const pegId  = document.getElementById("f-pegawai").value;
+  if (!pegId) {
+    alert("Pilih nama Pegawai dari daftar yang muncul saat mengetik.");
+    btn.disabled = false;
+    btn.innerHTML = editingHelpdeskId ? "<span>Simpan Perubahan</span>" : "<span>Kirim Laporan</span>";
+    return;
+  }
+  const peg    = allPegawai.find(p => p.id === pegId);
+  const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
+
+  let payload;
+  if (editingHelpdeskId) {
+    if (!currentUser) {
+      alert("Login Google diperlukan untuk menyimpan perubahan.");
+      btn.disabled = false; 
+      btn.innerHTML = "<span>Simpan Perubahan</span>";
+      return;
+    }
+    payload = {
+      action:       "updateHelpdesk",
+      id_tiket:     editingHelpdeskId,
+      id_token:     currentUser.id_token,
+      judul:        document.getElementById("f-judul").value.trim(),
+      nama_barang:  document.getElementById("f-aset").value.trim(),
+      deskripsi:    document.getElementById("f-deskripsi").value.trim(),
+    };
+    if (fotoB64) {
+      payload.foto_base64 = fotoB64;
+    }
+  } else {
+    payload = {
+      action:         "submitHelpdesk",
+      id_pelapor:     pegId,
+      nama_pelapor:   peg?.nama    || "",
+      lokasi_pelapor:  peg?.lokasiKerja  || peg?.bidang || "",
+      nama_barang:    document.getElementById("f-aset").value.trim(),
+      judul:          document.getElementById("f-judul").value,
+      deskripsi:      document.getElementById("f-deskripsi").value,
+      foto_base64:    fotoB64,
+    };
+  }
+
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      await new Promise(r => setTimeout(r, 1200));
+      if (editingHelpdeskId) {
+        alert("Perubahan berhasil disimpan (mode demo).");
+        window.location.href = "../index.html?actTab=helpdesk";
+      } else {
+        const demoId = "TKT-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
+        showSuccess(demoId);
+      }
+      return;
+    }
+    const res  = await fetch(CFG.APPS_SCRIPT_URL, {
+      method: "POST", body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (data.success) {
+      if (editingHelpdeskId) {
+        alert("Perubahan berhasil disimpan!");
+        window.location.href = "../index.html?actTab=helpdesk";
+      } else {
+        showSuccess(data.tiket_id);
+      }
+    } else throw new Error(data.message || "Gagal mengirim.");
+  } catch (err) {
+    alert("Gagal mengirim: " + err.message);
+    btn.disabled = false;
+    btn.innerHTML = editingHelpdeskId ? "<span>Simpan Perubahan</span>" : "<span>Kirim Laporan</span>";
+  }
+}
+
+function showSuccess(id) {
+  alert("Laporan berhasil dikirim! Simpan Nomor Tiket Anda: " + id);
+  window.location.href = "../index.html?actTab=helpdesk";
+}
+
+function resetForm() {
+  document.getElementById("form-helpdesk").reset();
+  document.getElementById("form-helpdesk").style.display  = "block";
+  document.getElementById("success-screen").style.display = "none";
+  document.getElementById("btn-submit").disabled     = false;
+  document.getElementById("btn-submit").textContent  = "Kirim Laporan";
+  document.getElementById("display-bidang").classList.remove("show");
+  document.getElementById("aset-chip").classList.remove("show");
+  document.getElementById("f-pegawai-search").value = "";
+  document.getElementById("f-pegawai").value = "";
+  removeFoto();
+}
+
+// ── Load Tiket ──────────────────────────────
+async function loadTiket() {
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      allTiket = [
+        { id:"TKT-0002", tanggal:"02/06/2025 13:00", nama:"MADE SARI DEWI",    judul:"AC ruangan tidak dingin",   status:"OPEN" },
+        { id:"TKT-0001", tanggal:"01/06/2025 09:30", nama:"NI PUTU ADELIA",    judul:"Laptop tidak bisa menyala", status:"SELESAI" },
+      ];
+    } else {
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHelpdesk&_t=${Date.now()}`);
+      const json = await res.json();
+      if (json.success) allTiket = json.data;
+    }
+  } catch (e) {
+    console.error("Error loading tickets:", e);
+  }
+}
+
+function renderTiket(tiket) {
+  const list = document.getElementById("tiket-list");
+  if (!list) return;
+  if (!tiket.length) {
+    list.innerHTML = '<div class="empty-state"><span style="display: flex; justify-content: center; margin-bottom: 12px; color: var(--muted);"><svg style="width: 48px; height: 48px; stroke-width: 1.5; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="2" y1="17" x2="22" y2="17"/></svg></span><p>Belum ada tiket ditemukan.</p></div>';
+    return;
+  }
+  const chipMap = {
+    "OPEN":        "chip-open",
+    "DALAM PROSES":"chip-proses",
+    "SELESAI":     "chip-selesai",
+    "DITOLAK":     "chip-ditolak",
+  };
+  list.innerHTML = tiket.map(t => `
+    <div class="tiket-card">
+      <div class="tiket-top">
+        <span class="tiket-id">${t.id}</span>
+        <span class="chip ${chipMap[t.status] || "chip-open"}">${t.status}</span>
+      </div>
+      <div class="tiket-judul">${t.judul}</div>
+      <div class="tiket-meta">${t.nama} &nbsp;·&nbsp; ${t.tanggal}</div>
+    </div>
+  `).join("");
+}
+
+function filterTiket() {
+  const qEl = document.getElementById("search-tiket");
+  if (!qEl) return;
+  const q = qEl.value.toLowerCase();
+  renderTiket(allTiket.filter(t =>
+    t.nama.toLowerCase().includes(q) ||
+    t.id.toLowerCase().includes(q)   ||
+    t.judul.toLowerCase().includes(q)
+  ));
+}
+
+
+
+// ── Autocomplete Helper ───────────────────────
+function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback) {
+  const searchInput = document.getElementById(inputId);
+  const dropdownList = document.getElementById(listId);
+  const hiddenInput = document.getElementById(hiddenId);
+
+  document.addEventListener("click", e => {
+    if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) {
+      dropdownList.style.display = "none";
+    }
+  });
+
+  searchInput.addEventListener("focus", () => {
+    filterList();
+  });
+
+  searchInput.addEventListener("input", () => {
+    hiddenInput.value = "";
+    if (onSelectCallback) onSelectCallback("");
+    filterList();
+  });
+
+  function filterList() {
+    const query = searchInput.value.toLowerCase().trim();
+    const filtered = dataList.filter(item => 
+      item.nama.toLowerCase().includes(query) || 
+      item.id.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      dropdownList.innerHTML = '<div style="padding:10px 14px;color:var(--muted);font-size:13px;">Tidak ditemukan</div>';
+      dropdownList.style.display = "block";
+      return;
+    }
+
+    dropdownList.innerHTML = filtered.map(item => `
+      <div class="autocomplete-item" data-id="${item.id}" data-nama="${item.nama}">
+        <div style="font-weight:600;">${item.nama}</div>
+        <div class="autocomplete-item-sub">${item.id} · ${item.bidang || ""} ${item.subBidang ? '- ' + item.subBidang : ''}</div>
+      </div>
+    `).join("");
+
+    dropdownList.style.display = "block";
+
+    dropdownList.querySelectorAll(".autocomplete-item").forEach(el => {
+      el.addEventListener("mousedown", e => {
+        e.preventDefault();
+        const id = el.dataset.id;
+        const nama = el.dataset.nama;
+        searchInput.value = nama;
+        hiddenInput.value = id;
+        dropdownList.style.display = "none";
+        if (onSelectCallback) {
+          onSelectCallback(id);
+        }
+      });
+    });
+  }
+}
+
+// Check tab from URL parameters immediately to avoid flash and network dependency
+const urlParams = new URLSearchParams(window.location.search);
+const tabParam = urlParams.get("tab");
+if (tabParam === "status") {
+  switchTab("status");
+} else if (tabParam === "form") {
+  switchTab("form");
+}
+
+function formatDriveImgUrl(url) {
+  if (!url) return "";
+  const match = url.match(/id=([^&]+)/) || url.match(/\/file\/d\/([^\/]+)/) || url.match(/\/d\/([^\/]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
+
+async function handleEditParam() {
+  const editId = new URLSearchParams(window.location.search).get("editHelpdesk");
+  if (!editId) return;
+  
+  editingHelpdeskId = editId;
+  
+  if (!allPegawai.length) {
+    await loadPegawai();
+  }
+  await loadTiket();
+  
+  const item = allTiket.find(t => t.id === editId);
+  if (!item) {
+    alert(`Tiket helpdesk dengan ID "${editId}" tidak ditemukan di database. (Jumlah data terunduh: ${allTiket.length})`);
+    return;
+  }
+  
+  // Populate Form Fields
+  const peg = allPegawai.find(p => p.nama === item.nama || p.id === item.idPelapor);
+  if (peg) {
+    document.getElementById("f-pegawai-search").value = peg.nama;
+    document.getElementById("f-pegawai").value = peg.id;
+    onPegawaiChange();
+  } else {
+    document.getElementById("f-pegawai-search").value = item.nama;
+    document.getElementById("f-pegawai").value = item.idPelapor || "";
+  }
+  
+  document.getElementById("f-judul").value = item.judul || "";
+  document.getElementById("f-aset").value = item.namaBarang || "";
+  document.getElementById("f-deskripsi").value = item.deskripsi || "";
+  
+  if (item.fotoUrl && item.fotoUrl.trim() !== "" && item.fotoUrl !== "undefined" && item.fotoUrl !== "null") {
+    const preview = document.getElementById("foto-preview");
+    const img = document.getElementById("foto-img");
+    img.src = formatDriveImgUrl(item.fotoUrl);
+    preview.style.display = "block";
+    document.getElementById("foto-zone").style.display = "none";
+    hasFoto = true;
+  }
+  
+  // Change button label and page header
+  const btn = document.getElementById("btn-submit");
+  if (btn) btn.textContent = "Simpan Perubahan";
+  
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "HELPDESK SARPRAS (EDIT)";
+  if (heroTitle) heroTitle.textContent = "Ubah Laporan Kerusakan";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan pada laporan sarpras Anda.";
+  document.title = "Edit Laporan Helpdesk - ARUNIWAVES";
+}
+
+(async () => {
+  await loadPegawai();
+  await handleEditParam();
+})();
+
+// Keyboard visual viewport handler
+document.addEventListener("focusin", e => {
+  if (["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) {
+    document.body.classList.add("keyboard-open");
+  }
+});
+document.addEventListener("focusout", e => {
+  if (["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) {
+    document.body.classList.remove("keyboard-open");
+  }
+});
+
+// --- DASHBOARD DRAWER HANDLERS ---
+function toggleMore() {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer) drawer.classList.toggle("open");
+}
+document.addEventListener("click", e => {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer && drawer.classList.contains("open") &&
+      !drawer.contains(e.target) &&
+      !e.target.closest(".nav-item") &&
+      !e.target.closest("[onclick='toggleMore()']")) {
+    drawer.classList.remove("open");
+  }
+});
+</script>
+</body>
+</html>

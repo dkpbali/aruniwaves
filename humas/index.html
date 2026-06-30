@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#061120"/>
+<meta name="description" content="Humas - Pendataan kontribusi konten media sosial - ARUNIWAVES DKP Provinsi Bali"/>
+<link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+<title>Humas - ARUNIWAVES</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
+  --sea:    #0055AA; --wave: #0077E6; --foam: #3399FF;
+  --text:   #1E293B; --muted:#64748B;
+  --border: #CBD5E1; --border2:#94A3B8;
+  --pink:   #0077E6; --rose: #3399FF; --fuchsia:#0055AA;
+  --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
+  --mono: 'Fira Code', monospace; --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:var(--sans);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--wave);
+}
+
+/* ── SHIMMER SKELETON ── */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.shimmer, .shimmer-card {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ink2);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 85, 170, 0.05);
+}
+.shimmer::after, .shimmer-card::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.7) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+  content: '';
+}
+
+nav.topnav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height:54px;display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-mark{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),var(--fuchsia));
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.nav-title{font-family:var(--title-sans);font-size:13px;font-weight:700;color:var(--text)}
+.nav-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+/* TABS (Segmented Control Style) */
+.tabs{
+  display:flex;background:var(--ink2);
+  border:1px solid var(--border);
+  border-radius:12px;padding:3px;
+  margin-bottom:20px;gap:2px;
+}
+.tab{
+  flex:1;padding:8px 12px;font-family:var(--title-sans);font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;white-space:nowrap;
+  background:transparent;border:1px solid transparent;border-radius:9px;
+  text-align:center;transition:all .2s ease;
+}
+.tab.active{
+  background:rgba(0, 119, 230, 0.08);
+  color:var(--pink);
+  border-color:rgba(0, 119, 230, 0.15);
+  font-weight:700;
+}
+
+main{max-width:560px;margin:0 auto;padding:20px 16px 100px}
+.section{display:none}
+.section.active{display:block}
+
+/* PLATFORM CARDS */
+.platform-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.platform-card{
+  background:var(--ink2);border:2px solid var(--border);
+  border-radius:12px;padding:10px 6px;
+  text-align:center;cursor:pointer;transition:all .2s;
+}
+.platform-card:hover{border-color:var(--border2)}
+.platform-card.selected{border-color:var(--pink);background:rgba(0,119,230,.08)}
+.platform-icon{font-size:22px;display:block;margin-bottom:4px}
+.platform-name{font-size:9px;color:var(--muted);font-family:var(--mono);font-weight:600}
+.platform-card.selected .platform-name{color:var(--pink)}
+
+/* JENIS KONTEN */
+.jenis-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+.jenis-btn{
+  padding:7px 14px;border-radius:99px;
+  background:var(--ink2);border:1.5px solid var(--border);
+  color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.jenis-btn:hover{border-color:var(--border2)}
+.jenis-btn.selected{
+  border-color:var(--pink);color:var(--pink);
+  background:rgba(0,119,230,.08);
+}
+
+/* FORM */
+.field{margin-bottom:14px}
+.field:focus-within {
+  position: relative;
+  z-index: 50;
+}
+.field label{
+  display:block;font-size:10px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+  font-family:var(--mono);
+}
+.req{color:var(--pink);margin-left:2px}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 14px;
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);
+  font-family:var(--sans);font-size:14px;
+  transition:border-color .2s;-webkit-appearance:none;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--pink)}
+.field input::placeholder{color:var(--muted)}
+
+/* Autofill */
+.autofill{
+  display:none;padding:10px 14px;
+  background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.15);
+  border-radius:10px;font-size:13px;color:#90E0EF;font-family:var(--mono);
+}
+.autofill.show{display:flex;align-items:center;gap:8px}
+
+/* DIVIDER */
+.divider{
+  font-size:9px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin:20px 0 14px;display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* SCREENSHOT UPLOAD */
+.foto-zone{
+  border:2px dashed var(--border2);border-radius:14px;
+  padding:24px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;
+}
+.foto-zone:hover,.foto-zone.drag{
+  border-color:var(--pink);background:rgba(0,119,230,.04);
+}
+.foto-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.foto-zone-icon{font-size:28px;margin-bottom:6px}
+.foto-zone p{font-size:13px;color:var(--muted);margin-bottom:3px}
+.foto-zone em{font-size:11px;color:var(--border2);font-style:normal}
+.foto-preview{
+  display:none;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border2);position:relative;
+}
+.foto-preview img{width:100%;display:block;max-height:200px;object-fit:cover}
+.foto-remove{
+  position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,.75);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;cursor:pointer;
+  font-size:14px;display:flex;align-items:center;justify-content:center;
+}
+
+/* SUBMIT */
+.btn-submit{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--fuchsia));
+  color:#fff;font-family:var(--sans);font-size:15px;font-weight:700;
+  cursor:pointer;transition:opacity .2s;margin-top:8px;
+}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:1}
+
+#success-screen{
+  display:none;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:56px 20px;gap:14px;
+}
+.suc-ring{
+  width:76px;height:76px;border-radius:50%;
+  background:rgba(236,72,153,.1);
+  border:2px solid var(--pink);
+  font-size:34px;display:flex;align-items:center;justify-content:center;
+}
+#success-screen h2{font-size:20px;font-weight:700}
+#success-screen p{font-size:13px;color:var(--muted);line-height:1.6}
+.hum-badge{
+  font-family:var(--mono);font-size:18px;
+  color:var(--pink);font-weight:700;
+  background:rgba(236,72,153,.08);
+  border:1px solid rgba(236,72,153,.2);
+  padding:10px 20px;border-radius:10px;
+}
+.btn-new{
+  padding:12px 28px;background:var(--ink2);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:var(--sans);
+  font-size:13px;font-weight:600;cursor:pointer;transition:border-color .2s;
+}
+.btn-new:hover{border-color:var(--pink);color:var(--pink)}
+
+/* STATUS TAB */
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-chip{
+  padding:6px 14px;border-radius:99px;
+  background:var(--ink2);border:1px solid var(--border);
+  color:var(--muted);font-size:11px;font-weight:600;
+  cursor:pointer;transition:all .2s;font-family:var(--mono);
+}
+.filter-chip.active{border-color:var(--pink);color:var(--pink);background:rgba(236,72,153,.08)}
+
+.konten-card{
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:12px;margin-bottom:10px;overflow:hidden;
+  transition:border-color .2s;
+}
+.konten-card:hover{border-color:var(--border2)}
+.konten-header{
+  display:flex;align-items:flex-start;
+  padding:12px 14px;gap:10px;
+}
+.platform-badge{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.konten-title{font-size:13px;font-weight:600;margin-bottom:3px;line-height:1.3}
+.konten-meta{font-size:11px;color:var(--muted)}
+.konten-status{
+  margin-left:auto;flex-shrink:0;
+  font-size:9px;font-weight:700;padding:3px 9px;
+  border-radius:99px;font-family:var(--mono);
+  align-self:flex-start;
+}
+.stat-pending  {background:rgba(251,191,36,.12);color:var(--yellow)}
+.stat-disetujui{background:rgba(45,212,191,.12);color:var(--green)}
+.stat-ditolak  {background:rgba(248,113,113,.12);color:var(--red)}
+
+.konten-screenshot{
+  width:100%;height:120px;object-fit:cover;
+  border-top:1px solid var(--border);display:block;
+}
+
+/* STATISTIK TAB */
+.stats-header{
+  background:linear-gradient(135deg,rgba(236,72,153,.15) 0%,rgba(217,70,239,.08) 100%);
+  border:1px solid rgba(236,72,153,.2);
+  border-radius:14px;padding:16px;margin-bottom:16px;
+  text-align:center;
+}
+.stats-total{font-size:36px;font-weight:700;font-family:var(--mono);color:var(--pink)}
+.stats-label{font-size:11px;color:var(--muted);margin-top:2px}
+
+.platform-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.pstat-card{
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:12px;padding:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.pstat-icon{font-size:24px}
+.pstat-num{font-size:20px;font-weight:700;font-family:var(--mono);color:var(--pink)}
+.pstat-name{font-size:10px;color:var(--muted);font-family:var(--mono)}
+
+.bidang-section-title{
+  font-size:9px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;
+  font-family:var(--mono);margin-bottom:10px;
+}
+.bidang-bar{
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;
+}
+.bidang-name{font-size:12px;font-weight:600;width:100px;flex-shrink:0}
+.bidang-track{flex:1;height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.bidang-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--fuchsia));border-radius:99px;transition:width .6s ease}
+.bidang-count{font-family:var(--mono);font-size:11px;color:var(--pink);width:24px;text-align:right;flex-shrink:0}
+
+/* LOADING */
+.loading-row{display:flex;align-items:center;gap:10px;padding:20px;color:var(--muted);font-size:13px}
+.spin{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state span{font-size:36px;display:block;margin-bottom:10px}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  display:flex;padding:8px 0 env(safe-area-inset-bottom);
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 4px;cursor:pointer;text-decoration:none;
+  color:var(--muted);
+  transition:color 0.2s, opacity 0.2s;
+}
+.nav-item:hover{opacity:.8}
+.nav-icon{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
+.nav-label{font-size:9px;font-weight:600;color:inherit;font-family:var(--mono)}
+.nav-item.active{color:var(--wave)}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 5px var(--wave))}
+
+.btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back-header:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+
+.more-drawer{
+  position:fixed;bottom:64px;left:0;right:0;z-index:150;
+  background:var(--ink2);border-top:1px solid var(--border);
+  padding:12px 16px;display:none;animation:slideUp .2s ease;
+}
+.more-drawer.open{display:block}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.more-item{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;background:var(--ink3);border:1px solid var(--border);
+  border-radius:12px;cursor:pointer;text-decoration:none;transition:border-color .2s;
+}
+.more-item:hover{border-color:var(--border2)}
+.more-item-icon{font-size:22px}
+.more-item-label{font-size:10px;color:var(--muted);font-family:var(--mono);text-align:center}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* Autocomplete styles */
+.autocomplete-wrap {
+  position: relative;
+}
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--ink3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(26,58,82,0.1);
+  text-align: left;
+}
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+.autocomplete-item:hover {
+  background: rgba(236,72,153,0.12);
+  color: var(--pink);
+}
+.autocomplete-item-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── DESKTOP & KEYBOARD STYLES ── */
+.desktop-nav {
+  display: none;
+  gap: 16px;
+  margin-left: 24px;
+}
+.desktop-nav-item {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+.desktop-nav-item:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-nav-item.active {
+  color: var(--pink);
+  background: rgba(236, 72, 153, 0.08);
+}
+body.keyboard-open .bottom-nav {
+  display: none !important;
+}
+body.keyboard-open .more-drawer {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+  .bottom-nav {
+    display: none !important;
+  }
+  main {
+    max-width: 1000px;
+    padding-bottom: 40px;
+  }
+  
+  
+}
+.logo-mark .svg-icon, .nav-logo-mark .svg-icon, .nav-mark .svg-icon, .monitor-icon .svg-icon {
+  stroke: #ffffff !important;
+}
+.btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back-header:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+
+.more-item.active {
+  border-color: var(--wave, #0077E6);
+  background: rgba(0, 119, 230, 0.08);
+}
+.more-item.active .more-item-icon svg {
+  stroke: var(--wave, #0077E6);
+}
+.more-item.active .more-item-label {
+  color: var(--wave, #0077E6);
+  font-weight: 700;
+}
+
+
+
+/* Hero Banner Styles (BBM Style) */
+.bbm-hero{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(0,119,230,0.12);
+  border-radius:20px;padding:24px 20px;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.bbm-hero::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(0,119,230,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.bbm-content{position:relative;z-index:2}
+.bbm-eyebrow{font-size:10px;color:var(--wave);font-family:var(--mono);letter-spacing:.1em;margin-bottom:6px;font-weight:700;}
+.bbm-title{font-family:var(--title-sans);font-size:22px;font-weight:800;margin-bottom:6px;line-height:1.2}
+.bbm-sub{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* Navigation overrides for 6-item mobile bottom nav & centered desktop nav */
+.bottom-nav { padding: 6px 0 env(safe-area-inset-bottom) !important; }
+.nav-item { padding: 4px 2px !important; gap: 2px !important; }
+.bottom-nav .svg-icon { width: 18px !important; height: 18px !important; }
+.nav-label { font-size: 8px !important; }
+.more-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+@media (min-width: 768px) {
+  .site-header, .topnav { position: relative !important; }
+  .desktop-nav {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-left: 0 !important;
+  }
+  .desktop-nav-item {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+}
+@media (min-width: 1024px) {
+  .submit-desktop-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .stats-desktop-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .desktop-nav {
+    gap: 16px !important;
+  }
+  .desktop-nav-item {
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+  }
+}
+
+
+
+
+/* Dropdown style on desktop */
+.desktop-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.desktop-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.desktop-dropdown-btn:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-dropdown-btn.active {
+  color: var(--wave);
+  background: rgba(0, 119, 182, 0.08);
+}
+.desktop-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0, 85, 170, 0.12);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  z-index: 300;
+  margin-top: 4px;
+}
+.desktop-dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: transparent;
+}
+.desktop-dropdown-content a {
+  color: var(--muted);
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
+  text-align: left;
+}
+.desktop-dropdown-content a:hover {
+  color: var(--wave);
+  background-color: var(--ink2);
+}
+.desktop-dropdown-content a.active {
+  color: var(--wave);
+  background-color: var(--ink2);
+}
+.desktop-dropdown:hover .desktop-dropdown-content {
+  display: block;
+}
+.desktop-dropdown:hover .desktop-dropdown-btn {
+  color: var(--text);
+  background: var(--ink2);
+}
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-mark">
+      <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg>
+    </div>
+    <div>
+      <div class="nav-title">Humas</div>
+      <div class="nav-sub">ARUNIWAVES</div>
+    </div>
+  </a>
+    <div class="desktop-nav">
+    <a href="../aset/index.html" class="desktop-nav-item">Aset</a>
+    <a href="../helpdesk/index.html" class="desktop-nav-item">Helpdesk</a>
+    <a href="../rapat/index.html" class="desktop-nav-item">Rapat</a>
+    <a href="../bbm/index.html" class="desktop-nav-item">BBM</a>
+    <div class="desktop-dropdown">
+      <button class="desktop-dropdown-btn">Dashboard <span style="font-size:9px;">▼</span></button>
+      <div class="desktop-dropdown-content">
+        <a href="../dashboard/dashboard_ews/index.html">Dashboard EWS</a>
+        <a href="../dashboard/dashboard_ekspor/index.html">Dashboard Ekspor</a>
+        <a href="../dashboard/dashboard_kendaraan/index.html">Dashboard Kendaraan</a>
+      </div>
+    </div>
+  </div>
+  
+  <div style="flex: 1"></div>
+  <a href="../index.html" class="btn-back-header">Beranda</a>
+</nav>
+
+<main>
+
+  <div class="bbm-hero">
+    <div class="bbm-content">
+      <div class="bbm-eyebrow">KONTRIBUSI HUMAS</div>
+      <div class="bbm-title">Pendataan Konten Medsos</div>
+      <div class="bbm-sub">Laporkan kontribusi publikasi konten media sosial Anda atau pantau status persetujuan konten di bawah ini.</div>
+    </div>
+  </div>
+
+  
+  </div>
+
+
+    <!-- Success -->
+    <div id="success-screen">
+      <div class="suc-ring">
+        <svg class="svg-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg>
+      </div>
+      <h2>Konten Terkirim!</h2>
+      <p>Admin Humas DKP Bali akan segera memvalidasi.<br/>ID submission Anda:</p>
+      <div class="hum-badge" id="result-hum-id">HUM-0000</div>
+      <p style="font-size:11px;color:var(--muted)">
+        Konten telah dikirim ke admin via Telegram. Pantau status di Beranda.
+      </p>
+      <button class="btn-new" onclick="resetForm()">+ Submit Lagi</button>
+    </div>
+
+    <form id="form-humas" onsubmit="submitHumas(event)">
+
+      <div class="submit-desktop-layout">
+        <div class="submit-desktop-left">
+          <div class="divider">Identitas & Detail Konten</div>
+
+          <div class="field">
+            <label>Nama Anda <span class="req">*</span></label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="f-pegawai-search" class="autocomplete-input" placeholder="Ketik nama Anda untuk mencari..." autocomplete="off" required/>
+              <input type="hidden" id="f-pegawai"/>
+              <div class="autocomplete-list" id="f-pegawai-list"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Bidang</label>
+            <div class="autofill" id="display-bidang">
+              <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h2v2H8V6zm4 0h2v2h-2V6zm4 0h2v2h-2V6zM8 10h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg>
+              <span id="val-bidang">-</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Judul / Nama Konten <span class="req">*</span></label>
+            <input type="text" id="f-nama-konten"
+                   placeholder="Judul berita, caption, nama video..."
+                   required maxlength="150"/>
+          </div>
+
+          <div class="field">
+            <label>Tanggal Posting <span class="req">*</span></label>
+            <input type="date" id="f-tanggal-posting" required/>
+          </div>
+
+          <div class="field">
+            <label>Link Konten <small style="font-size:9px;letter-spacing:0;text-transform:none;color:var(--muted)">(opsional)</small></label>
+            <input type="url" id="f-link" placeholder="https://..."/>
+          </div>
+        </div>
+
+        <div class="submit-desktop-right">
+          <div class="divider">Platform & Jenis Konten</div>
+
+          <!-- Platform selector -->
+          <div class="field">
+            <label>Platform <span class="req">*</span></label>
+            <div class="platform-grid">
+              <div class="platform-card" onclick="selectPlatform('Website', this)">
+                <span class="platform-icon">
+                  <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </span>
+                <span class="platform-name">Website</span>
+              </div>
+              <div class="platform-card" onclick="selectPlatform('Instagram', this)">
+                <span class="platform-icon">
+                  <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 4px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </span>
+                <span class="platform-name">Instagram</span>
+              </div>
+              <div class="platform-card" onclick="selectPlatform('YouTube', this)">
+                <span class="platform-icon">
+                  <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 4px;"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+                </span>
+                <span class="platform-name">YouTube</span>
+              </div>
+              <div class="platform-card" onclick="selectPlatform('TikTok', this)">
+                <span class="platform-icon">
+                  <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 4px;"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                </span>
+                <span class="platform-name">TikTok</span>
+              </div>
+              <div class="platform-card" onclick="selectPlatform('Facebook', this)">
+                <span class="platform-icon">
+                  <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 4px;"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </span>
+                <span class="platform-name">Facebook</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Jenis konten (conditional) -->
+          <div class="field" id="field-jenis" style="display:none">
+            <label>Jenis Konten <span class="req">*</span></label>
+            <div class="jenis-grid" id="jenis-grid"></div>
+          </div>
+
+          <div class="divider">Bukti Tayang / Lampiran</div>
+
+          <div class="field">
+            <label>Screenshot / Bukti Konten <span class="req">*</span></label>
+            <div class="foto-zone" id="foto-zone"
+                 onclick="document.getElementById('f-screenshot').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag')"
+                 ondragleave="this.classList.remove('drag')"
+                 ondrop="handleDrop(event)">
+              <input type="file" id="f-screenshot" accept="image/*"
+                     onchange="previewFoto(event)" style="display:none"/>
+              <svg class="svg-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <p>Tap untuk upload screenshot</p>
+              <em>JPG, PNG · Maks. 5MB</em>
+            </div>
+            <div class="foto-preview" id="foto-preview">
+              <img id="foto-img" src="" alt="Preview"/>
+              <button type="button" class="foto-remove" onclick="removeFoto()" style="display: inline-flex; align-items: center; justify-content: center;"><svg style="width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.5;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div id="foto-required" style="display:none;font-size:11px;color:var(--red);margin-top:6px;align-items:center;gap:4px;">
+              <svg style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: middle; display: inline-block;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Screenshot wajib dilampirkan.
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-submit">
+            Kirim untuk Divalidasi
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="../aset/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+    <span class="nav-label">Aset</span>
+  </a>
+  <a class="nav-item" href="../helpdesk/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+    <span class="nav-label">Helpdesk</span>
+  </a>
+  <a class="nav-item" href="../rapat/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+    <span class="nav-label">Rapat</span>
+  </a>
+  <a class="nav-item active" href="../humas/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg></span>
+    <span class="nav-label">Humas</span>
+  </a>
+  <a class="nav-item" href="../bbm/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V2h10v20H3z"/><path d="M17 9h4v8h-4z"/><circle cx="8" cy="7" r="2"/><path d="M13 5h4v4h-4z"/></svg></span>
+    <span class="nav-label">BBM</span>
+  </a>
+  <div class="nav-item" onclick="toggleMore()" style="cursor: pointer;">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+    <span class="nav-label">Lainnya</span>
+  </div>
+</nav>
+<!-- Bottom Navigation Drawer for Dashboards -->
+<div class="more-drawer" id="more-drawer">
+  <div class="more-grid">
+    <a class="more-item" href="../dashboard/dashboard_ews/index.html" id="drawer-item-ews">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard EWS</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_ekspor/index.html" id="drawer-item-ekspor">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Ekspor</span>
+    </a>
+    <a class="more-item" href="../dashboard/dashboard_kendaraan/index.html" id="drawer-item-bbm">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Kendaraan</span>
+    </a>
+  </div>
+</div>
+
+
+<script>
+const CFG = { APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec" };
+
+// ── State ───────────────────────────────────
+let allPegawai   = [];
+let allKonten    = [];
+let selectedPlatform = "";
+let selectedJenis    = "";
+let fotoB64 = null;
+let hasFoto = false;
+let editingHumasId = null;
+
+let currentUser = null;
+try {
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) currentUser = JSON.parse(cached);
+} catch (e) { console.error(e); }
+
+
+// Jenis konten per platform
+const JENIS_MAP = {
+  "Website":   ["Berita"],
+  "Instagram": ["Post", "Story", "Reels"],
+  "YouTube":   ["Video", "Shorts"],
+  "TikTok":    ["Video"],
+  "Facebook":  ["Post", "Reels"],
+};
+
+const PLATFORM_ICONS = {
+  "Website":   `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  "Instagram": `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  "YouTube":   `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>`,
+  "TikTok":    `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>`,
+  "Facebook":  `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`
+};
+
+// ── Tabs ────────────────────────────────────
+function switchTab(tab) {
+  ["submit"].forEach(t => {
+    document.getElementById(`section-${t}`).classList.toggle("active", t === tab);
+    document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
+  });
+}
+
+// ── Platform ─────────────────────────────────
+function selectPlatform(platform, el) {
+  selectedPlatform = platform;
+  selectedJenis    = "";
+  document.querySelectorAll(".platform-card").forEach(c => c.classList.remove("selected"));
+  if (el) el.classList.add("selected");
+
+  // Show jenis konten
+  const jenis = JENIS_MAP[platform] || [];
+  const grid  = document.getElementById("jenis-grid");
+  grid.innerHTML = jenis.map(j => `
+    <div class="jenis-btn" onclick="selectJenis('${j}', this)">${j}</div>
+  `).join("");
+  document.getElementById("field-jenis").style.display = "block";
+
+  // Auto-select jika hanya 1 jenis
+  if (jenis.length === 1) {
+    const btn = grid.querySelector(".jenis-btn");
+    if (btn) { btn.classList.add("selected"); selectedJenis = jenis[0]; }
+  }
+}
+
+function selectJenis(jenis, el) {
+  selectedJenis = jenis;
+  document.querySelectorAll(".jenis-btn").forEach(b => b.classList.remove("selected"));
+  el.classList.add("selected");
+}
+
+// ── Pegawai ──────────────────────────────────
+async function loadPegawai() {
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      allPegawai = [
+        { id:"P0001", nama:"NI PUTU ADELIA",        bidang:"SEKRETARIAT", subBidang:"SUNPROG" },
+        { id:"P0002", nama:"PANDE GDE KRISHNADANA",  bidang:"SEKRETARIAT", subBidang:"SUNPROG" },
+        { id:"P0005", nama:"DEWA YOJANA",             bidang:"BIDANG P2HP", subBidang:"" },
+        { id:"P0008", nama:"WAYAN SAPUTRA",           bidang:"BIDANG PERIKANAN", subBidang:"" },
+      ];
+    } else {
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getPegawai`);
+      const json = await res.json();
+      if (json.success) allPegawai = json.data;
+    }
+    initAutocomplete("f-pegawai-search", "f-pegawai-list", "f-pegawai", allPegawai, id => {
+      onPegawaiChange();
+    });
+  } catch (e) { console.error(e); }
+}
+
+function onPegawaiChange() {
+  const id  = document.getElementById("f-pegawai").value;
+  const peg = allPegawai.find(p => p.id === id);
+  const el  = document.getElementById("display-bidang");
+  if (peg) {
+    document.getElementById("val-bidang").textContent =
+      peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "");
+    el.classList.add("show");
+  } else {
+    el.classList.remove("show");
+  }
+}
+
+// ── Foto ─────────────────────────────────────
+function compressImage(file, maxWidth, maxHeight, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = event => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = err => reject(err);
+    };
+    reader.onerror = err => reject(err);
+  });
+}
+
+async function previewFoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const previewImg = document.getElementById("foto-img");
+  previewImg.src = "";
+  
+  try {
+    const compressedDataUrl = await compressImage(file, 1600, 1600, 0.8);
+    fotoB64  = compressedDataUrl;
+    hasFoto  = true;
+    previewImg.src = compressedDataUrl;
+    document.getElementById("foto-preview").style.display = "block";
+    document.getElementById("foto-zone").style.display    = "none";
+    document.getElementById("foto-required").style.display= "none";
+  } catch (err) {
+    console.error("Compression error:", err);
+    alert("Gagal memproses foto.");
+  }
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById("foto-zone").classList.remove("drag");
+  const file = e.dataTransfer.files[0];
+  if (file?.type.startsWith("image/")) {
+    const dt = new DataTransfer(); dt.items.add(file);
+    document.getElementById("f-screenshot").files = dt.files;
+    previewFoto({ target:{ files:[file] } });
+  }
+}
+function removeFoto() {
+  fotoB64 = null; hasFoto = false;
+  document.getElementById("foto-preview").style.display = "none";
+  document.getElementById("foto-zone").style.display    = "block";
+  document.getElementById("f-screenshot").value = "";
+}
+
+// ── Submit ───────────────────────────────────
+// ── Submit / Update ───────────────────────────
+async function submitHumas(e) {
+  e.preventDefault();
+  if (!selectedPlatform) { alert("Pilih platform terlebih dahulu."); return; }
+  if (!selectedJenis)    { alert("Pilih jenis konten."); return; }
+  if (!hasFoto) {
+    document.getElementById("foto-required").style.display = "block";
+    return;
+  }
+
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; width: 16px; height: 16px; display: inline-block;"></span> <span>Menyimpan...</span>';
+
+  const pegId  = document.getElementById("f-pegawai").value;
+  if (!pegId) {
+    alert("Pilih nama Anda dari daftar yang muncul saat mengetik.");
+    btn.disabled = false;
+    btn.innerHTML = editingHumasId ? "<span>Simpan Perubahan</span>" : "<span>Kirim untuk Divalidasi</span>";
+    return;
+  }
+  const peg    = allPegawai.find(p => p.id === pegId);
+  const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
+
+  let payload;
+  if (editingHumasId) {
+    if (!currentUser) {
+      alert("Login Google diperlukan untuk menyimpan perubahan.");
+      btn.disabled = false; 
+      btn.innerHTML = "<span>Simpan Perubahan</span>";
+      return;
+    }
+    payload = {
+      action:           "updateHumas",
+      id_konten:        editingHumasId,
+      id_token:         currentUser.id_token,
+      nama_konten:      document.getElementById("f-nama-konten").value,
+      tanggal_posting:  document.getElementById("f-tanggal-posting").value,
+      link_konten:      document.getElementById("f-link").value,
+      platform:         selectedPlatform,
+      jenis_konten:     selectedJenis,
+    };
+    if (fotoB64) {
+      payload.screenshot_base64 = fotoB64;
+    }
+  } else {
+    payload = {
+      action:           "submitHumas",
+      id_pegawai:       pegId,
+      nama_pegawai:     peg?.nama || "",
+      bidang,
+      platform:         selectedPlatform,
+      jenis_konten:     selectedJenis,
+      nama_konten:      document.getElementById("f-nama-konten").value,
+      tanggal_posting:  document.getElementById("f-tanggal-posting").value,
+      link_konten:      document.getElementById("f-link").value,
+      screenshot_base64:fotoB64,
+    };
+  }
+
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      await new Promise(r => setTimeout(r, 1100));
+      if (editingHumasId) {
+        alert("Perubahan berhasil disimpan (mode demo).");
+        window.location.href = "../index.html?actTab=humas";
+      } else {
+        const id = "HUM-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
+        showSuccess(id);
+      }
+      return;
+    }
+    const res  = await fetch(CFG.APPS_SCRIPT_URL, { method:"POST", body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.success) {
+      if (editingHumasId) {
+        alert("Perubahan berhasil disimpan!");
+        window.location.href = "../index.html?actTab=humas";
+      } else {
+        showSuccess(data.konten_id);
+      }
+    } else throw new Error(data.message);
+  } catch(err) {
+    alert("Gagal: " + err.message);
+    btn.disabled = false;
+    btn.innerHTML = editingHumasId ? "<span>Simpan Perubahan</span>" : "<span>Kirim untuk Divalidasi</span>";
+  }
+}
+
+function showSuccess(id) {
+  alert("Laporan berhasil dikirim! Simpan Nomor Konten Anda: " + id);
+  window.location.href = "../index.html?actTab=humas";
+}
+
+function resetForm() {
+  document.getElementById("form-humas").reset();
+  document.getElementById("form-humas").style.display   = "block";
+  document.getElementById("success-screen").style.display = "none";
+  document.getElementById("btn-submit").disabled  = false;
+  document.getElementById("btn-submit").textContent = "Kirim untuk Divalidasi";
+  document.getElementById("display-bidang").classList.remove("show");
+  document.getElementById("field-jenis").style.display = "none";
+  document.querySelectorAll(".platform-card").forEach(c => c.classList.remove("selected"));
+  selectedPlatform = ""; selectedJenis = "";
+  document.getElementById("f-pegawai-search").value = "";
+  document.getElementById("f-pegawai").value = "";
+  removeFoto();
+}
+
+// ── Load Konten ──────────────────────────────
+async function loadKonten() {
+  try {
+    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
+      allKonten = [
+        { id:"HUM-0003", namaPegawai:"PANDE GDE KRISHNADANA", bidang:"SEKRETARIAT - SUNPROG", platform:"YouTube",   jenisKonten:"Video",   namaKonten:"Sosialisasi Nelayan Tangkap 2025",        tanggalPosting:"01/06/2025", screenshotUrl:"", status:"DISETUJUI" },
+        { id:"HUM-0002", namaPegawai:"NI PUTU ADELIA",        bidang:"SEKRETARIAT - SUNPROG", platform:"Instagram", jenisKonten:"Post",    namaKonten:"Monitoring Budidaya Ikan Kerapu",         tanggalPosting:"30/05/2025", screenshotUrl:"", status:"PENDING" },
+        { id:"HUM-0001", namaPegawai:"DEWA YOJANA",           bidang:"BIDANG P2HP",           platform:"TikTok",    jenisKonten:"Video",   namaKonten:"Behind the scenes panen lobster",         tanggalPosting:"28/05/2025", screenshotUrl:"", status:"DITOLAK" },
+      ];
+    } else {
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHumas&_t=${Date.now()}`);
+      const json = await res.json();
+      if (json.success) allKonten = json.data;
+    }
+  } catch (e) {
+    console.error("Error loading content:", e);
+  }
+}
+
+function filterKonten() {
+  renderKonten();
+}
+
+function renderKonten() {
+  const list = document.getElementById("konten-list");
+  if (!list) return;
+  const qEl = document.getElementById("search-konten");
+  const q = qEl ? qEl.value.toLowerCase() : "";
+
+  let filtered = allKonten.filter(k => {
+    if (filterStatus !== "SEMUA" && k.status !== filterStatus) return false;
+    if (q && !k.namaPegawai.toLowerCase().includes(q) &&
+             !k.namaKonten.toLowerCase().includes(q)  &&
+             !k.platform.toLowerCase().includes(q))   return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-state"><svg class="svg-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px;"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M19 16v6"/><path d="m16 19 3 3 3-3"/></svg><p>Tidak ada konten ditemukan.</p></div>';
+    return;
+  }
+
+  const defaultDocIcon = `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+  const statMap = { "PENDING":"stat-pending", "DISETUJUI":"stat-disetujui", "DITOLAK":"stat-ditolak" };
+  list.innerHTML = filtered.map(k => `
+    <div class="konten-card">
+      <div class="konten-header">
+        <div class="platform-badge" style="background:rgba(0,119,230,.1)">
+          ${PLATFORM_ICONS[k.platform] || defaultDocIcon}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="konten-title">${k.namaKonten}</div>
+          <div class="konten-meta">
+            ${k.platform} · ${k.jenisKonten} · ${k.namaPegawai}
+          </div>
+          <div class="konten-meta" style="margin-top:2px">${k.tanggalPosting}</div>
+        </div>
+        <span class="konten-status ${statMap[k.status] || 'stat-pending'}">${k.status}</span>
+      </div>
+      ${k.screenshotUrl ? `<img class="konten-screenshot" src="${k.screenshotUrl}" alt="screenshot" onerror="this.style.display='none'"/>` : ""}
+    </div>
+  `).join("");
+}
+
+// ── Statistik ────────────────────────────────
+async function loadStatistik() {
+  document.getElementById("statistik-content").innerHTML =
+    '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><div class="shimmer-card" style="height:80px;"></div><div class="shimmer-card" style="height:80px;"></div></div>';
+
+  if (!allKonten.length) await loadKonten();
+
+  const approved = allKonten.filter(k => k.status === "DISETUJUI");
+  const total    = approved.length;
+
+  // Per platform
+  const byPlatform = {};
+  approved.forEach(k => {
+    byPlatform[k.platform] = (byPlatform[k.platform] || 0) + 1;
+  });
+
+  // Per bidang
+  const byBidang = {};
+  approved.forEach(k => {
+    const b = k.bidang.split(" - ")[0];
+    byBidang[b] = (byBidang[b] || 0) + 1;
+  });
+  const maxBidang = Math.max(...Object.values(byBidang), 1);
+  const sortedBidang = Object.entries(byBidang).sort((a,b) => b[1]-a[1]);
+
+  const defaultDocIcon = `<svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+  document.getElementById("statistik-content").innerHTML = `
+    <div class="stats-header">
+      <div class="stats-total">${total}</div>
+      <div class="stats-label">Total Konten Disetujui</div>
+    </div>
+
+    <div class="platform-stats">
+      ${Object.entries(byPlatform).map(([p,n]) => `
+        <div class="pstat-card">
+          <span class="pstat-icon">${PLATFORM_ICONS[p] || defaultDocIcon}</span>
+          <div>
+            <div class="pstat-num">${n}</div>
+            <div class="pstat-name">${p}</div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="bidang-section-title">Kontribusi per Bidang</div>
+    ${sortedBidang.map(([b,n]) => `
+      <div class="bidang-bar">
+        <div class="bidang-name">${b}</div>
+        <div class="bidang-track">
+          <div class="bidang-fill" style="width:${Math.round(n/maxBidang*100)}%"></div>
+        </div>
+        <div class="bidang-count">${n}</div>
+      </div>
+    `).join("")}
+    ${!sortedBidang.length ? '<div class="empty-state"><svg class="svg-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><p>Belum ada data statistik.</p></div>' : ""}
+  `;
+}
+
+
+
+// ── Autocomplete Helper ───────────────────────
+function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback) {
+  const searchInput = document.getElementById(inputId);
+  const dropdownList = document.getElementById(listId);
+  const hiddenInput = document.getElementById(hiddenId);
+
+  document.addEventListener("click", e => {
+    if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) {
+      dropdownList.style.display = "none";
+    }
+  });
+
+  searchInput.addEventListener("focus", () => {
+    filterList();
+  });
+
+  searchInput.addEventListener("input", () => {
+    hiddenInput.value = "";
+    if (onSelectCallback) onSelectCallback("");
+    filterList();
+  });
+
+  function filterList() {
+    const query = searchInput.value.toLowerCase().trim();
+    const filtered = dataList.filter(item => 
+      item.nama.toLowerCase().includes(query) || 
+      item.id.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      dropdownList.innerHTML = '<div style="padding:10px 14px;color:var(--muted);font-size:13px;">Tidak ditemukan</div>';
+      dropdownList.style.display = "block";
+      return;
+    }
+
+    dropdownList.innerHTML = filtered.map(item => `
+      <div class="autocomplete-item" data-id="${item.id}" data-nama="${item.nama}">
+        <div style="font-weight:600;">${item.nama}</div>
+        <div class="autocomplete-item-sub">${item.id} · ${item.bidang || ""} ${item.subBidang ? '- ' + item.subBidang : ''}</div>
+      </div>
+    `).join("");
+
+    dropdownList.style.display = "block";
+
+    dropdownList.querySelectorAll(".autocomplete-item").forEach(el => {
+      el.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        const id = el.dataset.id;
+        const nama = el.dataset.nama;
+        searchInput.value = nama;
+        hiddenInput.value = id;
+        dropdownList.style.display = "none";
+        if (onSelectCallback) {
+          onSelectCallback(id);
+        }
+      });
+    });
+  }
+}
+
+function formatDriveImgUrl(url) {
+  if (!url) return "";
+  const match = url.match(/id=([^&]+)/) || url.match(/\/file\/d\/([^\/]+)/) || url.match(/\/d\/([^\/]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
+
+// Check tab from URL parameters immediately to avoid flash and network dependency
+const urlParams = new URLSearchParams(window.location.search);
+const tabParam = urlParams.get("tab");
+if (tabParam === "submit") {
+  switchTab("submit");
+}
+
+function normalizeDate(dateStr) {
+  if (!dateStr) return "";
+  dateStr = dateStr.toString().trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+  if (/^\d{4}-\d{2}-\d{2}\b/.test(dateStr)) return dateStr.substring(0, 10);
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateStr)) {
+    const [d, m, y] = dateStr.split("/");
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  return dateStr;
+}
+
+async function handleEditParam() {
+  const editId = new URLSearchParams(window.location.search).get("editHumas");
+  if (!editId) return;
+  
+  editingHumasId = editId;
+  
+  if (!allPegawai.length) {
+    await loadPegawai();
+  }
+  await loadKonten();
+  
+  const item = allKonten.find(k => k.id === editId);
+  if (!item) {
+    alert("Data konten tidak ditemukan.");
+    return;
+  }
+  
+  // Populate Form Fields
+  const peg = allPegawai.find(p => p.nama === item.namaPegawai || p.id === item.idPegawai);
+  if (peg) {
+    document.getElementById("f-pegawai-search").value = peg.nama;
+    document.getElementById("f-pegawai").value = peg.id;
+    onPegawaiChange();
+  }
+  
+  document.getElementById("f-nama-konten").value = item.namaKonten || "";
+  if (item.tanggalPosting) {
+    document.getElementById("f-tanggal-posting").value = normalizeDate(item.tanggalPosting);
+  }
+  document.getElementById("f-link").value = item.linkKonten || "";
+  
+  if (item.platform) {
+    const platformCards = document.querySelectorAll(".platform-card");
+    let foundCard = null;
+    platformCards.forEach(c => {
+      if (c.textContent.trim().includes(item.platform)) {
+        foundCard = c;
+      }
+    });
+    if (foundCard) {
+      setTimeout(() => { selectPlatform(item.platform, foundCard); }, 100);
+    }
+  }
+  
+  if (item.jenisKonten) {
+    const jenisGrid = document.getElementById("jenis-grid");
+    setTimeout(() => {
+      const buttons = jenisGrid.querySelectorAll(".jenis-btn");
+      buttons.forEach(btn => {
+        if (btn.textContent.trim() === item.jenisKonten) {
+          selectJenis(item.jenisKonten, btn);
+        }
+      });
+    }, 150);
+  }
+  
+  if (item.screenshotUrl && item.screenshotUrl.trim() !== "" && item.screenshotUrl !== "undefined" && item.screenshotUrl !== "null") {
+    const preview = document.getElementById("foto-preview");
+    const img = document.getElementById("foto-img");
+    img.src = formatDriveImgUrl(item.screenshotUrl);
+    preview.style.display = "block";
+    document.getElementById("foto-zone").style.display = "none";
+    hasFoto = true;
+  }
+  
+  // Change button label and page header
+  const btn = document.getElementById("btn-submit");
+  if (btn) btn.textContent = "Simpan Perubahan";
+  
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "EDIT KONTRIBUSI HUMAS";
+  if (heroTitle) heroTitle.textContent = "Ubah Data Konten";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan data konten medsos Anda.";
+  document.title = "Edit Kontribusi Humas - ARUNIWAVES";
+}
+
+// ── Init ─────────────────────────────────────
+
+(async function initPage() {
+  await loadPegawai();
+  await handleEditParam();
+})();
+
+
+
+// Keyboard visual viewport handler
+document.addEventListener("focusin", e => {
+  if (["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) {
+    document.body.classList.add("keyboard-open");
+  }
+});
+document.addEventListener("focusout", e => {
+  if (["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) {
+    document.body.classList.remove("keyboard-open");
+  }
+});
+
+// --- DASHBOARD DRAWER HANDLERS ---
+function toggleMore() {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer) drawer.classList.toggle("open");
+}
+document.addEventListener("click", e => {
+  const drawer = document.getElementById("more-drawer");
+  if (drawer && drawer.classList.contains("open") &&
+      !drawer.contains(e.target) &&
+      !e.target.closest(".nav-item") &&
+      !e.target.closest("[onclick='toggleMore()']")) {
+    drawer.classList.remove("open");
+  }
+});
+</script>
+</body>
+</html>

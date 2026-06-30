@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#0055AA"/>
+  <meta name="description" content="Dashboard Kendaraan &amp; Penggunaan - ARUNIWAVES Dinas Kelautan dan Perikanan Provinsi Bali"/>
+  <link rel="apple-touch-icon" href="../../icons/icon-192.png"/>
+  <title>Dashboard Kendaraan &amp; Penggunaan - ARUNIWAVES</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
+      --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
+      --foam:   #3399FF; --sand: #E6F2FF; --light: #F8FAFD;
+      --text:   #1E293B; --muted:#64748B;
+      --border: #CBD5E1; --border2:#94A3B8;
+      --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
+      --brand-grad: linear-gradient(135deg, var(--sea), var(--wave));
+      --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif; --mono: 'Fira Code', monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--ink);color:var(--text);
+      font-family:var(--sans);min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+    ::-webkit-scrollbar{width:6px;height:6px}
+    ::-webkit-scrollbar-track{background:var(--ink2)}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--wave)}
+
+    /* ── HEADER ── */
+    .site-header{
+      position:sticky;top:0;z-index:200;
+      background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 1px 3px rgba(0,0,0,0.05);
+      padding:0 16px;height:56px;
+      display:flex;align-items:center;gap:12px;
+    }
+    .logo-wrap{display:flex;align-items:center;gap:10px;flex:1;text-decoration:none}
+    .logo-mark{
+      width:34px;height:34px;border-radius:9px;flex-shrink:0;
+      background:var(--brand-grad);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo-mark svg{stroke:#fff !important}
+    .logo-name{font-family:var(--title-sans);font-size:14px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
+    .logo-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+    .desktop-nav{display:none;gap:16px;margin-left:24px}
+    .desktop-nav-item{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;padding:6px 12px;border-radius:6px}
+    .desktop-nav-item:hover{color:var(--text);background:var(--ink2)}
+    .desktop-nav-item.active{color:var(--wave);background:rgba(0,119,230,.08)}
+    .btn-back-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--ink3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      font-family: var(--sans);
+      transition: all .2s;
+    }
+    .btn-back-header:hover {
+      background: var(--ink2);
+      border-color: var(--border2);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main{max-width:520px;margin:0 auto;padding:20px 16px 100px}
+
+    .bbm-hero{
+      background:rgba(255,255,255,0.75);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(0,119,230,0.12);
+      border-radius:14px;padding:16px 14px;margin-bottom:16px;
+      position:relative;overflow:hidden;
+    }
+    .bbm-hero::before{
+      content:'';position:absolute;top:-60px;right:-60px;
+      width:200px;height:200px;
+      background:radial-gradient(circle,rgba(0,119,230,.12) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .bbm-content{position:relative;z-index:2}
+    .bbm-eyebrow{font-size:10px;color:var(--wave);font-family:var(--mono);letter-spacing:.1em;margin-bottom:6px;font-weight:700;}
+    .bbm-title{font-family:var(--title-sans);font-size:20px;font-weight:800;margin-bottom:6px;line-height:1.2}
+    .bbm-sub{font-size:12px;color:var(--muted);line-height:1.4}
+
+    /* Section Title */
+    .section-title{
+      font-size:10px;font-weight:700;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.1em;
+      font-family:var(--mono);margin-bottom:12px;
+      display:flex;align-items:center;gap:8px;
+    }
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    /* ── TAB SEGMENT CONTROL ── */
+    .tabs-control-wrapper {
+      background: var(--ink2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .tabs-control {
+      display: flex;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 10px 12px;
+      font-family: var(--title-sans);
+      font-size: 11.5px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(0,0,0,0.03);
+    }
+    .tab-btn.active {
+      background: var(--wave);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,119,230,0.2);
+    }
+    .tab-panel {
+      display: none;
+    }
+
+    /* ── COMPACT FLEET MASTER-DETAIL STYLES ── */
+    .fleet-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .fleet-list-panel {
+      width: 100%;
+    }
+    .fleet-detail-panel {
+      display: none;
+    }
+    
+    @media (min-width: 768px) {
+      .fleet-layout {
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .fleet-detail-panel {
+        display: block !important;
+        position: sticky;
+        top: 72px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+      }
+    }
+
+    /* ── GROUP BY BIDANG ACCORDIONS ── */
+    .bidang-group-accordion {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #fff;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .bidang-group-accordion.open {
+      border-color: var(--border2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .bidang-group-header {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: var(--ink2);
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .bidang-group-header:hover {
+      background: var(--ink3);
+    }
+    .bidang-group-title {
+      font-family: var(--title-sans);
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text);
+    }
+    .bidang-group-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bidang-group-count {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .bidang-group-status-badge {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .bidang-group-status-badge.safe { background: var(--green); }
+    .bidang-group-status-badge.warning { background: var(--yellow); }
+    .bidang-group-status-badge.danger { background: var(--red); }
+    .bidang-group-arrow {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+    .bidang-group-accordion.open .bidang-group-arrow {
+      transform: rotate(180deg);
+    }
+    .bidang-group-body {
+      display: none;
+      padding: 8px;
+      background: rgba(0,0,0,0.01);
+      border-top: 1px solid var(--border);
+    }
+    .bidang-group-accordion.open .bidang-group-body {
+      display: block;
+    }
+
+    /* Nested vehicle row */
+    .nested-vehicle-row {
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      transition: all 0.2s ease;
+    }
+    .nested-vehicle-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .nested-vehicle-row:last-child {
+      margin-bottom: 0;
+    }
+    .nested-vehicle-row:hover {
+      border-color: var(--border2);
+    }
+    .nested-vehicle-row.selected {
+      border-color: var(--wave);
+      background: rgba(0, 119, 230, 0.04);
+      box-shadow: 0 2px 6px rgba(0,119,230,0.04);
+    }
+    .nested-vehicle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .nested-vehicle-name {
+      font-family: var(--title-sans);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .nested-vehicle-sub {
+      font-size: 9.5px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .fleet-row-detail-mobile {
+      border-top: 1px dashed var(--border);
+      padding-top: 10px;
+      margin-top: 10px;
+      width: 100%;
+      background: var(--light);
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    /* Vehicle details formatting */
+    .vehicle-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 10.5px;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .detail-label {
+      font-size: 8.5px;
+      color: var(--muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .detail-val {
+      font-weight: 700;
+    }
+    .vehicle-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .vehicle-photo-thumbnail {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .vehicle-photo-thumbnail:hover {
+      opacity: 0.95;
+    }
+    .photo-placeholder {
+      height: 80px;
+      background: var(--ink2);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 8.5px;
+      font-family: var(--mono);
+      border: 1px dashed var(--border);
+    }
+    .trip-badge-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .trip-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: var(--green);
+      background: rgba(13,148,136,0.08);
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-family: var(--title-sans);
+    }
+
+    /* Service status rows */
+    .status-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .status-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .status-label-wrap {
+      display: flex;
+      align-items: center;
+    }
+    .status-label {
+      color: var(--text);
+      font-family: var(--title-sans);
+      font-weight: 700;
+    }
+    .status-date {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+    }
+    .status-bar-track {
+      height: 5px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 2.5px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.01);
+    }
+    .status-bar-fill {
+      height: 100%;
+      border-radius: 2.5px;
+      transition: width 0.5s ease;
+    }
+    .status-bar-fill.safe {
+      background: var(--green);
+    }
+    .status-bar-fill.warning {
+      background: var(--yellow);
+    }
+    .status-bar-fill.danger {
+      background: var(--red);
+    }
+    .status-badge {
+      font-size: 7.5px;
+      font-family: var(--mono);
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-left: 5px;
+      text-transform: uppercase;
+    }
+    .status-badge.safe {
+      background: rgba(13,148,136,0.12);
+      color: var(--green);
+    }
+    .status-badge.warning {
+      background: rgba(202,138,4,0.12);
+      color: var(--yellow);
+    }
+    .status-badge.danger {
+      background: rgba(220,38,38,0.12);
+      color: var(--red);
+    }
+
+    /* Bidang Progress Bars */
+    .bidang-bars-card{
+      background:rgba(255,255,255,0.75);border:1px solid var(--border);
+      border-radius:16px;padding:18px;margin-bottom:24px;
+    }
+    .bidang-bar-row{margin-bottom:14px;cursor:pointer}
+    .bidang-bar-row:last-child{margin-bottom:0}
+    .bidang-bar-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;margin-bottom:4px}
+    .bidang-bar-name{color:var(--text)}
+    .bidang-bar-val{color:var(--wave);font-family:var(--mono);font-weight:700}
+    .bidang-bar-track{height:8px;background:rgba(0,0,0,0.04);border-radius:4px;overflow:hidden;border:1px solid rgba(0,0,0,0.02)}
+    .bidang-bar-fill{height:100%;background:var(--brand-grad);border-radius:4px;transition:width .8s cubic-bezier(0.1,1,0.1,1)}
+
+    /* ── FILTERS ── */
+    .filter-panel{
+      background:var(--ink2);border:1px solid var(--border);
+      border-radius:16px;padding:14px;margin-bottom:16px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .filter-title{font-size:10px;font-weight:700;color:var(--muted);font-family:var(--mono);text-transform:uppercase}
+    .filter-controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    @media (min-width: 768px) {
+      .filter-controls-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+      }
+      .filter-controls-row .filter-control {
+        flex: 1;
+      }
+    }
+    .filter-control{
+      width:100%;padding:8px 12px;font-size:12px;
+      background:#fff;border:1px solid var(--border);
+      border-radius:8px;font-family:var(--sans);color:var(--text);
+      font-weight:600;outline:none;
+    }
+    .filter-control:focus{border-color:var(--wave)}
+
+    .filter-active-msg{
+      font-size:11px;color:var(--muted);background:var(--ink3);
+      padding:8px 12px;border-radius:10px;display:flex;
+      justify-content:space-between;align-items:center;margin-bottom:10px;
+    }
+
+    /* ── INSIGHT CARD (ORIGINAL DESIGN RESTORED) ── */
+    .insight-card {
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0, 85, 170, 0.06);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      width: 100%;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    }
+    .insight-card:hover {
+      box-shadow: 0 6px 22px rgba(0, 119, 230, 0.12);
+      border-color: rgba(0, 119, 230, 0.35);
+      transform: translateY(-1px);
+    }
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--brand-grad);
+      border-radius: 16px 16px 0 0;
+    }
+    .insight-header {
+      font-family: var(--title-sans);
+      font-size: 12.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--wave);
+    }
+    .insight-subcards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .insight-subcard {
+      background: var(--sand);
+      border: 1px solid rgba(0, 119, 230, 0.12);
+      padding: 10px 12px;
+      border-radius: 10px;
+      transition: background 0.2s ease;
+    }
+    .insight-subcard:hover {
+      background: rgba(0, 119, 230, 0.07);
+    }
+    .insight-subcard-label {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-family: var(--mono);
+      letter-spacing: .04em;
+    }
+    .insight-subcard-val {
+      font-size: 12.5px;
+      font-weight: 800;
+      margin-top: 3px;
+      color: var(--text);
+    }
+    .insight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--ink2);
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      font-size: 11px;
+    }
+    .insight-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 5px;
+    }
+    .insight-list-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .insight-list-label {
+      color: var(--muted);
+    }
+    .insight-list-val {
+      font-weight: 700;
+      color: var(--text);
+    }
+    .insight-recommendation-box {
+      background: var(--sand);
+      border-left: 3px solid var(--wave);
+      padding: 11px 13px;
+      border-radius: 4px 10px 10px 4px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    @media (max-width: 600px) {
+      .insight-header {
+        font-size: 10.5px;
+      }
+      .insight-subcard-val {
+        font-size: 11px;
+      }
+      .insight-list {
+        font-size: 9.5px;
+      }
+      .insight-recommendation-box {
+        font-size: 9.5px;
+        padding: 9px 10px;
+      }
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;z-index:100;
+      background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
+      border-top:1px solid var(--border);
+      box-shadow:0 -2px 10px rgba(0,0,0,0.05);
+      display:flex;padding:8px 0 env(safe-area-inset-bottom);
+    }
+    .nav-item{
+      flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+      padding:6px 4px;cursor:pointer;text-decoration:none;
+      color:var(--muted);transition:color .2s,opacity .2s;
+    }
+    .nav-item:hover{opacity:.8}
+    .nav-icon{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
+    .nav-label{font-size:9px;font-weight:600;color:inherit;font-family:var(--mono)}
+    .nav-item.active{color:var(--wave)}
+    .nav-item.active .nav-icon{filter:drop-shadow(0 0 5px rgba(0,119,230,0.4))}
+
+    @media (max-width: 480px) {
+      main { padding: 16px 12px 90px; }
+      .bbm-hero { padding: 14px 12px; }
+      .bbm-title { font-size: 17px; }
+      .insight-subcards { grid-template-columns: 1fr; gap: 8px; }
+      .filter-panel { padding: 12px; }
+    }
+    @media(min-width:768px){
+      .desktop-nav{display:flex}
+      .bottom-nav{display:none !important}
+      main{max-width:720px;padding-bottom:40px}
+    }
+
+    @media (min-width:1024px){
+      main{max-width:1080px}
+    }
+
+    /* --- ACCORDION DETAILS TABLE CSS --- */
+    .bidang-accordion-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: var(--ink3, rgba(255,255,255,0.4));
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: all .2s ease;
+    }
+    .bidang-accordion-item:hover {
+      border-color: var(--border2);
+      box-shadow: 0 4px 12px rgba(0,119,230,0.04);
+    }
+    .bidang-accordion-header {
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255,255,255,0.6);
+      transition: background 0.2s;
+    }
+    .bidang-accordion-header:hover {
+      background: rgba(255,255,255,0.9);
+    }
+    .bidang-accordion-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: var(--sans);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    .bidang-accordion-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bidang-accordion-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 119, 230, 0.08);
+      color: var(--wave);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: var(--mono);
+    }
+    .bidang-accordion-arrow {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: bold;
+      transition: transform 0.25s ease;
+    }
+    .bidang-accordion-item.open .bidang-accordion-arrow {
+      transform: rotate(180deg);
+    }
+    .bidang-accordion-body {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.2);
+      padding: 12px;
+      overflow-x: auto;
+    }
+    .bidang-accordion-item.open .bidang-accordion-body {
+      display: block;
+    }
+    .bidang-detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    .bidang-detail-table th {
+      padding: 8px 10px;
+      color: var(--muted);
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      font-family: var(--sans);
+      text-transform: uppercase;
+      font-size: 9.5px;
+      letter-spacing: .05em;
+    }
+    .bidang-detail-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.4;
+      vertical-align: middle;
+    }
+    .bidang-detail-table tr:last-child td {
+      border-bottom: none;
+    }
+    .btn-doc-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      background: rgba(0, 119, 230, 0.06);
+      color: var(--wave);
+      border: 1px solid rgba(0, 119, 230, 0.1);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 10px;
+      transition: all .2s;
+    }
+    .btn-doc-link:hover {
+      background: var(--wave);
+      color: white;
+      border-color: var(--wave);
+    }
+
+    /* --- MOBILE DRAWER NAVIGATION STYLING --- */
+    .more-drawer {
+      position: fixed;
+      bottom: 64px;
+      left: 0;
+      right: 0;
+      z-index: 150;
+      background: var(--ink2, #ffffff);
+      border-top: 1px solid var(--border, #e0e0e0);
+      padding: 12px 16px;
+      display: none;
+      animation: slideUp .2s ease;
+    }
+    .more-drawer.open {
+      display: block;
+    }
+    .more-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .more-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      background: var(--ink3, #f5f5f5);
+      border: 1px solid var(--border, #e0e0e0);
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s;
+      color: var(--text, #333333);
+    }
+    .more-item:hover {
+      border-color: var(--border2, #cccccc);
+    }
+    .more-item-icon {
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .more-item-label {
+      font-size: 10px;
+      color: var(--muted, #666666);
+      font-family: var(--mono, monospace);
+      text-align: center;
+    }
+    body.keyboard-open .more-drawer {
+      display: none !important;
+    }
+    @media(min-width: 768px) {
+      .more-drawer {
+        display: none !important;
+      }
+    }
+
+    .more-item.active {
+      border-color: var(--wave, #0077E6);
+      background: rgba(0, 119, 230, 0.08);
+    }
+    .more-item.active .more-item-icon svg {
+      stroke: var(--wave, #0077E6);
+    }
+    .more-item.active .more-item-label {
+      color: var(--wave, #0077E6);
+      font-weight: 700;
+    }
+
+    /* Navigation overrides for mobile bottom nav & centered desktop nav */
+    .bottom-nav { padding: 6px 0 env(safe-area-inset-bottom) !important; }
+    .nav-item { padding: 4px 2px !important; gap: 2px !important; }
+    .bottom-nav .svg-icon { width: 18px !important; height: 18px !important; }
+    .nav-label { font-size: 8px !important; }
+    .more-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+    @media (min-width: 768px) {
+      .site-header, .topnav { position: relative !important; }
+      .desktop-nav {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-left: 0 !important;
+      }
+      .desktop-nav-item {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      .desktop-nav {
+        gap: 16px !important;
+      }
+      .desktop-nav-item {
+        font-size: 13px !important;
+        padding: 6px 12px !important;
+      }
+    }
+
+    /* Dropdown style on desktop */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+      z-index: 300;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-top: 2px;
+    }
+    .nav-dropdown-content a {
+      color: var(--text);
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .nav-dropdown-content a:hover {
+      background-color: var(--ink2);
+      color: var(--wave);
+    }
+    .nav-dropdown-content a.active {
+      background-color: rgba(0,119,230,0.08);
+      color: var(--wave);
+      font-weight: 700;
+    }
+    .nav-dropdown:hover .nav-dropdown-content {
+      display: block;
+    }
+    
+    /* Modal styles */
+    .modal-overlay {
+      transition: opacity 0.25s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo-wrap" href="../../index.html">
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <div>
+      <div class="logo-name">ARUNIWAVES</div>
+      <div class="logo-sub">DKP BALI ONLINE</div>
+    </div>
+  </a>
+
+  <nav class="desktop-nav">
+    <a class="desktop-nav-item" href="../../index.html">Beranda</a>
+    <a class="desktop-nav-item" href="../../aset/index.html">Aset</a>
+    <a class="desktop-nav-item" href="../../helpdesk/index.html">Helpdesk</a>
+    <a class="desktop-nav-item" href="../../rapat/index.html">Rapat</a>
+    <a class="desktop-nav-item" href="../../humas/index.html">Humas</a>
+    <a class="desktop-nav-item" href="../../kendaraan/index.html">Kendaraan</a>
+    <div class="nav-dropdown">
+      <a class="desktop-nav-item active" href="#" style="display:flex; align-items:center; gap:4px;">
+        Dashboard ▾
+      </a>
+      <div class="nav-dropdown-content">
+        <a href="../dashboard_ews/index.html">Early Warning Humas</a>
+        <a href="../dashboard_ekspor/index.html">Ekspor &amp; UPI</a>
+        <a href="index.html" class="active">Kendaraan &amp; BBM</a>
+      </div>
+    </div>
+  </nav>
+
+  <a class="btn-back-header" href="../../index.html">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    <span>Kembali</span>
+  </a>
+</header>
+
+<main>
+
+  <!-- Hero Section -->
+  <div class="bbm-hero">
+    <div class="bbm-content">
+      <div class="bbm-eyebrow" id="hero-eyebrow">MONITORING ARMADA</div>
+      <div class="bbm-title" id="hero-title">Dashboard Kendaraan &amp; Penggunaan</div>
+      <div class="bbm-sub" id="hero-subtitle">Statistik kendaraan dinas, samsat, riwayat service, dan monitoring penggunaan BBM.</div>
+    </div>
+  </div>
+
+  <!-- Segmented Tab Control (2 Tabs) -->
+  <div class="tabs-control-wrapper">
+    <div class="tabs-control">
+      <button class="tab-btn active" onclick="switchTab('kendaraan')">🚗 Kendaraan</button>
+      <button class="tab-btn" onclick="switchTab('bbm')">⛽ Monitoring BBM</button>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- TAB PANEL: KENDARAAN & SERVICE  -->
+  <!-- =============================== -->
+  <div id="panel-kendaraan" class="tab-panel" style="display: block;">
+    <div class="search-bar-wrap" style="margin-bottom:16px;">
+      <input type="text" id="search-kendaraan" class="filter-control" placeholder="Cari nopol, merk, supir..." oninput="renderVehicles()"/>
+    </div>
+    
+    <!-- Fleet Master-Detail Layout -->
+    <div class="fleet-layout">
+      <!-- Left Column: Bidang Accordions -->
+      <div class="fleet-list-panel">
+        <div id="vehicles-list-container">
+          <div style="padding:32px 16px; text-align:center;">
+            <div style="font-size:26px; margin-bottom:8px;">🔄</div>
+            <div style="font-size:11px; color:var(--muted); font-family:var(--mono);">Memuat data armada dari server...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column: Detail View (Desktop only) -->
+      <div class="fleet-detail-panel" id="vehicle-detail-panel">
+        <div class="empty-state">Pilih kendaraan dari bidang di sebelah kiri untuk melihat detail.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- TAB PANEL: BBM (MONITORING)-->
+  <!-- ======================== -->
+  <div id="panel-bbm" class="tab-panel" style="display: none;">
+    
+    <!-- Filter Panel (Horizontal Layout on Desktop) -->
+    <div class="filter-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span class="filter-title">Filter Data BBM</span>
+        <span style="font-size:10.5px; font-weight:700; color:var(--wave); cursor:pointer; font-family:var(--mono);" onclick="clearFilters()">Reset Filter</span>
+      </div>
+      <div class="filter-controls-row">
+        <select class="filter-control" id="f-tahun" onchange="applyFilters()">
+          <option value="">Semua Tahun</option>
+        </select>
+        <select class="filter-control" id="f-periode" onchange="applyFilters()">
+          <option value="">Semua Periode</option>
+          <optgroup label="Bulan">
+            <option value="M1">Januari</option>
+            <option value="M2">Februari</option>
+            <option value="M3">Maret</option>
+            <option value="M4">April</option>
+            <option value="M5">Mei</option>
+            <option value="M6">Juni</option>
+            <option value="M7">Juli</option>
+            <option value="M8">Agustus</option>
+            <option value="M9">September</option>
+            <option value="M10">Oktober</option>
+            <option value="M11">November</option>
+            <option value="M12">Desember</option>
+          </optgroup>
+          <optgroup label="Triwulan">
+            <option value="Q1">Triwulan I (Jan - Mar)</option>
+            <option value="Q2">Triwulan II (Apr - Jun)</option>
+            <option value="Q3">Triwulan III (Jul - Sep)</option>
+            <option value="Q4">Triwulan IV (Okt - Des)</option>
+          </optgroup>
+          <optgroup label="Semester">
+            <option value="S1">Semester I (Jan - Jun)</option>
+            <option value="S2">Semester II (Jul - Des)</option>
+          </optgroup>
+        </select>
+        <select class="filter-control" id="f-status" onchange="applyFilters()">
+          <option value="">Semua Status</option>
+          <option value="PENDING">Pending (Belum Lapor)</option>
+          <option value="DISETUJUI">Disetujui (Lunas/Lapor)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter Active Message -->
+    <div id="filter-msg-container" style="margin-bottom:16px;"></div>
+
+    <!-- Original Designed Insight Card Restored, Placed Under Filters -->
+    <div class="insight-card" id="bbm-insight-card">
+      <div class="insight-header">
+        ANALISIS &amp; REKOMENDASI EFISIENSI
+      </div>
+      <div class="insight-subcards">
+        <div class="insight-subcard">
+          <div class="insight-subcard-label">Indeks Efisiensi</div>
+          <div class="insight-subcard-val" id="val-indeks-efisiensi">Rendah (Evaluasi) 🔴</div>
+        </div>
+        <div class="insight-subcard">
+          <div class="insight-subcard-label">Rata-rata Konsumsi</div>
+          <div class="insight-subcard-val" id="val-rata-konsumsi">27.8 Ltr/keg</div>
+        </div>
+      </div>
+      <div class="insight-list">
+        <div class="insight-list-item">
+          <span class="insight-list-label">Total BBM Terdistribusi:</span>
+          <span class="insight-list-val" id="val-total-terdistribusi">11410 Liter</span>
+        </div>
+        <div class="insight-list-item">
+          <span class="insight-list-label">Konsumsi Rerata Terkecil (Per Trip):</span>
+          <span class="insight-list-val" style="color:var(--green);" id="val-rerata-terkecil">SEKRETARIAT (16.0 Ltr/keg)</span>
+        </div>
+        <div class="insight-list-item">
+          <span class="insight-list-label">Total Volume Terhemat:</span>
+          <span class="insight-list-val" style="color:var(--foam);" id="val-volume-terhemat">BIDANG KELAUTAN (300 Ltr)</span>
+        </div>
+        <div class="insight-list-item">
+          <span class="insight-list-label">Konsumsi Rerata Terbesar (Evaluasi):</span>
+          <span class="insight-list-val" style="color:var(--red);" id="val-rerata-terbesar">BIDANG PERIKANAN (32.1 Ltr/keg)</span>
+        </div>
+      </div>
+      <div class="insight-recommendation-box" id="val-rekomendasi-box">
+        <strong>Rekomendasi:</strong> Konsumsi rata-rata tinggi (27.8 Ltr/kegiatan). Disarankan untuk memperketat verifikasi nopol dan membatasi kuota voucher 10 liter pada Bidang BIDANG PERIKANAN.
+      </div>
+    </div>
+
+    <!-- Realisasi BBM per Bidang -->
+    <div class="realisasi-bidang-block bidang-bars-card" style="margin-bottom:0; width:100%;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;">Realisasi BBM per Bidang</div>
+        <div style="display:flex; gap:6px; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px;">
+          <button id="btn-tab-terlapor" onclick="switchRealisasiTab('terlapor')" style="background:var(--wave); color:#fff; border:none; padding:4px 10px; font-size:10px; font-weight:700; border-radius:6px; cursor:pointer; font-family:var(--title-sans); transition:all .2s;">Terlapor</button>
+          <button id="btn-tab-belum" onclick="switchRealisasiTab('belum-terlapor')" style="background:transparent; color:var(--muted); border:none; padding:4px 10px; font-size:10px; font-weight:700; border-radius:6px; cursor:pointer; font-family:var(--title-sans); transition:all .2s;">Belum Terlapor</button>
+        </div>
+      </div>
+      <div id="bidang-bars-container">
+        <div class="loading-state"><span style="font-size:11px">Memuat data realisasi bidang...</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+  <a class="nav-item" href="../../aset/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+    <span class="nav-label">Aset</span>
+  </a>
+  <a class="nav-item" href="../../helpdesk/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+    <span class="nav-label">Helpdesk</span>
+  </a>
+  <a class="nav-item" href="../../rapat/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+    <span class="nav-label">Rapat</span>
+  </a>
+  <a class="nav-item" href="../../humas/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8Z"/><path d="M22 12a3 3 0 0 0-3-3v6a3 3 0 0 0 3-3Z"/><path d="M6 9h4"/></svg></span>
+    <span class="nav-label">Humas</span>
+  </a>
+  <a class="nav-item" href="../../kendaraan/index.html">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v10c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="15" cy="17" r="2"/></svg></span>
+    <span class="nav-label">Kendaraan</span>
+  </a>
+  <div class="nav-item active" onclick="toggleMore()" style="cursor: pointer;">
+    <span class="nav-icon"><svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+    <span class="nav-label">Lainnya</span>
+  </div>
+</nav>
+
+<!-- Drawer for Dashboards -->
+<div class="more-drawer" id="more-drawer">
+  <div class="more-grid">
+    <a class="more-item" href="../dashboard_ews/index.html" id="drawer-item-ews">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard EWS</span>
+    </a>
+    <a class="more-item" href="../dashboard_ekspor/index.html" id="drawer-item-ekspor">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Ekspor</span>
+    </a>
+    <a class="more-item active" href="index.html" id="drawer-item-bbm">
+      <span class="more-item-icon">
+        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </span>
+      <span class="more-item-label">Dashboard Kendaraan</span>
+    </a>
+  </div>
+</div>
+
+<!-- PHOTO MODAL -->
+<div id="photo-modal" class="modal-overlay" onclick="closePhotoModal(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; align-items:center; justify-content:center;">
+  <div style="position:relative; max-width:90%; max-height:90%;">
+    <span onclick="closePhotoModal(null)" style="position:absolute; top:-40px; right:0; color:#fff; font-size:30px; cursor:pointer; font-weight:bold; user-select:none;">&times;</span>
+    <img id="modal-photo-img" src="" style="max-width:100%; max-height:80vh; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,0.5); object-fit:contain;" />
+  </div>
+</div>
+
+<script>
+const CFG = {
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec"
+};
+
+const BIDANG_LIST = ["SEKRETARIAT", "BIDANG PERIKANAN", "BIDANG P2HP", "BIDANG KELAUTAN", "BIDANG PSDKP"];
+const MONTHS = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+
+// ── STATE ──
+let allBbm = [];
+let filteredBbm = [];
+let allVehicles = [];
+let activeRealisasiTab = "terlapor";
+let currentTab = "kendaraan";
+let selectedVehicleId = null;
+let openBidangGroups = { 0: true }; // Open SEKRETARIAT by default
+
+// Helper shorthand selector
+function $(id) { return document.getElementById(id); }
+
+// Convert Google Drive sharing URL to embeddable direct image URL
+function toDriveDirectUrl(url) {
+  if (!url) return "";
+  // Match /file/d/FILE_ID/ or /d/FILE_ID pattern
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/); 
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  return url; // return as-is if not a Drive URL
+}
+
+function parseTanggal(str) {
+  if (!str) return null;
+  if (str instanceof Date) return isNaN(str.getTime()) ? null : str;
+  if (typeof str !== 'string') str = String(str);
+  str = str.trim();
+  
+  const mDashes = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (mDashes) {
+    return new Date(
+      parseInt(mDashes[1], 10),
+      parseInt(mDashes[2], 10) - 1,
+      parseInt(mDashes[3], 10),
+      mDashes[4] ? parseInt(mDashes[4], 10) : 0,
+      mDashes[5] ? parseInt(mDashes[5], 10) : 0,
+      mDashes[6] ? parseInt(mDashes[6], 10) : 0
+    );
+  }
+  
+  // Format M/D/YYYY or MM/DD/YYYY or DD/MM/YYYY (handles mixed locale date strings)
+  const mSlashes = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (mSlashes) {
+    const val1 = parseInt(mSlashes[1], 10);
+    const val2 = parseInt(mSlashes[2], 10);
+    const year = parseInt(mSlashes[3], 10);
+    const hr = mSlashes[4] ? parseInt(mSlashes[4], 10) : 0;
+    const min = mSlashes[5] ? parseInt(mSlashes[5], 10) : 0;
+    const sec = mSlashes[6] ? parseInt(mSlashes[6], 10) : 0;
+    
+    let month, day;
+    if (val1 > 12) {
+      // First number is > 12, so it must be Day (DD/MM/YYYY)
+      day = val1;
+      month = val2;
+    } else if (val2 > 12) {
+      // Second number is > 12, so it must be Day (MM/DD/YYYY)
+      month = val1;
+      day = val2;
+    } else {
+      // Both <= 12, ambiguous. Default to DD/MM/YYYY since Apps Script writes in dd/MM/yyyy.
+      day = val1;
+      month = val2;
+    }
+    
+    return new Date(year, month - 1, day, hr, min, sec);
+  }
+  
+  const d = new Date(str);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function formatTanggal(str) { 
+  const d = parseTanggal(str); 
+  if (!d) return str || "-"; 
+  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; 
+}
+
+// ── INITIALIZATION ──
+(async function init() {
+  await loadDashboardData();
+  switchTab("kendaraan");
+})();
+
+async function loadDashboardData() {
+  try {
+    // Always fetch from Apps Script (no mock fallback in production)
+    const [resBbm, resVeh] = await Promise.all([
+      fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm`).then(r => r.json()),
+      fetch(`${CFG.APPS_SCRIPT_URL}?action=getVehicles`).then(r => r.json())
+    ]);
+
+    if (resBbm.success && Array.isArray(resBbm.data)) {
+      allBbm = resBbm.data;
+      console.log("[DEBUG] BBM data loaded:", allBbm.length, "rows");
+      if (allBbm.length > 0) {
+        console.log("[DEBUG] BBM sample row:", JSON.stringify(allBbm[0]));
+      }
+    } else {
+      console.warn("getBbm failed:", resBbm.message || "unknown error");
+      console.log("[DEBUG] getBbm response:", JSON.stringify(resBbm));
+    }
+
+    if (resVeh.success && Array.isArray(resVeh.data)) {
+      // Normalize fields: Apps Script returns UPPERCASE keys, map to expected casing
+      allVehicles = resVeh.data.map(v => ({
+        ID_KENDARAAN:        v.ID_KENDARAAN || v.id_kendaraan || "",
+        MERK:                v.MERK        || v.merk         || "",
+        NO_POLISI:           v.NO_POLISI   || v.no_polisi    || "",
+        JENIS:               v.JENIS       || v.jenis        || "",
+        TAHUN:               v.TAHUN       || v.tahun        || "",
+        WARNA:               v.WARNA       || v.warna        || "",
+        FOTO_DEPAN:          v.FOTO_DEPAN  || v.foto_depan  || v.FOTO || v.foto || v.GAMBAR_DEPAN || v.URL_FOTO_DEPAN || "",
+        FOTO_BELAKANG:       v.FOTO_BELAKANG || v.foto_belakang || v.GAMBAR_BELAKANG || v.URL_FOTO_BELAKANG || "",
+        TGL_PAJAK:           v.TGL_PAJAK   || v.tgl_pajak    || "",
+        TGL_STNK:            v.TGL_STNK    || v.tgl_stnk     || "",
+        TGL_SERVICE_TERAKHIR: v.TGL_SERVICE_TERAKHIR || v.tgl_service_terakhir || "",
+        INTERVAL_SERVICE:    v.INTERVAL_SERVICE || v.interval_service || 6,
+        SUPIR:               v.SUPIR       || v.supir        || "",
+        BIDANG:              v.BIDANG      || v.bidang       || "",
+        STATUS_PAJAK:        v.STATUS_PAJAK || v.status_pajak || "",
+        STATUS_STNK:         v.STATUS_STNK  || v.status_stnk  || "",
+      }));
+      console.log("[DEBUG] Vehicles loaded:", allVehicles.length, "rows");
+      if (allVehicles.length > 0) {
+        console.log("[DEBUG] Vehicle sample:", JSON.stringify(allVehicles[0]));
+      }
+    } else {
+      console.warn("getVehicles failed:", resVeh.message || "unknown error");
+      console.log("[DEBUG] getVehicles response:", JSON.stringify(resVeh));
+    }
+
+  } catch (err) {
+    console.error("loadDashboardData error:", err);
+    // Show user-facing error
+    const vContainer = document.getElementById("vehicles-list-container");
+    if (vContainer) {
+      vContainer.innerHTML = `<div style="padding:20px; text-align:center; font-size:12px; color:var(--red);">
+        Gagal memuat data armada. Periksa koneksi atau URL Apps Script.<br/>
+        <code style="font-size:10px; color:var(--muted);">${err.message}</code>
+      </div>`;
+    }
+  }
+}
+// ── TAB SWITCHER ──
+function switchTab(tabName) {
+  currentTab = tabName;
+  
+  $("panel-kendaraan").style.display = "none";
+  $("panel-bbm").style.display = "none";
+  
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  
+  if (tabName === "kendaraan") {
+    $("panel-kendaraan").style.display = "block";
+    document.querySelector('.tab-btn[onclick="switchTab(\'kendaraan\')"]').classList.add("active");
+    renderVehicles();
+    
+    $("hero-eyebrow").textContent = "MONITORING ARMADA & JATUH TEMPO";
+    $("hero-title").innerHTML = "Daftar Kendaraan &amp; Pajak";
+    $("hero-subtitle").textContent = "Informasi lengkap kendaraan dinas operasional Sekretariat, estimasi jadwal service, jatuh tempo Pajak/STNK.";
+  } else if (tabName === "bbm") {
+    $("panel-bbm").style.display = "block";
+    document.querySelector('.tab-btn[onclick="switchTab(\'bbm\')"]').classList.add("active");
+    renderDashboard();
+    
+    $("hero-eyebrow").textContent = "ANALIS KONSUMSI BBM";
+    $("hero-title").innerHTML = "Monitoring Realisasi BBM";
+    $("hero-subtitle").textContent = "Statistik kuota alokasi bidang, evaluasi efisiensi rute dinas, dan pengingat pelaporan voucher lapangan.";
+  }
+}
+
+// ── VEHICLE STATUS CALCULATION ──
+function getVehicleOverallStatus(v) {
+  const taxDays = getDaysRemaining(v.TGL_PAJAK);
+  const stnkDays = getDaysRemaining(v.TGL_STNK);
+  const nextServiceDate = getNextServiceDate(v.TGL_SERVICE_TERAKHIR, v.INTERVAL_SERVICE);
+  
+  let serviceDays = null;
+  if (nextServiceDate) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    nextServiceDate.setHours(0,0,0,0);
+    const diffTime = nextServiceDate.getTime() - today.getTime();
+    serviceDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+  
+  if ((taxDays !== null && taxDays < 0) || 
+      (stnkDays !== null && stnkDays < 0) || 
+      (serviceDays !== null && serviceDays < 0)) {
+    return { class: "danger", text: "Jatuh Tempo" };
+  }
+  
+  if ((taxDays !== null && taxDays <= 30) || 
+      (stnkDays !== null && stnkDays <= 30) || 
+      (serviceDays !== null && serviceDays <= 30)) {
+    return { class: "warning", text: "Perhatian" };
+  }
+  
+  return { class: "safe", text: "Aman" };
+}
+
+function countTripsThisYear(nopol) {
+  if (!nopol) return 0;
+  const currentYear = new Date().getFullYear();
+  const cleanNopol = nopol.toUpperCase().replace(/\s+/g, "");
+  
+  return allBbm.filter(b => {
+    const bNopol = (b.nopol_kendaraan || b.NOPOL_KENDARAAN || "").toUpperCase().replace(/\s+/g, "");
+    if (bNopol !== cleanNopol) return false;
+    
+    const date = parseTanggal(b.tgl_kegiatan || b.TGL_KEGIATAN || b.tgl_submit);
+    return date && date.getFullYear() === currentYear;
+  }).length;
+}
+
+function toggleBidangGroup(idx) {
+  openBidangGroups[idx] = !openBidangGroups[idx];
+  renderVehicles();
+}
+
+function selectVehicle(id) {
+  selectedVehicleId = id;
+  renderVehicles();
+}
+
+// ── KENDARAAN TAB RENDERING ──
+function renderVehicles() {
+  const container = $("vehicles-list-container");
+  if (!container) return;
+  
+  const searchVal = $("search-kendaraan").value.toLowerCase().trim();
+  const isMobile = window.innerWidth < 768;
+  
+  const grouped = {};
+  BIDANG_LIST.forEach(b => {
+    grouped[b] = [];
+  });
+  
+  allVehicles.forEach(v => {
+    const matchedBidang = getMatchedBidangKey(v.BIDANG) || "SEKRETARIAT";
+    const matchSearch = (v.MERK || "").toLowerCase().includes(searchVal) ||
+                        (v.NO_POLISI || "").toLowerCase().includes(searchVal) ||
+                        (v.SUPIR || "").toLowerCase().includes(searchVal);
+    if (matchSearch) {
+      grouped[matchedBidang].push(v);
+    }
+  });
+  
+  if (!selectedVehicleId) {
+    for (let b of BIDANG_LIST) {
+      if (grouped[b].length > 0) {
+        selectedVehicleId = grouped[b][0].ID_KENDARAAN;
+        break;
+      }
+    }
+  }
+
+  const html = BIDANG_LIST.map((b, idx) => {
+    const list = grouped[b];
+    if (list.length === 0 && searchVal !== "") return "";
+    
+    const isOpen = openBidangGroups[idx] ? "open" : "";
+    const shortName = b.replace("BIDANG ", "");
+    
+    let groupStatusClass = "safe";
+    list.forEach(v => {
+      const s = getVehicleOverallStatus(v);
+      if (s.class === "danger") groupStatusClass = "danger";
+      else if (s.class === "warning" && groupStatusClass !== "danger") groupStatusClass = "warning";
+    });
+    
+    const rowsHtml = list.map(v => {
+      const isSelected = v.ID_KENDARAAN === selectedVehicleId ? "selected" : "";
+      const statusInfo = getVehicleOverallStatus(v);
+      
+      const detailMobileHtml = isMobile && isSelected ? `
+        <div class="fleet-row-detail-mobile" onclick="event.stopPropagation()">
+          ${renderVehicleDetailContent(v)}
+        </div>
+      ` : "";
+      
+      return `
+        <div class="nested-vehicle-row ${isSelected}" onclick="selectVehicle('${v.ID_KENDARAAN}')">
+          <div class="nested-vehicle-row-header">
+            <div class="nested-vehicle-info">
+              <span class="nested-vehicle-name">${v.MERK || "Tanpa Nama"}</span>
+              <span class="nested-vehicle-sub">${v.NO_POLISI || "-"}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>
+            </div>
+          </div>
+          ${detailMobileHtml}
+        </div>
+      `;
+    }).join("");
+    
+    return `
+      <div class="bidang-group-accordion ${isOpen}">
+        <div class="bidang-group-header" onclick="toggleBidangGroup(${idx})">
+          <span class="bidang-group-title">${shortName}</span>
+          <div class="bidang-group-meta">
+            <span class="bidang-group-status-badge ${groupStatusClass}"></span>
+            <span class="bidang-group-count">${list.length} Kendaraan</span>
+            <span class="bidang-group-arrow">▼</span>
+          </div>
+        </div>
+        <div class="bidang-group-body">
+          ${rowsHtml || '<div style="font-size:11px; color:var(--muted); font-style:italic; padding:6px 0;">Tidak ada kendaraan</div>'}
+        </div>
+      </div>
+    `;
+  }).join("");
+  
+  container.innerHTML = html || `<div class="empty-state">Tidak ada armada dinas ditemukan.</div>`;
+  
+  const detailPanel = $("vehicle-detail-panel");
+  if (detailPanel) {
+    if (isMobile) {
+      detailPanel.style.display = "none";
+    } else {
+      detailPanel.style.display = "block";
+      const selectedVeh = allVehicles.find(v => v.ID_KENDARAAN === selectedVehicleId);
+      if (selectedVeh) {
+        detailPanel.innerHTML = renderVehicleDetailContent(selectedVeh);
+      } else {
+        detailPanel.innerHTML = `<div class="empty-state">Pilih kendaraan dari bidang di sebelah kiri untuk melihat rincian detail.</div>`;
+      }
+    }
+  }
+}
+
+function renderVehicleDetailContent(v) {
+  const trips = countTripsThisYear(v.NO_POLISI);
+  const photoDepan = toDriveDirectUrl(v.FOTO_DEPAN || "");
+  const photoBelakang = toDriveDirectUrl(v.FOTO_BELAKANG || "");
+  
+  let photosHtml = "";
+  if (photoDepan || photoBelakang) {
+    photosHtml = `
+      <div class="vehicle-photos" style="margin-top: 10px;">
+        ${photoDepan ? `<img src="${photoDepan}" class="vehicle-photo-thumbnail" onclick="openPhotoModal('${photoDepan}')" alt="Foto Depan"/>` : '<div class="photo-placeholder"><span>No Foto Depan</span></div>'}
+        ${photoBelakang ? `<img src="${photoBelakang}" class="vehicle-photo-thumbnail" onclick="openPhotoModal('${photoBelakang}')" alt="Foto Belakang"/>` : '<div class="photo-placeholder"><span>No Foto Belakang</span></div>'}
+      </div>
+    `;
+  } else {
+    photosHtml = `
+      <div class="vehicle-photos" style="margin-top: 10px;">
+        <div class="photo-placeholder" style="grid-column: span 2; height: 90px;">
+          <span>📸 Belum ada foto kendaraan</span>
+        </div>
+      </div>
+    `;
+  }
+
+  const taxDays = getDaysRemaining(v.TGL_PAJAK);
+  let taxLabel = "-", taxPercent = 0, taxClass = "safe", taxBadge = "Aman";
+  if (taxDays !== null) {
+    if (taxDays < 0) {
+      taxLabel = `Terlambat ${Math.abs(taxDays)} hari`;
+      taxPercent = 100;
+      taxClass = "danger";
+      taxBadge = "Terlambat";
+    } else if (taxDays <= 30) {
+      taxLabel = `${taxDays} hari lagi`;
+      taxPercent = Math.max(10, Math.round((taxDays / 30) * 100));
+      taxClass = "warning";
+      taxBadge = "Penting";
+    } else {
+      taxLabel = `${taxDays} hari lagi`;
+      taxPercent = Math.min(100, Math.round((taxDays / 365) * 100));
+      taxClass = "safe";
+      taxBadge = "Aman";
+    }
+  }
+  
+  const stnkDays = getDaysRemaining(v.TGL_STNK);
+  let stnkLabel = "-", stnkPercent = 0, stnkClass = "safe", stnkBadge = "Aman";
+  if (stnkDays !== null) {
+    if (stnkDays < 0) {
+      stnkLabel = `Terlambat ${Math.abs(stnkDays)} hari`;
+      stnkPercent = 100;
+      stnkClass = "danger";
+      stnkBadge = "Ganti Plat";
+    } else if (stnkDays <= 30) {
+      stnkLabel = `${stnkDays} hari lagi`;
+      stnkPercent = Math.max(10, Math.round((stnkDays / 30) * 100));
+      stnkClass = "warning";
+      stnkBadge = "Penting";
+    } else {
+      stnkLabel = `${stnkDays} hari lagi`;
+      stnkPercent = Math.min(100, Math.round((stnkDays / 1825) * 100));
+      stnkClass = "safe";
+      stnkBadge = "Aman";
+    }
+  }
+  
+  const nextServiceDate = getNextServiceDate(v.TGL_SERVICE_TERAKHIR, v.INTERVAL_SERVICE);
+  let serviceLabel = "-", servicePercent = 0, serviceClass = "safe", serviceBadge = "Aman", nextServiceStr = "-";
+  if (nextServiceDate) {
+    const year = nextServiceDate.getFullYear();
+    const month = MONTHS[nextServiceDate.getMonth()];
+    const day = nextServiceDate.getDate();
+    nextServiceStr = `${day} ${month} ${year}`;
+    
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    nextServiceDate.setHours(0,0,0,0);
+    
+    const diffTime = nextServiceDate.getTime() - today.getTime();
+    const sDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const intervalDays = (parseInt(v.INTERVAL_SERVICE, 10) || 6) * 30;
+    
+    if (sDays < 0) {
+      serviceLabel = `Terlambat ${Math.abs(sDays)} hari`;
+      servicePercent = 100;
+      serviceClass = "danger";
+      serviceBadge = "Wajib Servis";
+    } else if (sDays <= 30) {
+      serviceLabel = `${sDays} hari lagi`;
+      servicePercent = Math.max(10, Math.round((sDays / 30) * 100));
+      serviceClass = "warning";
+      serviceBadge = "Segera Servis";
+    } else {
+      serviceLabel = `${sDays} hari lagi`;
+      servicePercent = Math.min(100, Math.round((sDays / intervalDays) * 100));
+      serviceClass = "safe";
+      serviceBadge = "Aman";
+    }
+  }
+
+  return `
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <div style="font-family:var(--title-sans); font-size:16px; font-weight:850; color:var(--text);">${v.MERK || "Tanpa Merk"}</div>
+        <div style="font-family:var(--mono); font-size:11.5px; color:var(--wave); font-weight:700; margin-top:2px;">${v.NO_POLISI || "-"}</div>
+      </div>
+      
+      <div class="vehicle-details" style="border-bottom:none; padding-bottom:0;">
+        <div class="detail-item">
+          <span class="detail-label">Jenis Armada</span>
+          <span class="detail-val">${v.JENIS || "-"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Tahun Pembuatan</span>
+          <span class="detail-val">${v.TAHUN || "-"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Supir P.J</span>
+          <span class="detail-val">${v.SUPIR || "-"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Bidang / Dep</span>
+          <span class="detail-val">${v.BIDANG || "Umum"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Status Pajak 1 Thn</span>
+          <span class="detail-val" style="font-weight:600;">${v.STATUS_PAJAK || "-"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Status STNK 5 Thn</span>
+          <span class="detail-val" style="font-weight:600;">${v.STATUS_STNK || "-"}</span>
+        </div>
+      </div>
+      
+      <div>
+        <span class="detail-label" style="display:block; margin-bottom:4px;">Dokumentasi Foto</span>
+        ${photosHtml}
+      </div>
+      
+      <div style="border-top:1px solid var(--border); padding-top:12px; display:flex; flex-direction:column; gap:12px;">
+        <span class="detail-label" style="display:block; margin-bottom:-4px;">Jatuh Tempo &amp; Service</span>
+        
+        <div class="status-row">
+          <div class="status-meta">
+            <div class="status-label-wrap">
+              <span class="status-label" style="font-size:11px;">Pajak Tahunan (Samsat)</span>
+              <span class="status-badge ${taxClass}">${taxBadge}</span>
+            </div>
+            <span class="status-date">${v.TGL_PAJAK ? formatTanggal(v.TGL_PAJAK) : "-"}</span>
+          </div>
+          <div class="status-bar-track">
+            <div class="status-bar-fill ${taxClass}" style="width: ${taxPercent}%;"></div>
+          </div>
+          <div style="font-size:9px; color:var(--muted); text-align:right; font-family:var(--mono); margin-top:2px;">${taxLabel}</div>
+        </div>
+        
+        <div class="status-row">
+          <div class="status-meta">
+            <div class="status-label-wrap">
+              <span class="status-label" style="font-size:11px;">Plat Nomor (STNK 5 Tahunan)</span>
+              <span class="status-badge ${stnkClass}">${stnkBadge}</span>
+            </div>
+            <span class="status-date">${v.TGL_STNK ? formatTanggal(v.TGL_STNK) : "-"}</span>
+          </div>
+          <div class="status-bar-track">
+            <div class="status-bar-fill ${stnkClass}" style="width: ${stnkPercent}%;"></div>
+          </div>
+          <div style="font-size:9px; color:var(--muted); text-align:right; font-family:var(--mono); margin-top:2px;">${stnkLabel}</div>
+        </div>
+        
+        <div class="status-row">
+          <div class="status-meta">
+            <div class="status-label-wrap">
+              <span class="status-label" style="font-size:11px;">Servis Rutin Berkala</span>
+              <span class="status-badge ${serviceClass}">${serviceBadge}</span>
+            </div>
+            <span class="status-date">Estimasi: ${nextServiceStr}</span>
+          </div>
+          <div class="status-bar-track">
+            <div class="status-bar-fill ${serviceClass}" style="width: ${servicePercent}%;"></div>
+          </div>
+          <div style="font-size:9px; color:var(--muted); text-align:right; font-family:var(--mono); margin-top:2px;">Terakhir: ${v.TGL_SERVICE_TERAKHIR ? formatTanggal(v.TGL_SERVICE_TERAKHIR) : "-"} (${serviceLabel})</div>
+        </div>
+      </div>
+      
+      <div style="border-top:1px solid var(--border); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span class="detail-label">Perjalanan tahun ini</span>
+        <span class="trip-badge">📊 ${trips} Perjalanan</span>
+      </div>
+    </div>
+  `;
+}
+
+function getDaysRemaining(dateStr) {
+  const targetDate = parseTanggal(dateStr);
+  if (!targetDate) return null;
+  
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  targetDate.setHours(0,0,0,0);
+  
+  const diffTime = targetDate.getTime() - today.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+function getNextServiceDate(lastServiceStr, intervalMonths) {
+  const lastDate = parseTanggal(lastServiceStr);
+  if (!lastDate) return null;
+  
+  const nextDate = new Date(lastDate);
+  const interval = parseInt(intervalMonths, 10) || 6;
+  nextDate.setMonth(nextDate.getMonth() + interval);
+  return nextDate;
+}
+
+// ── PHOTO MODAL UTILITIES ──
+function openPhotoModal(src) {
+  const modal = $("photo-modal");
+  const img = $("modal-photo-img");
+  img.src = src;
+  modal.style.display = "flex";
+}
+
+function closePhotoModal(event) {
+  if (!event || event.target.id === "photo-modal" || event.target.innerHTML === "&times;") {
+    $("photo-modal").style.display = "none";
+  }
+}
+
+window.addEventListener("resize", () => {
+  if (currentTab === "kendaraan") {
+    renderVehicles();
+  }
+});
+
+// ── BBM TAB MONITORING FUNCTIONS ──
+function populateYearFilter() {
+  const selectEl = $("f-tahun");
+  if (!selectEl) return;
+  const years = new Set();
+  allBbm.forEach(b => {
+    // Try tgl_kegiatan first (most reliable), then tgl_submit
+    const dateStr = b.tgl_kegiatan || b.tgl_submit || "";
+    const d = parseTanggal(dateStr);
+    if (d && !isNaN(d.getTime())) {
+      const yr = d.getFullYear();
+      // Sanity check: only accept years between 2020-2035
+      if (yr >= 2020 && yr <= 2035) {
+        years.add(yr);
+      }
+    }
+  });
+  const sortedYears = Array.from(years).sort((a, b) => b - a);
+  selectEl.innerHTML = '<option value="">Semua Tahun</option>' +
+    sortedYears.map(yr => `<option value="${yr}">Tahun ${yr}</option>`).join("");
+}
+
+function renderDashboard() {
+  populateYearFilter();
+  renderBidangAllocation();
+  applyFilters();
+}
+
+function switchRealisasiTab(tab) {
+  activeRealisasiTab = tab;
+  const btnTerlapor = $("btn-tab-terlapor");
+  const btnBelum = $("btn-tab-belum");
+  
+  if (tab === "terlapor") {
+    btnTerlapor.style.background = "var(--wave)";
+    btnTerlapor.style.color = "#fff";
+    btnBelum.style.background = "transparent";
+    btnBelum.style.color = "var(--muted)";
+  } else {
+    btnBelum.style.background = "var(--wave)";
+    btnBelum.style.color = "#fff";
+    btnTerlapor.style.background = "transparent";
+    btnTerlapor.style.color = "var(--muted)";
+  }
+  
+  destroyAllBidangCharts();
+  openAccordions = {};
+  renderBidangAllocation();
+}
+
+let openAccordions = {};
+let bidangCharts = {};
+
+function destroyAllBidangCharts() {
+  Object.keys(bidangCharts).forEach(key => {
+    if (bidangCharts[key]) {
+      bidangCharts[key].destroy();
+      bidangCharts[key] = null;
+    }
+  });
+  bidangCharts = {};
+}
+
+function toggleBidangAccordion(idx) {
+  openAccordions[idx] = !openAccordions[idx];
+  const el = $("accordion-item-" + idx);
+  if (el) {
+    if (openAccordions[idx]) {
+      el.classList.add("open");
+      setTimeout(() => renderNestedBidangChart(idx), 50);
+    } else {
+      el.classList.remove("open");
+    }
+  }
+}
+
+function renderNestedBidangChart(idx) {
+  const fTahun = $("f-tahun").value;
+  const fPeriode = $("f-periode").value;
+  const chartContainer = $("chart-container-" + idx);
+  if (!chartContainer) return;
+  
+  // Show chart for Yearly Overview, Triwulan, and Semester. Hide only for specific Month (starts with M).
+  if (fPeriode.startsWith("M") || fTahun === "") {
+    chartContainer.style.display = "none";
+    if (bidangCharts[idx]) {
+      bidangCharts[idx].destroy();
+      bidangCharts[idx] = null;
+    }
+    return;
+  }
+  
+  chartContainer.style.display = "block";
+  const bName = BIDANG_LIST[idx];
+  
+  const monthlyData = new Array(12).fill(0);
+  
+  allBbm.forEach(b => {
+    const status = (b.status || "").toUpperCase().trim();
+    if (status !== "DISETUJUI" && status !== "DILAPORKAN" && status !== "SELESAI") return;
+    
+    if (getMatchedBidangKey(b.bidang) !== bName) return;
+    
+    const d = parseTanggal(b.tgl_kegiatan || b.tgl_submit);
+    if (d && d.getFullYear().toString() === fTahun) {
+      const m = d.getMonth();
+      const qty = parseFloat(b.jumlah_digunakan || b.jumlah) || 0;
+      const size = parseFloat(b.jenis_voucher) || 0;
+      
+      // If a Triwulan or Semester filter is active, only aggregate the corresponding months
+      if (fPeriode) {
+        const type = fPeriode.substring(0, 1);
+        const val = parseInt(fPeriode.substring(1), 10);
+        const monthNum = m + 1;
+        
+        if (type === "Q") {
+          if (val === 1 && ![1, 2, 3].includes(monthNum)) return;
+          if (val === 2 && ![4, 5, 6].includes(monthNum)) return;
+          if (val === 3 && ![7, 8, 9].includes(monthNum)) return;
+          if (val === 4 && ![10, 11, 12].includes(monthNum)) return;
+        } else if (type === "S") {
+          if (val === 1 && monthNum > 6) return;
+          if (val === 2 && monthNum <= 6) return;
+        }
+      }
+      
+      monthlyData[m] += (qty * size);
+    }
+  });
+  
+  const canvas = $("chart-bidang-" + idx);
+  if (!canvas) return;
+  
+  if (bidangCharts[idx]) {
+    bidangCharts[idx].destroy();
+  }
+  
+  const ctx = canvas.getContext('2d');
+  
+  const gradient = ctx.createLinearGradient(0, 0, 0, 110);
+  gradient.addColorStop(0, '#0077E6');
+  gradient.addColorStop(1, 'rgba(0, 85, 170, 0.15)');
+  
+  bidangCharts[idx] = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{
+        data: monthlyData,
+        backgroundColor: gradient,
+        borderColor: 'rgba(0, 85, 170, 0.4)',
+        borderWidth: 0.5,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "rgba(30, 41, 59, 0.95)",
+          padding: 6,
+          cornerRadius: 6,
+          titleFont: { size: 9, family: 'Inter', weight: 'bold' },
+          bodyFont: { size: 9, family: 'Inter' }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 7.5, family: 'Inter' }, color: 'var(--muted)' }
+        },
+        y: {
+          grid: { color: 'rgba(0, 85, 170, 0.03)', drawBorder: false },
+          ticks: { font: { size: 7.5, family: 'Fira Code' }, color: 'var(--muted)' }
+        }
+      }
+    }
+  });
+}
+
+function renderBidangAllocation() {
+  const container = $("bidang-bars-container");
+  if (!container) return;
+
+  const allocation = {};
+  BIDANG_LIST.forEach(b => {
+    allocation[b] = {
+      totalLiters: 0,
+      vouchersCount: 0,
+      requests: []
+    };
+  });
+
+  filteredBbm.forEach(b => {
+    const status = (b.status || "").toUpperCase().trim();
+    if (status !== "DISETUJUI" && status !== "DILAPORKAN" && status !== "SELESAI") return;
+
+    const qty = parseFloat(b.jumlah) || 0;
+    const used = parseFloat(b.jumlah_digunakan) || 0;
+    const returned = parseFloat(b.jumlah_dikembalikan) || 0;
+    const jenis = b.jenis_voucher || "";
+    const liters = parseFloat(jenis) || 0;
+
+    const isReported = (used + returned) >= qty;
+
+    if (activeRealisasiTab === "terlapor" && !isReported) return;
+    if (activeRealisasiTab === "belum-terlapor" && isReported) return;
+
+    const bKey = getMatchedBidangKey(b.bidang);
+    if (bKey && allocation[bKey]) {
+      allocation[bKey].totalLiters += (liters * (isReported ? used : qty));
+      allocation[bKey].vouchersCount += qty;
+      allocation[bKey].requests.push(b);
+    }
+  });
+
+  const maxLiters = Math.max(...Object.values(allocation).map(a => a.totalLiters), 1);
+  const fTahun = $("f-tahun").value;
+
+  // Sort bidang by highest totalLiters (most usage first)
+  const sortedBidang = [...BIDANG_LIST].sort((a, b) => (allocation[b]?.totalLiters || 0) - (allocation[a]?.totalLiters || 0));
+  const html = sortedBidang.map((b, idx) => {
+    const alloc = allocation[b];
+    const percentage = Math.round((alloc.totalLiters / maxLiters) * 100);
+    const isOpen = openAccordions[idx] ? "open" : "";
+    
+    let subContentHtml = "";
+    
+    if (activeRealisasiTab === "terlapor") {
+      if (fTahun) {
+        const monthlyStats = {};
+        for (let m = 0; m < 12; m++) {
+          monthlyStats[m] = { liters: 0, vouchers: 0, trips: 0 };
+        }
+        
+        alloc.requests.forEach(req => {
+          const d = parseTanggal(req.tgl_kegiatan || req.tgl_submit);
+          if (d && d.getFullYear().toString() === fTahun) {
+            const m = d.getMonth();
+            const qty = parseFloat(req.jumlah_digunakan) || 0;
+            const size = parseFloat(req.jenis_voucher) || 0;
+            monthlyStats[m].liters += (qty * size);
+            monthlyStats[m].vouchers += qty;
+            monthlyStats[m].trips += 1;
+          }
+        });
+        
+        const trs = MONTHS.map((mName, mIdx) => {
+          const stats = monthlyStats[mIdx];
+          if (stats.trips === 0) return "";
+          return `
+            <tr>
+              <td style="font-weight:700;">${mName}</td>
+              <td style="font-family:var(--mono); font-weight:700;">${stats.liters} Ltr</td>
+              <td style="font-family:var(--mono);">${stats.vouchers} Voucher</td>
+            </tr>
+          `;
+        }).join("");
+        
+        subContentHtml = `
+          <table class="bidang-detail-table">
+            <thead>
+              <tr>
+                <th>Bulan (${fTahun})</th>
+                <th>Volume Terpakai</th>
+                <th>Jumlah Voucher</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${trs || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:14px;font-style:italic">Tidak ada realisasi pada periode ini.</td></tr>'}
+            </tbody>
+          </table>
+        `;
+      } else {
+        const yearlyStats = {};
+        alloc.requests.forEach(req => {
+          const d = parseTanggal(req.tgl_kegiatan || req.tgl_submit);
+          if (d) {
+            const y = d.getFullYear();
+            if (!yearlyStats[y]) yearlyStats[y] = { liters: 0, vouchers: 0, trips: 0 };
+            const qty = parseFloat(req.jumlah_digunakan) || 0;
+            const size = parseFloat(req.jenis_voucher) || 0;
+            yearlyStats[y].liters += (qty * size);
+            yearlyStats[y].vouchers += qty;
+            yearlyStats[y].trips += 1;
+          }
+        });
+        
+        const sortedYears = Object.keys(yearlyStats).sort((a,b) => b - a);
+        const trs = sortedYears.map(y => {
+          const stats = yearlyStats[y];
+          return `
+            <tr>
+              <td style="font-weight:700;">Tahun ${y}</td>
+              <td style="font-family:var(--mono); font-weight:700;">${stats.liters} Ltr</td>
+              <td style="font-family:var(--mono);">${stats.vouchers} Voucher</td>
+            </tr>
+          `;
+        }).join("");
+        
+        subContentHtml = `
+          <table class="bidang-detail-table">
+            <thead>
+              <tr>
+                <th>Tahun</th>
+                <th>Volume Terpakai</th>
+                <th>Jumlah Voucher</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${trs || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:14px;font-style:italic">Tidak ada realisasi.</td></tr>'}
+            </tbody>
+          </table>
+        `;
+      }
+    } else {
+      let tableRows = alloc.requests.map(req => {
+        return `
+          <tr>
+            <td style="font-weight:700;">${req.nama_penerima || "-"}</td>
+            <td style="font-family:var(--mono);">${req.nopol_kendaraan || "-"}</td>
+            <td>${req.tgl_kegiatan ? formatTanggal(req.tgl_kegiatan) : "-"}</td>
+            <td style="font-family:var(--mono); font-weight:700;">${req.jumlah || 0} vchr (${req.jenis_voucher || ""})</td>
+            <td>
+              <span class="status-badge warning">Belum Lapor</span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      if (tableRows.length === 0) {
+        tableRows = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:14px;font-style:italic">Semua laporan terverifikasi (Lunas).</td></tr>`;
+      }
+      
+      subContentHtml = `
+        <table class="bidang-detail-table">
+          <thead>
+            <tr>
+              <th>Penerima</th>
+              <th>Nopol</th>
+              <th>Tgl Tugas</th>
+              <th>Voucher</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+          </tbody>
+        </table>
+      `;
+    }
+
+    const shortName = b.replace("BIDANG ", "");
+
+    return `
+      <div class="bidang-accordion-item ${isOpen}" id="accordion-item-${idx}">
+        <div class="bidang-accordion-header" onclick="toggleBidangAccordion(${idx})">
+          <div class="bidang-accordion-title">${shortName}</div>
+          <div class="bidang-accordion-meta">
+            <span class="bidang-accordion-badge">${alloc.totalLiters} Ltr</span>
+            <span class="bidang-accordion-arrow">▼</span>
+          </div>
+        </div>
+        <div class="bidang-accordion-body">
+          
+          <div class="bidang-chart-container" id="chart-container-${idx}" style="display: none; margin-bottom: 16px; height: 110px; width: 100%;">
+            <canvas id="chart-bidang-${idx}"></canvas>
+          </div>
+          
+          <div class="bidang-bar-row" style="margin-bottom:14px; cursor:default;">
+            <div class="bidang-bar-meta">
+              <span class="bidang-bar-name">Total Realisasi Volume</span>
+              <span class="bidang-bar-val">${alloc.totalLiters} Ltr</span>
+            </div>
+            <div class="bidang-bar-track">
+              <div class="bidang-bar-fill" style="width: ${percentage}%;"></div>
+            </div>
+          </div>
+          <div style="font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; font-family:var(--mono); margin-bottom:8px; margin-top:14px;">Detail Realisasi Penggunaan</div>
+          ${subContentHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = html;
+  
+  Object.keys(openAccordions).forEach(key => {
+    if (openAccordions[key]) {
+      renderNestedBidangChart(key);
+    }
+  });
+}
+
+function getMatchedBidangKey(bidangStr) {
+  if (!bidangStr) return null;
+  const s = bidangStr.toUpperCase().trim();
+  if (s.includes("SEKRETARIAT")) return "SEKRETARIAT";
+  if (s.includes("PERIKANAN")) return "BIDANG PERIKANAN";
+  if (s.includes("P2HP") || s.includes("PENGOLAHAN")) return "BIDANG P2HP";
+  if (s.includes("KELAUTAN")) return "BIDANG KELAUTAN";
+  if (s.includes("PSDKP") || s.includes("PENGAWASAN")) return "BIDANG PSDKP";
+  return null;
+}
+
+// ── BBM FILTER SYSTEM ──
+function applyFilters() {
+  const fTahun = $("f-tahun").value;
+  const fPeriode = $("f-periode").value;
+  const fStatus = $("f-status").value;
+
+  filteredBbm = allBbm.filter(b => {
+    const d = parseTanggal(b.tgl_submit || b.tgl_kegiatan);
+    if (fTahun && d && d.getFullYear().toString() !== fTahun) return false;
+    
+    if (fPeriode && d) {
+      const type = fPeriode.substring(0, 1);
+      const val = parseInt(fPeriode.substring(1), 10);
+      const m = d.getMonth() + 1;
+      
+      if (type === "M") {
+        if (m !== val) return false;
+      } else if (type === "Q") {
+        if (val === 1 && ![1, 2, 3].includes(m)) return false;
+        if (val === 2 && ![4, 5, 6].includes(m)) return false;
+        if (val === 3 && ![7, 8, 9].includes(m)) return false;
+        if (val === 4 && ![10, 11, 12].includes(m)) return false;
+      } else if (type === "S") {
+        if (val === 1 && m > 6) return false;
+        if (val === 2 && m <= 6) return false;
+      }
+    }
+    
+    if (fStatus) {
+      const status = (b.status || "").toUpperCase().trim();
+      if (fStatus === "PENDING" && status !== "PENDING") return false;
+      if (fStatus === "DISETUJUI" && status !== "DISETUJUI" && status !== "DILAPORKAN" && status !== "SELESAI") return false;
+    }
+    
+    return true;
+  });
+
+  const activeFilters = [];
+  if (fTahun) activeFilters.push(`Tahun: ${fTahun}`);
+  if (fPeriode) activeFilters.push(`Periode: ${$("f-periode").options[$("f-periode").selectedIndex].text}`);
+  if (fStatus) activeFilters.push(`Status: ${fStatus}`);
+
+  renderFilterMessage(activeFilters);
+  renderBidangAllocation();
+  calculateInsightCardValues();
+}
+
+function renderFilterMessage(fields) {
+  const container = $("filter-msg-container");
+  if (!container) return;
+  if (fields.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+  container.innerHTML = `
+    <div class="filter-active-msg">
+      <div>
+        <strong>Filter aktif:</strong> ${fields.join(" · ")} (${filteredBbm.length} data)
+      </div>
+      <span style="cursor:pointer; font-weight:bold; color:var(--wave); margin-left:12px;" onclick="clearFilters()">&times; Hapus</span>
+    </div>
+  `;
+}
+
+function clearFilters() {
+  $("f-tahun").value = "";
+  $("f-periode").value = "";
+  $("f-status").value = "";
+  applyFilters();
+}
+
+// ── INSIGHT CARD DATA CALCULATION ──
+function calculateInsightCardValues() {
+  const dataMap = {};
+  BIDANG_LIST.forEach(b => {
+    dataMap[b] = { totalLiters: 0, count: 0 };
+  });
+
+  filteredBbm.forEach(b => {
+    const status = (b.status || "").toUpperCase().trim();
+    if (status !== "DISETUJUI" && status !== "DILAPORKAN" && status !== "SELESAI") return;
+
+    const qty = parseFloat(b.jumlah_digunakan || b.jumlah) || 0;
+    const size = parseFloat(b.jenis_voucher) || 0;
+    const bKey = getMatchedBidangKey(b.bidang);
+
+    if (bKey && dataMap[bKey]) {
+      dataMap[bKey].totalLiters += (qty * size);
+      dataMap[bKey].count += 1;
+    }
+  });
+
+  let totalLiters = 0;
+  let totalTrips = 0;
+  let minAvg = Infinity;
+  let maxAvg = -Infinity;
+  let minTotal = Infinity;
+  let bestBidang = "-";
+  let worstBidang = "-";
+  let lowestTotalBidang = "-";
+
+  BIDANG_LIST.forEach(b => {
+    const item = dataMap[b];
+    const total = item.totalLiters;
+    const count = item.count;
+    const avg = count > 0 ? total / count : 0;
+
+    totalLiters += total;
+    totalTrips += count;
+
+    if (count > 0) {
+      if (avg < minAvg) {
+        minAvg = avg;
+        bestBidang = b.replace("BIDANG ", "");
+      }
+      if (avg > maxAvg) {
+        maxAvg = avg;
+        worstBidang = b.replace("BIDANG ", "");
+      }
+    }
+    
+    if (total > 0 && total < minTotal) {
+      minTotal = total;
+      lowestTotalBidang = b.replace("BIDANG ", "");
+    }
+  });
+
+  const overallAvg = totalTrips > 0 ? totalLiters / totalTrips : 0;
+
+  let efficiencyLabel = "N/A";
+  let recommendation = "";
+
+  if (totalTrips === 0) {
+    efficiencyLabel = "Tidak Ada Data";
+    recommendation = "Tidak ada data voucher bbm dilaporkan/disetujui untuk parameter periode filter saat ini.";
+  } else if (overallAvg < 6) {
+    efficiencyLabel = "Sangat Tinggi 🟢";
+    recommendation = "Pola penggunaan bahan bakar sangat efisien. Pengambilan voucher BBM sejalan dengan rute kegiatan operasional lapangan.";
+  } else if (overallAvg <= 10) {
+    efficiencyLabel = "Cukup Tinggi 🟡";
+    recommendation = "Indeks penggunaan bahan bakar berada pada batas normal. Direkomendasikan penggabungan rute tugas searah.";
+  } else {
+    efficiencyLabel = "Rendah (Evaluasi) 🔴";
+    recommendation = `Konsumsi rata-rata tinggi (${overallAvg.toFixed(1)} Ltr/kegiatan). Disarankan untuk memperketat verifikasi nopol dan membatasi kuota voucher 10 liter pada Bidang ${worstBidang}.`;
+  }
+
+  $("val-indeks-efisiensi").innerHTML = efficiencyLabel;
+  $("val-rata-konsumsi").innerHTML = `${overallAvg.toFixed(1)} Ltr/keg`;
+  $("val-total-terdistribusi").innerHTML = `${totalLiters.toLocaleString()} Liter`;
+  $("val-rerata-terkecil").innerHTML = bestBidang !== "-" ? `${bestBidang} (${minAvg.toFixed(1)} Ltr/keg)` : "-";
+  $("val-volume-terhemat").innerHTML = lowestTotalBidang !== "-" ? `${lowestTotalBidang} (${minTotal} Ltr)` : "-";
+  $("val-rerata-terbesar").innerHTML = worstBidang !== "-" ? `${worstBidang} (${maxAvg.toFixed(1)} Ltr/keg)` : "-";
+  $("val-rekomendasi-box").innerHTML = `<strong>Rekomendasi:</strong> ${recommendation}`;
+}
+
+</script>
+</body>
+</html>
