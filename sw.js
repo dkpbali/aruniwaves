@@ -3,7 +3,7 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v12";
+const CACHE_NAME = "aruniwaves-v14";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [
@@ -17,11 +17,31 @@ const PRECACHE_URLS = [
   "helpdesk/index.html",
   "rapat/index.html",
   "humas/index.html",
+  "kendaraan/index.html",
   "dashboard/dashboard_kendaraan/index.html",
   "dashboard/dashboard_ekspor/index.html",
   "dashboard/dashboard_ews/index.html",
   "dashboard/dashboard_ews/verifikasi.html",
   "dashboard/dashboard_ews/kabupaten-bali.geojson",
+  "assets/css/main.css",
+  "assets/css/component.css",
+  "assets/css/form.css",
+  "assets/css/table.css",
+  "assets/js/config.js",
+  "assets/js/utils.js",
+  "assets/js/api.js",
+  "assets/js/auth.js",
+  "assets/js/ui.js",
+  "assets/js/aset.js",
+  "assets/js/bbm.js",
+  "assets/js/helpdesk.js",
+  "assets/js/humas.js",
+  "assets/js/kendaraan.js",
+  "assets/js/rapat.js",
+  "assets/js/dashboard_ekspor.js",
+  "assets/js/dashboard_ews.js",
+  "assets/js/dashboard_ews_verifikasi.js",
+  "assets/js/dashboard_kendaraan.js"
 ];
 
 // ── Install: cache semua file utama ─────────

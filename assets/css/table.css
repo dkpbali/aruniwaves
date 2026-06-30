@@ -1,0 +1,111 @@
+/* ===================================================================
+   ARUNIWAVES - Shared Styles: Tables (Responsive Data Grids, Desktop Grids)
+   =================================================================== */
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+th {
+  background: var(--ink3);
+  color: var(--text);
+  font-weight: 700;
+  padding: 12px 14px;
+  font-family: var(--title-sans);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: 10px;
+}
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  background: #fff;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.tr-hover:hover td {
+  background: rgba(0, 119, 230, 0.02);
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 12px;
+}
+
+/* ── EMPTY STATE & LOADERS ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--muted);
+}
+
+.empty-state span {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.spin {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--wave);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+/* ── DESKTOP GRID LAYOUTS ── */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-grid .full-width {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  main {
+    max-width: 1000px !important;
+    padding-bottom: 40px !important;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .form-grid .full-width {
+    grid-column: span 2;
+  }
+}

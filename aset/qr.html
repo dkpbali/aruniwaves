@@ -9,30 +9,11 @@
 <title>Cetak QR Aset - ARUNIWAVES</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-:root {
-  --ink:      #FFFFFF;
-  --ink2:     #F4F8FC;
-  --ink3:     #E8F1F7;
-  --sea:      #0055AA;
-  --sea2:     #004488;
-  --wave:     #0077E6;
-  --foam:     #3399FF;
-  --text:     #1E293B;
-  --muted:    #64748B;
-  --border:   #CBD5E1;
-  --border2:  #94A3B8;
-  --green:    #0D9488;
-  --yellow:   #CA8A04;
-  --red:      #DC2626;
-  --mono:     'Fira Code', monospace;
-  --sans:     'Inter', sans-serif;
-  --title-sans: 'Outfit', sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--ink);color:var(--text);font-family:var(--sans);min-height:100vh}
-
-/* ── CUSTOM SCROLLBAR ── */
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/component.css">
+<link rel="stylesheet" href="../assets/css/form.css">
+<link rel="stylesheet" href="../assets/css/table.css">
+<style>/* ── CUSTOM SCROLLBAR ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -759,39 +740,7 @@ tr:hover {
 </head>
 <body>
 
-<nav class="topnav">
-  <a class="nav-logo" href="../index.html">
-    <div class="nav-logo-mark">
-      <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="6" height="6" rx="1"/>
-        <rect x="15" y="3" width="6" height="6" rx="1"/>
-        <rect x="3" y="15" width="6" height="6" rx="1"/>
-        <path d="M15 15h1v1M19 15h2v2M15 19h2v2M19 21h2"/>
-      </svg>
-    </div>
-    <div>
-      <div class="nav-logo-text">Cetak QR Aset</div>
-      <div class="nav-logo-sub">ARUNIWAVES</div>
-    </div>
-  </a>
-    <div class="desktop-nav">
-    <a href="../aset/index.html" class="desktop-nav-item active">Aset</a>
-    <a href="../helpdesk/index.html" class="desktop-nav-item">Helpdesk</a>
-    <a href="../rapat/index.html" class="desktop-nav-item">Rapat</a>
-    <a href="../humas/index.html" class="desktop-nav-item">Humas</a>
-    <a href="../bbm/index.html" class="desktop-nav-item">BBM</a>
-    <div class="desktop-dropdown">
-      <button class="desktop-dropdown-btn">Dashboard <span style="font-size:9px;">▼</span></button>
-      <div class="desktop-dropdown-content">
-        <a href="../dashboard/dashboard_ews/index.html">Dashboard EWS</a>
-        <a href="../dashboard/dashboard_ekspor/index.html">Dashboard Ekspor</a>
-        <a href="../dashboard/dashboard_kendaraan/index.html">Dashboard Kendaraan</a>
-      </div>
-    </div>
-  </div>
-  <div class="nav-spacer"></div>
-  <a href="../index.html" class="btn-back-header">Beranda</a>
-</nav>
+<div id="app-header"></div>
 
 <!-- PRINT AREA (hidden on screen) -->
 <div id="print-area" style="display:none"></div>
@@ -971,6 +920,11 @@ tr:hover {
   </div>
 </div>
 
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/utils.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/ui.js"></script>
 <script>
 const CFG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec",
@@ -987,8 +941,7 @@ const $ = id => document.getElementById(id);
 // ── Load aset ──────────────────────────────────
 async function loadAset() {
   try {
-    const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getAsetList`);
-    const json = await res.json();
+    const json = await API.get("getAsetList");
     if (json.success) {
       allAset = json.data.map(a => ({
         kode:     a.KODE_ASET,
@@ -1228,7 +1181,7 @@ function doPrint() {
 }
 
 // ── Init ───────────────────────────────────────
-loadAset();
+UI.renderNavigation("aset");`r`nloadAset();
 
 function toggleMore() {
   document.getElementById("more-drawer").classList.toggle("open");
@@ -1254,5 +1207,7 @@ document.addEventListener("focusout", e => {
   }
 });
 </script>
+<div id="app-nav"></div>
+<div id="app-drawer"></div>
 </body>
 </html>
