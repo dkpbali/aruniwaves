@@ -1429,13 +1429,19 @@ async function loadBbmStatus() {
       }
     } else {
       const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
-      if (json.success) allBbm = json.data;
+      if (json.success) {
+        allBbm = json.data;
+      } else {
+        throw new Error(json.message || "Server returned success=false");
+      }
     }
     renderBbmStatus(allBbm);
   } catch (err) {
     console.error("loadBbmStatus error:", err);
-    list.innerHTML = '<div class="empty-state">Gagal memuat data permohonan.</div>';
+    list.innerHTML = `<div class="empty-state" style="color:var(--red);">Gagal memuat data permohonan: ${err.message}</div>`;
+    alert(`Gagal memuat data permohonan BBM: ${err.message}`);
   }
 }
 
