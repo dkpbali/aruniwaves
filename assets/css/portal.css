@@ -639,3 +639,126 @@
 .app-card:nth-child(2) { animation-delay: 0.1s; }
 .app-card:nth-child(3) { animation-delay: 0.15s; }
 .app-card:nth-child(4) { animation-delay: 0.2s; }
+
+/* ── MONITORING TEASER ── */
+.monitor-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--ink2) 0%, var(--ink3) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 24px;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.monitor-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
+.monitor-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--sea), var(--wave));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.monitor-icon .svg-icon {
+  width: 18px;
+  height: 18px;
+}
+.monitor-body {
+  flex: 1;
+  min-width: 0;
+}
+.monitor-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.monitor-desc {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.monitor-arrow {
+  font-size: 14px;
+  color: var(--border2);
+  flex-shrink: 0;
+}
+
+/* ── RESPONSIVE TABLET & DESKTOP OVERRIDES ── */
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+  .bottom-nav {
+    display: none !important;
+  }
+  main {
+    max-width: 1000px;
+    padding-bottom: 40px;
+  }
+  .app-card {
+    flex: 0 0 calc(25% - 7.5px);
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 14px 12px;
+    gap: 12px;
+  }
+  .app-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .app-header-row {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .app-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  .app-name {
+    font-size: 15px;
+  }
+  .app-desc {
+    font-size: 11px;
+  }
+  .app-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+  .monitor-card {
+    padding: 16px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+  .monitor-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+  .monitor-icon .svg-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .monitor-title {
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .monitor-desc {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .monitor-arrow {
+    font-size: 18px;
+  }
+}
