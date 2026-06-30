@@ -1811,7 +1811,7 @@ function editHumas(id, nama, tanggal, link, platform, jenis, screenshotUrl) {
   editHumasFotoB64 = null;
   const previewContainer = document.getElementById("edit-hum-ss-preview-container");
   const previewImg = document.getElementById("edit-hum-ss-preview");
-  if (screenshotUrl) {
+  if (screenshotUrl && screenshotUrl !== 'undefined' && screenshotUrl !== 'null' && screenshotUrl.trim() !== '') {
     previewImg.src = screenshotUrl;
     previewContainer.style.display = "block";
   } else {
@@ -2422,39 +2422,38 @@ async function submitEditBooking(e) {
       <form id="edit-humas-form" onsubmit="submitEditHumas(event)">
         <input type="hidden" id="edit-hum-id"/>
         <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Nama Konten</label>
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Judul / Nama Konten *</label>
           <input type="text" id="edit-hum-nama" class="form-control" required/>
         </div>
         
-        <div class="field" style="margin-bottom: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div>
-            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Platform</label>
-            <select id="edit-hum-platform" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;" onchange="onEditPlatformChange()">
-              <option value="Website">Website</option>
-              <option value="Instagram">Instagram</option>
-              <option value="YouTube">YouTube</option>
-              <option value="TikTok">TikTok</option>
-              <option value="Facebook">Facebook</option>
-            </select>
-          </div>
-          <div>
-            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Konten</label>
-            <select id="edit-hum-jenis" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;">
-              <!-- Populated dynamically -->
-            </select>
-          </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Platform (Website, Instagram, YouTube, TikTok, Facebook)</label>
+          <select id="edit-hum-platform" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;" onchange="onEditPlatformChange()">
+            <option value="Website">Website</option>
+            <option value="Instagram">Instagram</option>
+            <option value="YouTube">YouTube</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Facebook">Facebook</option>
+          </select>
         </div>
 
         <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Rencana Posting</label>
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Konten</label>
+          <select id="edit-hum-jenis" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Posting</label>
           <input type="date" id="edit-hum-tanggal" class="form-control" required/>
         </div>
         <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten (Opsional)</label>
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten</label>
           <input type="url" id="edit-hum-link" class="form-control"/>
         </div>
         <div class="field" style="margin-bottom: 16px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Bukti Screenshot (Opsional - Pilih Baru untuk Mengganti)</label>
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Screenshot/Bukti Konten</label>
           <input type="file" id="edit-hum-ss-file" class="form-control" accept="image/*" onchange="handleEditHumasFile(event)"/>
           <div id="edit-hum-ss-preview-container" style="margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 6px; display: none; text-align: center; background: var(--light);">
             <img id="edit-hum-ss-preview" src="" alt="SS Preview" style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px;" />
