@@ -1158,18 +1158,28 @@ async function cekKetersediaan() {
 }
 
 // ── Submit ──────────────────────────────────
+function restoreSubmitBtn() {
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = false;
+  if (editingBookingId) {
+    btn.textContent = `Simpan Perubahan - ${editingBookingId}`;
+  } else {
+    updateSubmitBtn();
+  }
+}
+
 async function submitBooking(e) {
   e.preventDefault();
   if (!selectedRoom) { alert("Pilih ruangan terlebih dahulu."); return; }
 
   const btn = document.getElementById("btn-submit");
-  btn.disabled = true; btn.textContent = "Mengirim...";
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="border-top-color:#fff; display:inline-block; vertical-align:middle; margin-right:8px; width:16px; height:16px;"></span><span>Mengirim...</span>';
 
   const pemId  = document.getElementById("f-pemohon").value;
   if (!pemId) {
     alert("Pilih nama Pemohon dari daftar yang muncul saat mengetik.");
-    btn.disabled = false;
-    btn.textContent = editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`;
+    restoreSubmitBtn();
     return;
   }
   const pem    = allPegawai.find(p => p.id === pemId);
@@ -1179,8 +1189,8 @@ async function submitBooking(e) {
   // Validasi field kondisional
   const acara   = document.getElementById("f-acara").value.trim();
   const ket     = document.getElementById("f-keterangan").value.trim();
-  if (isRapat && !acara)  { alert("Nama acara wajib diisi."); btn.disabled=false; btn.textContent=editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`; return; }
-  if (!isRapat && !ket)   { alert("Keterangan keperluan wajib diisi."); btn.disabled=false; btn.textContent=editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`; return; }
+  if (isRapat && !acara)  { alert("Nama acara wajib diisi."); restoreSubmitBtn(); return; }
+  if (!isRapat && !ket)   { alert("Keterangan keperluan wajib diisi."); restoreSubmitBtn(); return; }
 
 
 
@@ -1217,8 +1227,7 @@ async function submitBooking(e) {
     }
   } catch (err) {
     alert("Gagal: " + err.message);
-    btn.disabled = false;
-    btn.textContent = editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`;
+    restoreSubmitBtn();
   }
 }
 
