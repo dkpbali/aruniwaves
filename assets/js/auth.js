@@ -78,13 +78,13 @@ const Auth = {
   init(buttonContainerId, successCallback, errorCallback) {
     if (typeof google === 'undefined' || !google.accounts) {
       console.warn("[Auth] Google Accounts API not loaded yet. Retrying in 500ms...");
-      setTimeout(() => this.init(buttonContainerId, successCallback, errorCallback), 500);
+      setTimeout(() => Auth.init(buttonContainerId, successCallback, errorCallback), 500);
       return;
     }
 
     google.accounts.id.initialize({
       client_id: CFG.GOOGLE_CLIENT_ID,
-      callback: (res) => this.handleLoginResponse(res, successCallback, errorCallback),
+      callback: (res) => Auth.handleLoginResponse(res, successCallback, errorCallback),
       auto_select: false,
     });
 

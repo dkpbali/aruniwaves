@@ -3,7 +3,7 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v15";
+const CACHE_NAME = "aruniwaves-v16";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [
@@ -91,6 +91,7 @@ self.addEventListener("fetch", event => {
 
   // Jangan cache request ke Apps Script / Telegram API (data selalu fresh)
   if (url.hostname.includes("script.google.com") ||
+      url.hostname.includes("script.googleusercontent.com") ||
       url.hostname.includes("api.telegram.org")) {
     event.respondWith(fetch(event.request));
     return;
