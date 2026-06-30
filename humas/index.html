@@ -1347,6 +1347,15 @@ function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback)
   }
 }
 
+function formatDriveImgUrl(url) {
+  if (!url) return "";
+  const match = url.match(/id=([^&]+)/) || url.match(/\/file\/d\/([^\/]+)/) || url.match(/\/d\/([^\/]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
+
 // Check tab from URL parameters immediately to avoid flash and network dependency
 const urlParams = new URLSearchParams(window.location.search);
 const tabParam = urlParams.get("tab");
@@ -1405,7 +1414,9 @@ async function handleEditParam() {
         foundCard = c;
       }
     });
-    selectPlatform(item.platform, foundCard);
+    if (foundCard) {
+      setTimeout(() => { selectPlatform(item.platform, foundCard); }, 100);
+    }
   }
   
   if (item.jenisKonten) {
@@ -1423,7 +1434,7 @@ async function handleEditParam() {
   if (item.screenshotUrl && item.screenshotUrl.trim() !== "" && item.screenshotUrl !== "undefined" && item.screenshotUrl !== "null") {
     const preview = document.getElementById("foto-preview");
     const img = document.getElementById("foto-img");
-    img.src = item.screenshotUrl;
+    img.src = formatDriveImgUrl(item.screenshotUrl);
     preview.style.display = "block";
     document.getElementById("foto-zone").style.display = "none";
     hasFoto = true;

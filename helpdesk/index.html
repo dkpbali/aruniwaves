@@ -701,7 +701,7 @@ body.keyboard-open .more-drawer {
             <img id="foto-img" src="" alt="Preview"/>
             <button type="button" class="foto-remove" onclick="removeFoto()" style="display: inline-flex; align-items: center; justify-content: center;"><svg style="width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.5;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
-          <div class="foto-required" id="foto-required" style="display: inline-flex; align-items: center; gap: 4px;">
+          <div class="foto-required" id="foto-required" style="display: none; align-items: center; gap: 4px;">
             <svg style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: middle; display: inline-block;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Foto wajib dilampirkan sebelum mengirim.
           </div>
         </div>
@@ -1151,6 +1151,15 @@ if (tabParam === "status") {
   switchTab("form");
 }
 
+function formatDriveImgUrl(url) {
+  if (!url) return "";
+  const match = url.match(/id=([^&]+)/) || url.match(/\/file\/d\/([^\/]+)/) || url.match(/\/d\/([^\/]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
+
 async function handleEditParam() {
   const editId = new URLSearchParams(window.location.search).get("editHelpdesk");
   if (!editId) return;
@@ -1186,7 +1195,7 @@ async function handleEditParam() {
   if (item.fotoUrl && item.fotoUrl.trim() !== "" && item.fotoUrl !== "undefined" && item.fotoUrl !== "null") {
     const preview = document.getElementById("foto-preview");
     const img = document.getElementById("foto-img");
-    img.src = item.fotoUrl;
+    img.src = formatDriveImgUrl(item.fotoUrl);
     preview.style.display = "block";
     document.getElementById("foto-zone").style.display = "none";
     hasFoto = true;
