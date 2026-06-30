@@ -780,8 +780,16 @@ const CFG = {
 
 // ── State ───────────────────────────────────
 let allPegawai   = [];
+let allTiket     = [];
 let fotoB64      = null;
 let hasFoto      = false;
+let editingHelpdeskId = null;
+
+let currentUser = null;
+try {
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) currentUser = JSON.parse(cached);
+} catch (e) { console.error(e); }
 
 
 // ── Tabs ────────────────────────────────────
@@ -904,7 +912,7 @@ function removeFoto() {
   document.getElementById("f-foto").value = "";
 }
 
-// ── Submit ──────────────────────────────────
+// ── Submit / Update ──────────────────────────
 async function submitLaporan(e) {
   e.preventDefault();
 
@@ -917,49 +925,77 @@ async function submitLaporan(e) {
 
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.textContent = "⏳ Mengirim laporan...";
+  btn.textContent = "⏳ Menyimpan...";
 
   const pegId  = document.getElementById("f-pegawai").value;
   if (!pegId) {
     alert("Pilih nama Pegawai dari daftar yang muncul saat mengetik.");
     btn.disabled = false;
-    btn.textContent = "Kirim Laporan";
+    btn.textContent = editingHelpdeskId ? "Simpan Perubahan" : "Kirim Laporan";
     return;
   }
   const peg    = allPegawai.find(p => p.id === pegId);
   const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
 
-
-
-  const payload = {
-    action:         "submitHelpdesk",
-    
-    id_pelapor:     pegId,
-    nama_pelapor:   peg?.nama    || "",
-    lokasi_pelapor:  peg?.lokasiKerja  || peg?.bidang || "",
-    nama_barang:    document.getElementById("f-aset").value.trim(),
-    judul:          document.getElementById("f-judul").value,
-    deskripsi:      document.getElementById("f-deskripsi").value,
-    foto_base64:    fotoB64,
-  };
+  let payload;
+  if (editingHelpdeskId) {
+    if (!currentUser) {
+      alert("Login Google diperlukan untuk menyimpan perubahan.");
+      btn.disabled = false; btn.textContent = "Simpan Perubahan";
+      return;
+    }
+    payload = {
+      action:       "updateHelpdesk",
+      id_tiket:     editingHelpdeskId,
+      id_token:     currentUser.id_token,
+      judul:        document.getElementById("f-judul").value.trim(),
+      nama_barang:  document.getElementById("f-aset").value.trim(),
+      deskripsi:    document.getElementById("f-deskripsi").value.trim(),
+    };
+    if (fotoB64) {
+      payload.foto_base64 = fotoB64;
+    }
+  } else {
+    payload = {
+      action:         "submitHelpdesk",
+      id_pelapor:     pegId,
+      nama_pelapor:   peg?.nama    || "",
+      lokasi_pelapor:  peg?.lokasiKerja  || peg?.bidang || "",
+      nama_barang:    document.getElementById("f-aset").value.trim(),
+      judul:          document.getElementById("f-judul").value,
+      deskripsi:      document.getElementById("f-deskripsi").value,
+      foto_base64:    fotoB64,
+    };
+  }
 
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
       await new Promise(r => setTimeout(r, 1200));
-      const demoId = "TKT-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
-      showSuccess(demoId);
+      if (editingHelpdeskId) {
+        alert("Perubahan berhasil disimpan (mode demo).");
+        window.location.href = "../index.html?actTab=helpdesk";
+      } else {
+        const demoId = "TKT-" + String(Math.floor(Math.random()*900)+100).padStart(4,"0");
+        showSuccess(demoId);
+      }
       return;
     }
     const res  = await fetch(CFG.APPS_SCRIPT_URL, {
       method: "POST", body: JSON.stringify(payload),
     });
     const data = await res.json();
-    if (data.success) showSuccess(data.tiket_id);
-    else throw new Error(data.message || "Gagal mengirim.");
+    if (data.success) {
+      if (editingHelpdeskId) {
+        alert("Perubahan berhasil disimpan!");
+        window.location.href = "../index.html?actTab=helpdesk";
+      } else {
+        showSuccess(data.tiket_id);
+      }
+    } else throw new Error(data.message || "Gagal mengirim.");
   } catch (err) {
     alert("Gagal mengirim: " + err.message);
     btn.disabled = false;
-    btn.textContent = "Kirim Laporan";
+    btn.textContent = editingHelpdeskId ? "Simpan Perubahan" : "Kirim Laporan";
   }
 }
 
@@ -1107,8 +1143,62 @@ if (tabParam === "status") {
   switchTab("form");
 }
 
+async function handleEditParam() {
+  const editId = new URLSearchParams(window.location.search).get("editHelpdesk");
+  if (!editId) return;
+  
+  editingHelpdeskId = editId;
+  
+  if (!allPegawai.length) {
+    await loadPegawai();
+  }
+  await loadTiket();
+  
+  const item = allTiket.find(t => t.id === editId);
+  if (!item) {
+    alert("Tiket helpdesk tidak ditemukan.");
+    return;
+  }
+  
+  // Populate Form Fields
+  const peg = allPegawai.find(p => p.nama === item.nama || p.id === item.idPelapor);
+  if (peg) {
+    document.getElementById("f-pegawai-search").value = peg.nama;
+    document.getElementById("f-pegawai").value = peg.id;
+    onPegawaiChange();
+  } else {
+    document.getElementById("f-pegawai-search").value = item.nama;
+    document.getElementById("f-pegawai").value = item.idPelapor || "";
+  }
+  
+  document.getElementById("f-judul").value = item.judul || "";
+  document.getElementById("f-aset").value = item.namaBarang || "";
+  document.getElementById("f-deskripsi").value = item.deskripsi || "";
+  
+  if (item.fotoUrl && item.fotoUrl.trim() !== "" && item.fotoUrl !== "undefined" && item.fotoUrl !== "null") {
+    const preview = document.getElementById("foto-preview");
+    const img = document.getElementById("foto-img");
+    img.src = item.fotoUrl;
+    preview.style.display = "block";
+    document.getElementById("foto-zone").style.display = "none";
+    hasFoto = true;
+  }
+  
+  // Change button label and page header
+  const btn = document.getElementById("btn-submit");
+  if (btn) btn.textContent = "Simpan Perubahan";
+  
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "HELPDESK SARPRAS (EDIT)";
+  if (heroTitle) heroTitle.textContent = "Ubah Laporan Kerusakan";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan pada laporan sarpras Anda.";
+}
+
 (async () => {
   await loadPegawai();
+  await handleEditParam();
 })();
 
 // Keyboard visual viewport handler

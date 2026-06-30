@@ -1558,6 +1558,15 @@ function renderActTab(tab) {
       const isStatusOpen = t.status.toUpperCase() === 'OPEN';
       const badgeColor = isStatusOpen ? 'var(--orange)' : 'var(--wave)';
       const statusLabel = isStatusOpen ? 'BARU' : t.status;
+      const isOwner = t.idPelapor === loggedPegId;
+
+      let actions = '';
+      if (isStatusOpen && isUserLogged && isOwner) {
+        actions = `<div class="act-actions">
+          <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHelpdeskRedirect('${t.id}')">Edit</button>
+          <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHelpdesk('${t.id}')">Hapus</button>
+        </div>`;
+      }
 
       return `
         <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
@@ -1568,8 +1577,9 @@ function renderActTab(tab) {
               <div class="act-meta">${escHtml(t.nama)} · ${escHtml(t.bidang)} · <span style="font-weight:700;color:${badgeColor}">${statusLabel}</span></div>
             </div>
           </div>
-          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
-            <div class="act-time">${formatShortDate(t.tanggal)}</div>
+          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+            <div class="act-time" style="margin-right:8px;">${formatShortDate(t.tanggal)}</div>
+            ${actions}
           </div>
         </div>`;
     }).join('');
@@ -1805,6 +1815,24 @@ function editHumasRedirect(id) {
     return;
   }
   window.location.href = `humas/index.html?editHumas=${id}`;
+}
+
+function editHelpdeskRedirect(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk mengubah tiket Helpdesk.");
+    return;
+  }
+  window.location.href = `helpdesk/index.html?editHelpdesk=${id}`;
+}
+
+async function deleteHelpdesk(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk menghapus tiket Helpdesk.");
+    return;
+  }
+  if (confirm("Apakah Anda yakin ingin menghapus laporan helpdesk ini?")) {
+    await postAction({ action: "deleteHelpdesk", id_tiket: id });
+  }
 }
 async function deleteHumas(id) {
   if (!currentUser) {
