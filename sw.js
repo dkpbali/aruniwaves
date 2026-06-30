@@ -3,7 +3,7 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v14";
+const CACHE_NAME = "aruniwaves-v15";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [
@@ -27,6 +27,7 @@ const PRECACHE_URLS = [
   "assets/css/component.css",
   "assets/css/form.css",
   "assets/css/table.css",
+  "assets/css/portal.css",
   "assets/js/config.js",
   "assets/js/utils.js",
   "assets/js/api.js",
@@ -113,8 +114,10 @@ self.addEventListener("fetch", event => {
           // Jika offline/gagal network, gunakan cache (abaikan query parameters seperti ?tab=)
           return caches.match(event.request, { ignoreSearch: true }).then(cached => {
             if (cached) return cached;
-            // Offline fallback
-            return caches.match("index.html", { ignoreSearch: true });
+            // Offline fallback hanya untuk navigasi halaman HTML
+            if (event.request.mode === "navigate" || (event.request.headers.get("accept") && event.request.headers.get("accept").includes("text/html"))) {
+              return caches.match("index.html", { ignoreSearch: true });
+            }
           });
         })
     );

@@ -30,6 +30,10 @@ const Auth = {
     return null;
   },
 
+  getCurrentUser() {
+    return this.getUser();
+  },
+
   async handleLoginResponse(response, successCallback, errorCallback) {
     const idToken = response.credential;
     try {

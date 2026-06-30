@@ -1,0 +1,598 @@
+/* ===================================================================
+   ARUNIWAVES - Portal Specific Styles (index.html components)
+   =================================================================== */
+
+/* ── HERO BANNER OVERRIDES ── */
+.hero {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 85, 170, 0.12);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── SKY & OCEAN ANIMATIONS ── */
+.sky-decor {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 99px;
+  filter: blur(2px);
+  animation: drift 35s linear infinite;
+}
+
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+.cloud-1 {
+  width: 50px; height: 16px;
+  top: 15%; left: -60px;
+  animation-delay: 0s;
+}
+
+.cloud-1::before { width: 24px; height: 24px; top: -12px; left: 8px; }
+.cloud-1::after { width: 20px; height: 20px; top: -8px; left: 22px; }
+
+.cloud-2 {
+  width: 70px; height: 20px;
+  top: 35%; left: -80px;
+  animation-duration: 45s;
+  animation-delay: -15s;
+  opacity: 0.6;
+}
+
+.cloud-2::before { width: 32px; height: 32px; top: -16px; left: 10px; }
+.cloud-2::after { width: 24px; height: 24px; top: -10px; left: 30px; }
+
+@keyframes drift {
+  from { left: -80px; }
+  to { left: 100%; }
+}
+
+.bird {
+  position: absolute;
+  width: 14px; height: 10px;
+  color: rgba(0, 85, 170, 0.2);
+  animation: fly 22s linear infinite;
+}
+
+.bird-1 { top: 12%; left: -20px; animation-delay: 4s; }
+.bird-2 { top: 22%; left: -30px; animation-duration: 28s; animation-delay: -8s; transform: scale(0.75); }
+
+@keyframes fly {
+  0% { transform: translate(0, 0) rotate(5deg) scaleX(1); }
+  50% { transform: translate(250px, -15px) rotate(-5deg) scaleX(1); }
+  100% { transform: translate(550px, 0) rotate(5deg) scaleX(1); }
+}
+
+.bird svg, .bird svg path {
+  width: 100%; height: 100%;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bird-wings {
+  animation: flap 0.5s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes flap {
+  from { transform: scaleY(1.2); }
+  to { transform: scaleY(-0.4); }
+}
+
+/* ── SVG Wave Animation ── */
+.hero-waves-wrap {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-waves {
+  width: 100%;
+  height: 100%;
+  min-height: 48px;
+  max-height: 48px;
+}
+
+.parallax-waves > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.parallax-waves > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.parallax-waves > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.parallax-waves > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.parallax-waves > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@keyframes move-forever {
+  0% { transform: translate3d(-90px, 0, 0); }
+  100% { transform: translate3d(85px, 0, 0); }
+}
+
+/* ── HOMEPAGE CALENDAR WIDGET ── */
+.calendar-card {
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.calendar-month-year {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--sans);
+  color: var(--text);
+}
+
+.btn-cal-nav {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+
+.btn-cal-nav:hover {
+  background: var(--ink3);
+  color: var(--text);
+  border-color: var(--border2);
+}
+
+/* ── HOMEPAGE DATE STRIP CALENDAR ── */
+.date-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.date-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.date-btn {
+  flex: 1;
+  min-width: 50px;
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.date-btn:hover {
+  border-color: var(--border2);
+}
+
+.date-btn.active {
+  background: var(--wave);
+  border-color: transparent;
+  color: #fff;
+}
+
+.date-btn.active .date-day,
+.date-btn.active .date-num {
+  color: #fff;
+}
+
+.date-day {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-weight: 700;
+}
+
+.date-num {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+
+.date-btn.has-meeting {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.date-btn.has-meeting .date-num {
+  color: var(--red);
+}
+
+.date-btn.active.has-meeting {
+  background: var(--red);
+  border-color: transparent;
+}
+
+.date-btn.active.has-meeting .date-num {
+  color: #fff;
+}
+
+.calendar-bookings-list {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.cal-booking-item {
+  background: #fff;
+  border: 1px solid rgba(0, 85, 170, 0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s, box-shadow 0.25s;
+}
+
+.cal-booking-item:last-child {
+  margin-bottom: 0;
+}
+
+.cal-booking-item:hover {
+  border-color: var(--wave);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 85, 170, 0.08);
+}
+
+.cal-booking-title {
+  font-family: var(--title-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.cal-booking-meta {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.cal-booking-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--indigo);
+}
+
+.cal-booking-empty {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ── Google Login Bar ── */
+#login-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #0055AA, #0077E6);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+#login-bar .login-bar-text {
+  flex: 1;
+}
+
+#login-bar .login-bar-title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+#login-bar .login-bar-sub {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#gis-btn-container {
+  flex-shrink: 0;
+}
+
+#gis-btn-container > div {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+#user-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+#user-bar .user-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+#user-bar .user-email {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.btn-logout {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── Tabs for Aktivitas Terkini ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  color: var(--wave);
+  border-bottom-color: var(--wave);
+}
+
+/* ── File Upload ── */
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.upload-card {
+  background: var(--light);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.upload-card:hover {
+  border-color: var(--wave);
+}
+
+.upload-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.upload-limit {
+  font-size: 8px;
+  color: var(--muted);
+}
+
+.upload-input {
+  display: none;
+}
+
+.file-preview {
+  display: none;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--card);
+  border-radius: 10px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 4px; right: 4px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-thumb {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.preview-name {
+  font-size: 8px;
+  color: var(--text);
+  word-break: break-all;
+}
+
+/* Action Buttons */
+.act-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  margin-left: 16px;
+}
+
+.act-btn {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  transition: all .2s;
+}
+
+.act-btn:hover {
+  background: var(--light);
+  border-color: var(--border2);
+  color: var(--text);
+}
+
+.act-btn-primary {
+  background: var(--wave);
+  color: #fff;
+  border-color: transparent;
+}
+
+.act-btn-primary:hover {
+  background: var(--sea);
+  color: #fff;
+  border-color: transparent;
+}
+
+.act-btn-danger {
+  background: var(--red);
+  color: #fff;
+  border-color: transparent;
+}
+
+.act-btn-danger:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: transparent;
+  opacity: .9;
+}
+
+.act-btn-success {
+  background: var(--green);
+  color: #fff;
+  border-color: transparent;
+}
+
+.act-btn-success:hover {
+  background: var(--green);
+  color: #fff;
+  border-color: transparent;
+  opacity: .9;
+}
+
+.spin-loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* ── DESKTOP SPLIT GRID ── */
+@media (min-width: 1024px) {
+  .desktop-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .desktop-left {
+    flex: 1;
+    min-width: 0;
+  }
+  .desktop-right {
+    width: 320px;
+    flex-shrink: 0;
+  }
+}
