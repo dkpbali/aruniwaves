@@ -1558,7 +1558,10 @@ function renderActTab(tab) {
       const isStatusOpen = t.status.toUpperCase() === 'OPEN';
       const badgeColor = isStatusOpen ? 'var(--orange)' : 'var(--wave)';
       const statusLabel = isStatusOpen ? 'BARU' : t.status;
-      const isOwner = t.idPelapor === loggedPegId;
+      const isOwner = isUserLogged && (
+        (t.idPelapor && t.idPelapor === loggedPegId) ||
+        (t.nama && currentUser.nama && t.nama.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+      );
 
       let actions = '';
       if (isStatusOpen && isUserLogged && isOwner) {
@@ -1618,6 +1621,11 @@ function renderActTab(tab) {
           statusColor = 'var(--red)';
         }
 
+        const isOwner = isUserLogged && (
+          (h.idPegawai && h.idPegawai === loggedPegId) ||
+          (h.namaPegawai && currentUser.nama && h.namaPegawai.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+        );
+
         if (isUserLogged && isLoggedAdmin) {
           if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
             actions = `<div class="act-actions">
@@ -1625,7 +1633,7 @@ function renderActTab(tab) {
               <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); valHumas('${h.id}', 'DITOLAK')">Tolak</button>
             </div>`;
           }
-        } else {
+        } else if (isOwner) {
           if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
             actions = `<div class="act-actions">
               <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumasRedirect('${h.id}')">Edit</button>
@@ -1676,7 +1684,10 @@ function renderActTab(tab) {
       const groupHeader = `<div style="font-size:11px; font-weight:700; color:var(--wave); ${marginStyle} margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed var(--border); padding-bottom:4px;">${bidang}</div>`;
       
       const itemsHtml = list.map(b => {
-        const isOwner = isUserLogged && (loggedPegId === b.id_pegawai);
+        const isOwner = isUserLogged && (
+          (b.id_pegawai && b.id_pegawai === loggedPegId) ||
+          (b.nama_penerima && currentUser.nama && b.nama_penerima.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+        );
         const isStatusOpen = b.status.toUpperCase() === 'OPEN';
         const isStatusApproved = b.status.toUpperCase() === 'DISETUJUI';
 
@@ -2232,12 +2243,16 @@ function renderSelectedDayBookings(dateStr, bookings) {
     <div style="font-size:11px; font-weight:700; color:var(--muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase;">JADWAL ${formattedDate} (${bookings.length})</div>
     <div style="display:flex; flex-direction:column; gap:8px;">
       ${bookings.map(b => {
-        const actionsHtml = `
+        const isOwner = isUserLogged && (
+          (b.id_pemohon && b.id_pemohon === loggedPegId) ||
+          (b.pemohon && currentUser.nama && b.pemohon.toLowerCase().trim() === currentUser.nama.toLowerCase().trim())
+        );
+        const actionsHtml = (isLoggedAdmin || isOwner) ? `
           <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start; margin-left: 0;">
             <button class="act-btn act-btn-primary" onclick="editBookingHome('${b.id}')">Edit</button>
             <button class="act-btn act-btn-danger" onclick="cancelBookingHome('${b.id}')">Hapus</button>
           </div>
-        `;
+        ` : '';
 
         const bidangStr = (b.bidang && b.bidang.trim() !== "" && b.bidang.trim() !== "-") ? ` (${escHtml(b.bidang)})` : "";
 

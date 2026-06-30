@@ -2019,6 +2019,15 @@ function editBbm(id, skipConfirm) {
   }
 
   $("btn-submit").querySelector("span").textContent = "Perbarui Permohonan";
+  
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "EDIT PERMOHONAN BBM";
+  if (heroTitle) heroTitle.textContent = "Ubah Data BBM";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan data permohonan bensin/voucher BBM Anda.";
+  document.title = "Edit Laporan BBM - ARUNIWAVES";
+
   showToast("Mengedit permohonan " + id + ". Ubah data lalu simpan.");
 }
 

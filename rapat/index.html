@@ -1380,6 +1380,14 @@ function editBooking(id) {
   btn.textContent = `Simpan Perubahan - ${b.id}`;
   btn.disabled = false;
   
+  const heroEyebrow = document.querySelector(".bbm-eyebrow");
+  const heroTitle = document.querySelector(".bbm-title");
+  const heroSub = document.querySelector(".bbm-sub");
+  if (heroEyebrow) heroEyebrow.textContent = "EDIT BOOKING RUANGAN";
+  if (heroTitle) heroTitle.textContent = "Ubah Booking Ruangan";
+  if (heroSub) heroSub.textContent = "Perbarui formulir di bawah ini untuk menyimpan perubahan pada pesanan ruangan rapat Anda.";
+  document.title = "Edit Booking Rapat - ARUNIWAVES";
+
   switchTab("booking");
   const indicator = document.getElementById("avail-indicator");
   if (indicator) indicator.className = "avail";
