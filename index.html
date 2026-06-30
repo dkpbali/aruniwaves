@@ -1891,6 +1891,10 @@ function editBbm(id, jenis, jumlah, tujuan) {
   openModal('edit-bbm-modal');
 }
 async function deleteBbm(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk menghapus permohonan BBM.");
+    return;
+  }
   if (confirm("Apakah Anda yakin ingin menghapus permohonan BBM ini?")) {
     await postAction({ action: "deleteBbm", id_bbm: id });
   }
