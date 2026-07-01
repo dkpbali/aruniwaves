@@ -56,6 +56,7 @@
 
 /* ── DARK THEME ── */
 html.dark {
+  color-scheme: dark;
   /* Backgrounds */
   --ink:      #0F172A; /* Slate 900 */
   --ink2:     #1E293B; /* Slate 800 */
@@ -1124,4 +1125,28 @@ html.dark .info-card {
   background: var(--card) !important;
   border-color: var(--border) !important;
   color: var(--text) !important;
+}
+
+/* ── AUTOFILL & PICKER INDICATOR OVERRIDES ── */
+html.dark input::-webkit-calendar-picker-indicator {
+  filter: invert(1) !important;
+}
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus,
+html.dark textarea:-webkit-autofill,
+html.dark textarea:-webkit-autofill:hover,
+html.dark textarea:-webkit-autofill:focus,
+html.dark select:-webkit-autofill,
+html.dark select:-webkit-autofill:hover,
+html.dark select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--ink2) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ── GLOBAL DESKTOP DROPDOWN OVERRIDES ── */
+html.dark .desktop-dropdown-content {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
 }
