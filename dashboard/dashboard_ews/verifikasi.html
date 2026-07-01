@@ -7,70 +7,10 @@
 <meta name="description" content="Form Verifikasi Lapangan Red Tide / HAB - ARUNIWAVES Dinas Kelautan dan Perikanan Provinsi Bali"/>
 <link rel="apple-touch-icon" href="../../icons/icon-192.png"/>
 <title>Verifikasi Lapangan EWS - ARUNIWAVES</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../../shared.css"/>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-:root {
-  --ink:    #FFFFFF; --ink2: #0E1A2B; --ink3: #16253B;
-  --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
-  --foam:   #3399FF; --sand: #0B192C; --light: #061120;
-  --text:   #F4F8FC; --muted:#94A3B8;
-  --border: #2E3E56; --border2:#475B7A;
-  --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
-  --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif; --mono: 'Fira Code', monospace;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--light);color:var(--text);
-  font-family:var(--sans);min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  display:flex;flex-direction:column;
-}
 
-/* ── SITE HEADER ── */
-.site-header{
-  position:sticky;top:0;z-index:200;
-  background:rgba(6,17,32,.9);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  padding:0 16px;height:56px;
-  display:flex;align-items:center;gap:12px;
-}
-.logo-wrap{display:flex;align-items:center;gap:10px;flex:1;text-decoration:none}
-.logo-mark{
-  width:34px;height:34px;border-radius:9px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--sea),var(--wave));
-  display:flex;align-items:center;justify-content:center;
-}
-.logo-mark svg { stroke: #fff !important; }
-.logo-name{font-family:var(--title-sans);font-size:13px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
-.logo-sub{font-size:8px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
-.btn-back {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: var(--ink3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 11px;
-  font-weight: 700;
-  text-decoration: none;
-  font-family: var(--sans);
-  transition: all .2s;
-}
-.btn-back:hover {
-  background: var(--ink2);
-  border-color: var(--border2);
-}
-
-main {
-  flex: 1;
-  max-width: 520px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 24px 16px 80px;
-}
 
 .card {
   background: rgba(255,255,255,0.03);
@@ -305,28 +245,7 @@ main {
   max-width: 280px;
 }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50px);
-  z-index: 1500;
-  background: var(--ink3);
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-size: 12px;
-  font-weight: 600;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
+
 
 </style>
 </head>

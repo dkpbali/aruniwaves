@@ -7,81 +7,11 @@
 <meta name="description" content="Dashboard Ekspor Hasil Perikanan &amp; Direktori UPI Provinsi Bali - ARUNIWAVES Dinas Kelautan dan Perikanan Provinsi Bali"/>
 <link rel="apple-touch-icon" href="../../icons/icon-192.png"/>
 <title>Dashboard Ekspor &amp; UPI - ARUNIWAVES</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../../shared.css"/>
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root {
-  --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
-  --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
-  --foam:   #3399FF; --sand: #E6F2FF; --light: #F8FAFD;
-  --text:   #1E293B; --muted:#64748B;
-  --border: #CBD5E1; --border2:#94A3B8;
-  --green:  #0D9488; --green2: #0F766E; --green-light: #F0FDF4;
-  --yellow: #CA8A04; --red:#DC2626;
-  --mono: 'Fira Code', monospace; --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif;
-  --brand-grad: linear-gradient(135deg, var(--sea), var(--wave));
-  --green-grad: linear-gradient(135deg, var(--green), #14B8A6);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--ink2);color:var(--text);
-  font-family:var(--sans);min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
 
-/* ── CUSTOM SCROLLBAR ── */
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:var(--ink2)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:var(--wave)}
-
-/* ── SITE HEADER ── */
-.site-header{
-  position:sticky;top:0;z-index:200;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  box-shadow:0 1px 3px rgba(0,0,0,0.05);
-  padding:0 16px;height:56px;
-  display:flex;align-items:center;gap:12px;
-}
-.logo-wrap{display:flex;align-items:center;gap:10px;flex:1;text-decoration:none}
-.logo-mark{
-  width:34px;height:34px;border-radius:9px;flex-shrink:0;
-  background:var(--brand-grad);
-  display:flex;align-items:center;justify-content:center;font-size:16px;
-}
-.logo-name{font-family:var(--title-sans);font-size:14px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
-.logo-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
-.desktop-nav{display:none;gap:16px;margin-left:24px}
-.desktop-nav-item{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s,background .2s;padding:6px 12px;border-radius:6px}
-.desktop-nav-item:hover{color:var(--text);background:var(--ink3)}
-.desktop-nav-item.active{color:var(--wave);background:rgba(0,119,230,.08)}
-
-.btn-back-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: var(--ink3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 11px;
-  font-weight: 700;
-  text-decoration: none;
-  font-family: var(--sans);
-  transition: all .2s;
-}
-.btn-back-header:hover {
-  background: var(--ink2);
-  border-color: var(--border2);
-}
-
-/* ── MAIN ── */
-main{max-width:520px;margin:0 auto;padding:12px 10px 80px}
 
 /* ── HERO BANNER ── */
 .bbm-hero{
@@ -562,10 +492,7 @@ tr:last-child td{border-bottom:none}
   color: var(--wave) !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
-.spin {
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+
 
 
 
