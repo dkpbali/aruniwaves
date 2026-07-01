@@ -72,9 +72,9 @@
   </div>
 
   <!-- TABS -->
-  <div class="tabs">
-    <div class="tab active" id="tab-ekspor" onclick="switchTab('ekspor')">Statistik Ekspor</div>
-    <div class="tab" id="tab-upi" onclick="switchTab('upi')">Direktori UPI</div>
+  <div class="ews-tabs" style="margin-bottom: 20px;">
+    <button class="ews-tab active" id="tab-ekspor" onclick="switchTab('ekspor')">Statistik Ekspor</button>
+    <button class="ews-tab" id="tab-upi" onclick="switchTab('upi')">Direktori UPI</button>
   </div>
 
   <!-- ==================== TAB EKSPOR ==================== -->
@@ -433,7 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Switch Tabs
 function switchTab(tabId) {
-  const tabs = document.querySelectorAll(".tab");
+  const tabs = document.querySelectorAll(".ews-tab");
   const sections = document.querySelectorAll(".tab-section");
   
   tabs.forEach(t => t.classList.remove("active"));
@@ -853,59 +853,27 @@ function updateCharts() {
   const listCountryContainer = $("list-country");
   listCountryContainer.innerHTML = "";
   if (topCountries.length === 0) {
-    listCountrylet trendBg = "rgba(255,255,255,0.12)";
-  let trendColor = "inherit";
-  let recBg = "rgba(255,255,255,0.15)";
-  let recBorder = "#ffffff";
-  
-  if (hasGrowth) {
-    if (isPositive) {
-      trendBg = "rgba(16, 185, 129, 0.18)";
-      trendColor = "#34d399";
-      recBg = "rgba(16, 185, 129, 0.12)";
-      recBorder = "#10b981";
-    } else {
-      trendBg = "rgba(239, 68, 68, 0.18)";
-      trendColor = "#f87171";
-      recBg = "rgba(239, 68, 68, 0.12)";
-      recBorder = "#ef4444";
-    }
-  }
-
-  container.innerHTML = `
-    <!-- Top 2 KPI Grid -->
-    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:4px;">
-      <div style="background:rgba(255,255,255,0.12); padding:10px; border-radius:10px;">
-        <div style="font-size:9px; opacity:0.85; text-transform:uppercase; font-family:var(--mono);">Total Nilai Ekspor</div>
-        <div style="font-size:13.5px; font-weight:800; margin-top:2px; color:#ffffff;">${formatIDR(totalValue)}</div>
-      </div>
-      <div style="background:${trendBg}; padding:10px; border-radius:10px; border:1px solid ${recBorder}22;">
-        <div style="font-size:9px; opacity:0.85; text-transform:uppercase; font-family:var(--mono); color:#ffffff;">Tren Bulanan (MoM)</div>
-        <div style="font-size:12.5px; font-weight:800; margin-top:2px; color:${trendColor};">${growthLabel}</div>
-      </div>
-    </div>
-    
-    <!-- Detail List -->
-    <div style="display:flex; flex-direction:column; gap:4px; font-size:11px; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); color:#ffffff;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px dashed rgba(255,255,255,0.15); padding-bottom:4px;">
-        <span style="opacity:0.85;">🌐 Pasar Ekspor Utama:</span>
-        <span style="font-weight:700; text-align:right;">${topCountryName} (${topCountryPct}%)</span>
-      </div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px dashed rgba(255,255,255,0.15); padding-bottom:4px;">
-        <span style="opacity:0.85;">🐟 Komoditas Terlaris:</span>
-        <span style="font-weight:700; text-align:right;">${topCommName} (${formatNum(topCommVal)} ${satuan === 'KG' ? 'kg' : 'ekor'} - ${topCommPct}%)</span>
-      </div>
-      <div style="display:flex; justify-content:space-between; padding-bottom:2px;">
-        <span style="opacity:0.85;">🏢 Eksportir Terbesar:</span>
-        <span style="font-weight:700; text-align:right;">${topExpName} (${topExpPct}%)</span>
-      </div>
-    </div>
-
-    <!-- Recommendation Box -->
-    <div style="background:${recBg}; border-left:4px solid ${recBorder}; padding:12px; border-radius:4px 10px 10px 4px; font-size:11px; line-height:1.45; color:#ffffff; border-top:1px solid ${recBorder}15; border-right:1px solid ${recBorder}15; border-bottom:1px solid ${recBorder}15;">
-      <strong>Rekomendasi:</strong> ${recommendation}
-    </div>
-  `;
+    listCountryContainer.innerHTML = `<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px;">Tidak ada data</div>`;
+  } else {
+    const maxVal = topCountries[0][1] || 1;
+    topCountries.forEach(([name, val], idx) => {
+      const pct = (val / maxVal * 100).toFixed(0);
+      const item = document.createElement("div");
+      item.className = "top-list-item";
+      item.title = name;
+      item.onclick = () => showCountryDetails(name);
+      item.innerHTML = `
+        <div class="top-rank-badge">${idx + 1}</div>
+        <div class="top-item-content">
+          <div class="top-item-header">
+            <span class="top-item-name">${name}</span>
+            <span class="top-item-val">${formatIDR(val)}</span>
+          </div>
+          <div class="top-progress-bg">
+            <div class="top-progress-bar" style="width: ${pct}%"></div>
+          </div>
+        </div>
+      `;
       listCountryContainer.appendChild(item);
     });
   }
@@ -1105,21 +1073,40 @@ function generateInsights() {
     recommendation = `Data saat ini menunjukkan pasar ekspor utama didominasi oleh <strong>${topCountryName}</strong> dengan komoditas terlaris <strong>${topCommName}</strong>. Disarankan untuk memantau pergerakan bulanan berikutnya guna merumuskan kebijakan yang terukur.`;
   }
   
+  let trendBg = "rgba(255,255,255,0.12)";
+  let trendColor = "inherit";
+  let recBg = "rgba(255,255,255,0.15)";
+  let recBorder = "#ffffff";
+  
+  if (hasGrowth) {
+    if (isPositive) {
+      trendBg = "rgba(16, 185, 129, 0.18)";
+      trendColor = "#34d399";
+      recBg = "rgba(16, 185, 129, 0.12)";
+      recBorder = "#10b981";
+    } else {
+      trendBg = "rgba(239, 68, 68, 0.18)";
+      trendColor = "#f87171";
+      recBg = "rgba(239, 68, 68, 0.12)";
+      recBorder = "#ef4444";
+    }
+  }
+
   container.innerHTML = `
     <!-- Top 2 KPI Grid -->
     <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:4px;">
       <div style="background:rgba(255,255,255,0.12); padding:10px; border-radius:10px;">
         <div style="font-size:9px; opacity:0.85; text-transform:uppercase; font-family:var(--mono);">Total Nilai Ekspor</div>
-        <div style="font-size:13.5px; font-weight:800; margin-top:2px;">${formatIDR(totalValue)}</div>
+        <div style="font-size:13.5px; font-weight:800; margin-top:2px; color:#ffffff;">${formatIDR(totalValue)}</div>
       </div>
-      <div style="background:rgba(255,255,255,0.12); padding:10px; border-radius:10px;">
-        <div style="font-size:9px; opacity:0.85; text-transform:uppercase; font-family:var(--mono);">Tren Bulanan (MoM)</div>
-        <div style="font-size:12.5px; font-weight:800; margin-top:2px;">${growthLabel}</div>
+      <div style="background:${trendBg}; padding:10px; border-radius:10px; border:1px solid ${recBorder}22;">
+        <div style="font-size:9px; opacity:0.85; text-transform:uppercase; font-family:var(--mono); color:#ffffff;">Tren Bulanan (MoM)</div>
+        <div style="font-size:12.5px; font-weight:800; margin-top:2px; color:${trendColor};">${growthLabel}</div>
       </div>
     </div>
     
     <!-- Detail List -->
-    <div style="display:flex; flex-direction:column; gap:4px; font-size:11px; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+    <div style="display:flex; flex-direction:column; gap:4px; font-size:11px; background:rgba(255,255,255,0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); color:#ffffff;">
       <div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px dashed rgba(255,255,255,0.15); padding-bottom:4px;">
         <span style="opacity:0.85;">🌐 Pasar Ekspor Utama:</span>
         <span style="font-weight:700; text-align:right;">${topCountryName} (${topCountryPct}%)</span>
@@ -1135,7 +1122,7 @@ function generateInsights() {
     </div>
 
     <!-- Recommendation Box -->
-    <div style="background:rgba(255,255,255,0.15); border-left:4px solid #fff; padding:10px; border-radius:4px 10px 10px 4px; font-size:11px; line-height:1.4;">
+    <div style="background:${recBg}; border-left:4px solid ${recBorder}; padding:12px; border-radius:4px 10px 10px 4px; font-size:11px; line-height:1.45; color:#ffffff; border-top:1px solid ${recBorder}15; border-right:1px solid ${recBorder}15; border-bottom:1px solid ${recBorder}15;">
       <strong>Rekomendasi:</strong> ${recommendation}
     </div>
   `;
