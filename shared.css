@@ -1182,3 +1182,14 @@ input::-webkit-calendar-picker-indicator {
   opacity: 0 !important;
   cursor: pointer !important;
 }
+
+/* ── GLOBAL DESKTOP DROPDOWN HOVER BRIDGE ── */
+.desktop-dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: transparent;
+}
