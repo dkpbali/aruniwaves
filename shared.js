@@ -375,3 +375,65 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(window.processOfflineQueue, 2000);
   }
 });
+
+
+// ── LIQUID RIPPLE EFFECT (EFEK RIAK AIR) ──
+document.addEventListener('mousedown', (e) => {
+  const target = e.target.closest('.app-card, .monitor-card, button, .btn, .btn-submit, .btn-install-hero, .ews-tab, .tab, .tab-btn, .more-item, .theme-toggle-btn');
+  if (!target) return;
+
+  // Pastikan posisi relatif dan overflow tersembunyi
+  if (window.getComputedStyle(target).position === 'static') {
+    target.style.position = 'relative';
+  }
+  
+  // Kecualikan theme toggle btn jika overflow hidden merusak tampilannya
+  if (!target.classList.contains('theme-toggle-btn')) {
+    target.style.overflow = 'hidden';
+  }
+
+  const rect = target.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  
+  const ripple = document.createElement('span');
+  ripple.className = 'aruni-ripple';
+  ripple.style.width = ripple.style.height = `${size}px`;
+  
+  const x = e.clientX - rect.left - size / 2;
+  const y = e.clientY - rect.top - size / 2;
+  
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+  
+  target.appendChild(ripple);
+  
+  ripple.addEventListener('animationend', () => {
+    ripple.remove();
+  });
+});
+
+// Inject Ripple CSS rules
+document.addEventListener('DOMContentLoaded', () => {
+  const style = document.createElement('style');
+  style.textContent = `
+    .aruni-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 119, 230, 0.22);
+      pointer-events: none;
+      transform: scale(0);
+      animation: aruni-ripple-anim 0.5s cubic-bezier(0.1, 0.8, 0.3, 1);
+      z-index: 10;
+    }
+    html.dark .aruni-ripple {
+      background: rgba(51, 153, 255, 0.25);
+    }
+    @keyframes aruni-ripple-anim {
+      to {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+});
