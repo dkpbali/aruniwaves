@@ -581,11 +581,11 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
 
 <script>
 const CFG = {
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec"
+  APPS_SCRIPT_URL: window.ARUNIWAVES_CONFIG.APPS_SCRIPT_URL
 };
 
 // ── GIS & User State ────────────────────────
-const GIS_CLIENT_ID = "980835671745-kovsr0jmtlnf6r3rq9hqnif5flc9i2g7.apps.googleusercontent.com";
+const GIS_CLIENT_ID = window.ARUNIWAVES_CONFIG.GOOGLE_CLIENT_ID;
 let currentUser = null; // { email, name, id_token, id_pegawai, is_admin, ... }
 
 // ── Aktivitas Terkini State ──────────────────
