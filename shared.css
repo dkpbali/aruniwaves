@@ -1073,6 +1073,9 @@ body.keyboard-open .more-drawer { display: none !important; }
   background: var(--ink2);
   border-color: var(--border2);
 }
+.theme-toggle-btn * {
+  pointer-events: none;
+}
 .theme-toggle-btn svg {
   stroke: var(--text);
   width: 14px;
@@ -1112,3 +1115,13 @@ html.dark .toast.success { background: #064e3b !important; color: #34d399 !impor
 html.dark .toast.error   { background: #7f1d1d !important; color: #f87171 !important; border-color: rgba(248, 113, 113, 0.2) !important; }
 html.dark .toast.info    { background: #1e3a8a !important; color: #60a5fa !important; border-color: rgba(96, 165, 250, 0.2) !important; }
 html.dark .toast.warning { background: #78350f !important; color: #fbbf24 !important; border-color: rgba(251, 191, 36, 0.2) !important; }
+
+/* ── GLOBAL DARK MODE CARD OVERRIDES ── */
+html.dark .form-card,
+html.dark .bbm-status-card,
+html.dark .status-card,
+html.dark .info-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
