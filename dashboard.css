@@ -2028,7 +2028,7 @@ body.keyboard-open .more-drawer{display:none !important}
 }
 
 /* ── STYLES FROM DASHBOARD/DASHBOARD_EWS/VERIFIKASI.HTML ── */
-.card {
+.auth-card {
   background: rgba(255,255,255,0.03);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border);
