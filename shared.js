@@ -293,3 +293,85 @@ window.confirmPromise = function(msg) {
     window.showConfirm(msg, () => resolve(true), () => resolve(false));
   });
 };
+
+
+let isProcessingQueue = false;
+
+window.processOfflineQueue = async function() {
+  if (isProcessingQueue || !navigator.onLine) return;
+  
+  const queue = JSON.parse(localStorage.getItem('aruni_offline_queue') || '[]');
+  if (queue.length === 0) return;
+
+  isProcessingQueue = true;
+  window.showToast(`Menghubungkan kembali... Mengirim ${queue.length} antrean data offline...`, 'info');
+
+  const remaining = [];
+  let successCount = 0;
+
+  for (const item of queue) {
+    try {
+      const res = await fetch(item.url, {
+        method: "POST",
+        body: JSON.stringify(item.payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        successCount++;
+        window.showToast(`${item.label} berhasil terkirim secara otomatis!`, 'success');
+      } else {
+        console.error("Server returned error for offline item:", data);
+        remaining.push(item);
+      }
+    } catch (err) {
+      console.error("Failed to send offline item, keeping in queue:", err);
+      remaining.push(item);
+    }
+  }
+
+  localStorage.setItem('aruni_offline_queue', JSON.stringify(remaining));
+  isProcessingQueue = false;
+
+  if (successCount > 0) {
+    if (typeof loadAktivitasTerkini === 'function') {
+      setTimeout(() => loadAktivitasTerkini(), 1000);
+    }
+  }
+};
+
+window.submitFormOfflineCapable = async function(url, payload, label) {
+  if (navigator.onLine) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.warn("Network error during active connection, saving to offline queue...", err);
+    }
+  }
+
+  const queue = JSON.parse(localStorage.getItem('aruni_offline_queue') || '[]');
+  const queueItem = {
+    id: Date.now() + Math.random().toString(36).substr(2, 5),
+    url,
+    payload,
+    timestamp: Date.now(),
+    label
+  };
+  queue.push(queueItem);
+  localStorage.setItem('aruni_offline_queue', JSON.stringify(queue));
+
+  window.showToast(`Koneksi internet terputus. ${label} telah disimpan di antrean HP Anda. Akan otomatis terkirim begitu Anda online!`, 'warning');
+  
+  return { success: true, is_offline_queued: true, ticket_id: "DEMO-OFFLINE", konten_id: "DEMO-OFFLINE", booking_id: "DEMO-OFFLINE" };
+};
+
+window.addEventListener('online', window.processOfflineQueue);
+document.addEventListener('DOMContentLoaded', () => {
+  if (navigator.onLine) {
+    setTimeout(window.processOfflineQueue, 2000);
+  }
+});

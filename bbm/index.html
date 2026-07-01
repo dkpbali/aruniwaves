@@ -820,12 +820,14 @@ async function submitFormBbm(event) {
       }
       window.location.href = "../index.html?actTab=bbm";
     } else {
-      const res = await fetch(CFG.APPS_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
+      const json = await submitFormOfflineCapable(CFG.APPS_SCRIPT_URL, payload, "Permohonan BBM");
       if (json.success) {
+        if (json.is_offline_queued) {
+          resetForm();
+          editingBbmId = null;
+          window.location.href = "../index.html?actTab=bbm";
+          return;
+        }
         if (editingBbmId) {
           alert("Permohonan BBM berhasil diperbarui!");
         } else {
@@ -1513,12 +1515,12 @@ async function submitBbmReport(e) {
       closeReportModal();
       loadBbmLaporan();
     } else {
-      const res = await fetch(CFG.APPS_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
+      const json = await submitFormOfflineCapable(CFG.APPS_SCRIPT_URL, payload, "Laporan Pertanggungjawaban BBM");
       if (json.success) {
+        if (json.is_offline_queued) {
+          closeReportModal();
+          return;
+        }
         showToast("Laporan pertanggungjawaban BBM berhasil disimpan!");
         closeReportModal();
         allBbm = [];

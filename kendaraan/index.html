@@ -739,12 +739,15 @@ async function submitForm(e) {
   };
   
   try {
-    const res = await fetch(CFG.APPS_SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    const json = await res.json();
+    const json = await submitFormOfflineCapable(CFG.APPS_SCRIPT_URL, payload, "Peminjaman Kendaraan");
     if (json.success) {
+      if (json.is_offline_queued) {
+        document.getElementById("form-container").style.display = "none";
+        document.getElementById("result-ba-id").textContent = "BA-OFFLINE";
+        document.getElementById("success-screen").style.display = "block";
+        window.scrollTo(0, 0);
+        return;
+      }
       if (json.ba_error) {
         alert("Peringatan: Dokumen BA gagal dibuat secara otomatis.\nDetail Error: " + json.ba_error + "\n\nPermohonan tetap terdaftar di spreadsheet, tetapi tautan dokumen BA kosong.");
       }

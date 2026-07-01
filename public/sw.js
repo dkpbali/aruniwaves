@@ -95,7 +95,7 @@ self.addEventListener("fetch", event => {
           return caches.match(event.request, { ignoreSearch: true }).then(cached => {
             if (cached) return cached;
             // Offline fallback
-            return caches.match("index.html", { ignoreSearch: true });
+            return caches.match("offline.html", { ignoreSearch: true });
           });
         })
     );

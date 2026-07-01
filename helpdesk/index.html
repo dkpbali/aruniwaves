@@ -625,11 +625,12 @@ async function submitLaporan(e) {
       }
       return;
     }
-    const res  = await fetch(CFG.APPS_SCRIPT_URL, {
-      method: "POST", body: JSON.stringify(payload),
-    });
-    const data = await res.json();
+    const data = await submitFormOfflineCapable(CFG.APPS_SCRIPT_URL, payload, "Laporan Helpdesk");
     if (data.success) {
+      if (data.is_offline_queued) {
+        window.location.href = "../index.html?actTab=helpdesk";
+        return;
+      }
       if (editingHelpdeskId) {
         alert("Perubahan berhasil disimpan!");
         window.location.href = "../index.html?actTab=helpdesk";
