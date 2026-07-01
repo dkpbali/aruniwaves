@@ -392,7 +392,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Aset</span>
-                <span class="app-badge badge-new" id="badge-aset">Memuat...</span>
+                
               </div>
               <div class="app-desc">Kelola & tracking aset kantor dengan QR Code.</div>
             </div>
@@ -404,7 +404,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Helpdesk</span>
-                <span class="app-badge badge-count" id="badge-helpdesk">Memuat...</span>
+                
               </div>
               <div class="app-desc">Laporan kerusakan barang &amp; perangkat kantor.</div>
             </div>
@@ -416,7 +416,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Ruang Rapat</span>
-                <span class="app-badge badge-count" id="badge-rapat">Memuat...</span>
+                
               </div>
               <div class="app-desc">Booking ruang rapat dan ruang khusus.</div>
             </div>
@@ -428,7 +428,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Humas</span>
-                <span class="app-badge badge-new" id="badge-humas">Memuat...</span>
+                
               </div>
               <div class="app-desc">Pendataan kontribusi konten media sosial.</div>
             </div>
@@ -442,7 +442,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Form BBM</span>
-                <span class="app-badge badge-count" id="badge-bbm">Memuat...</span>
+                
               </div>
               <div class="app-desc">Formulir pengisian BBM operasional tugas lapangan.</div>
             </div>
@@ -454,7 +454,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
             <div class="app-content">
               <div class="app-header-row">
                 <span class="app-name">Pinjam Kendaraan</span>
-                <span class="app-badge badge-count" id="badge-kendaraan">Memuat...</span>
+                
               </div>
               <div class="app-desc">Peminjaman kendaraan dinas Sekretariat untuk dinas & pribadi.</div>
             </div>
@@ -879,44 +879,13 @@ function formatShortDate(dateStr) {
   return `${parseInt(day, 10)} ${mName}${timeFormatted}`;
 }
 
-// ── Load Stats ──────────────────────────────
+// ── Load Stats (Disabled for Performance & Reliability) ──────────────────────────────
 async function loadStats() {
-  let rData = { success: false, helpdesk: [], booking: [], aset: [], bbm: [] };
-  try {
-    const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHomepageData`);
-    rData = await res.json();
-  } catch(e) { console.error("Homepage batch fetch error:", e); }
-
-  try {
-    const success = rData.success;
-    const hdData = rData.helpdesk || [];
-    const bkData = rData.booking || [];
-    const asData = rData.aset || [];
-    const bbmData = rData.bbm || [];
-
-    const tiketOpen      = success ? hdData.filter(t => t.status.toUpperCase() === "OPEN").length : 0;
-    const bookingPending = success ? bkData.filter(b => b.status.toUpperCase() === "OPEN").length : 0;
-    const totalAset      = success ? asData.length : 0;
-    const bbmPending     = success ? bbmData.filter(b => b.status.toUpperCase() === "OPEN").length : 0;
-
-    const kdrData = rData.kendaraan || [];
-const kdrPending = success ? kdrData.filter(k => k.status.toUpperCase() === "OPEN").length : 0;
-updateStats({ aset: totalAset, tiketOpen, bookingPending, bbmPending, kdrPending });
-    
-  } catch (err) {
-    console.error("loadStats processing error:", err);
-    updateStats({ aset: 0, tiketOpen: 0, bookingPending: 0, bbmPending: 0, kdrPending: 0 });
-    
-  }
+  // Disabled to increase performance and eliminate dynamic status badges errors
 }
 
-function updateStats({ aset, tiketOpen, bookingPending, bbmPending, kdrPending }) {
-  document.getElementById("badge-aset").textContent      = `${aset} aset`;
-  document.getElementById("badge-helpdesk").textContent  = tiketOpen > 0 ? `${tiketOpen} open` : "Semua clear";
-  document.getElementById("badge-rapat").textContent     = bookingPending > 0 ? `${bookingPending} pending` : "Tersedia";
-  document.getElementById("badge-humas").textContent     = "Submit konten";
-  document.getElementById("badge-bbm").textContent       = bbmPending > 0 ? `${bbmPending} pending` : "Semua clear";
-if (document.getElementById("badge-kendaraan")) document.getElementById("badge-kendaraan").textContent = (kdrPending || 0) > 0 ? `${kdrPending} pending` : "Semua clear";
+function updateStats() {
+  // Disabled to increase performance and eliminate dynamic status badges errors
 }
 
 // ── 3-Tab Aktivitas Terkini ───────────────────
