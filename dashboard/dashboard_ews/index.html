@@ -76,8 +76,8 @@
     </div>
     <canvas id="hero-waves" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
     <div class="sky-decor">
-      <div class="cloud cloud-1"></div>
-      <div class="cloud cloud-2"></div>
+
+
       <div class="bird bird-1"><svg viewBox="0 0 24 24"><path class="bird-wings" d="M2 12 C 6 6, 12 12, 12 12 C 12 12, 18 6, 22 12" /></svg></div>
       <div class="bird bird-2"><svg viewBox="0 0 24 24"><path class="bird-wings" d="M2 12 C 6 6, 12 12, 12 12 C 12 12, 18 6, 22 12" /></svg></div>
     </div>
@@ -1052,7 +1052,7 @@ function renderHumasStats(allKonten) {
           <span style="font-size:10px;font-family:var(--mono);font-weight:700;">${badgeText}</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:12px;">
-          ${uniqueRecs.map(r => `<div style="background:rgba(255,255,255,0.65);padding:10px 12px;border-radius:10px;border:1px solid ${borderColor};"><div style="font-weight:700;color:var(--text);margin-bottom:2px;">${r.title}</div><div style="color:var(--muted);font-size:11px;line-height:1.45;">${r.text}</div></div>`).join("")}
+          ${uniqueRecs.map(r => `<div style="background:var(--card);padding:10px 12px;border-radius:10px;border:1px solid ${borderColor};"><div style="font-weight:700;color:var(--text);margin-bottom:2px;">${r.title}</div><div style="color:var(--muted);font-size:11px;line-height:1.45;">${r.text}</div></div>`).join("")}
         </div>
       </div>`;
   }
@@ -1262,17 +1262,17 @@ function showSingleRecommendationModal(recTitle, recText, recHumas) {
       </p>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
-        <div style="background: rgba(220,38,38,0.02); padding: 16px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--red);">
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+        <div style="background: rgba(220, 38, 38, 0.05); padding: 18px; border-radius: 12px; border: 1px solid rgba(220, 38, 38, 0.12); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
             <span style="font-size: 14px;">🚨</span>
-            <strong style="color: var(--red); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--sans);">Tindakan Lapangan DKP</strong>
+            <strong style="color: var(--red, #dc2626); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--sans);">Tindakan Lapangan DKP</strong>
           </div>
           <span style="color: var(--text); font-size: 13.5px; line-height: 1.55; display: block;">${recText}</span>
         </div>
-        <div style="background: rgba(0,119,230,0.02); padding: 16px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--wave);">
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+        <div style="background: rgba(0, 119, 182, 0.05); padding: 18px; border-radius: 12px; border: 1px solid rgba(0, 119, 182, 0.12); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
             <span style="font-size: 14px;">📢</span>
-            <strong style="color: var(--wave); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--sans);">Publikasi Humas DKP</strong>
+            <strong style="color: var(--wave, #0077b6); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--sans);">Publikasi Humas DKP</strong>
           </div>
           <span style="color: var(--text); font-size: 13.5px; line-height: 1.55; display: block;">${recHumas}</span>
         </div>
