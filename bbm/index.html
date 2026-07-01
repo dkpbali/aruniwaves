@@ -19,16 +19,7 @@
 /* ── bbm/index.html — Module-specific styles only ── */
 
 
-/* ── FORM CARD WRAPPER ── */
-.form-card{
-  background:transparent;
-  border:none;
-  padding:0;
-  box-shadow:none;
-  backdrop-filter:none;-webkit-backdrop-filter:none;
-  max-width:640px;
-  margin:0 auto;
-}
+
 
 /* Tab Section display toggling */
 .section {
@@ -309,8 +300,7 @@
   </div>
 
   <div id="section-form" class="section active">
-    <div class="form-card">
-      <form id="bbm-form" onsubmit="submitFormBbm(event)">
+      <form id="bbm-form" onsubmit="submitFormBbm(event)" style="max-width: 640px; margin: 0 auto; padding: 0 16px;">
       <div class="form-grid">
 
       <!-- NAMA PENERIMA / PEGAWAI -->
@@ -423,9 +413,7 @@
 
       </form>
     </div>
-  </div>
-
-</main>
+  </main>
 
 <nav class="bottom-nav">
   <a class="nav-item" href="../aset/index.html">
