@@ -77,11 +77,9 @@
   </div>
 
   <!-- Segmented Tab Control (2 Tabs) -->
-  <div class="tabs-control-wrapper">
-    <div class="tabs-control">
-      <button class="tab-btn active" onclick="switchTab('kendaraan')">🚗 Kendaraan</button>
-      <button class="tab-btn" onclick="switchTab('bbm')">⛽ Monitoring BBM</button>
-    </div>
+  <div class="ews-tabs" style="margin-bottom: 20px;">
+    <button class="ews-tab active" onclick="switchTab('kendaraan')">🚗 Kendaraan</button>
+    <button class="ews-tab" onclick="switchTab('bbm')">⛽ Monitoring BBM</button>
   </div>
 
   <!-- =============================== -->
@@ -437,11 +435,11 @@ function switchTab(tabName) {
   $("panel-kendaraan").style.display = "none";
   $("panel-bbm").style.display = "none";
   
-  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".ews-tab").forEach(btn => btn.classList.remove("active"));
   
   if (tabName === "kendaraan") {
     $("panel-kendaraan").style.display = "block";
-    document.querySelector('.tab-btn[onclick="switchTab(\'kendaraan\')"]').classList.add("active");
+    document.querySelector('.ews-tab[onclick="switchTab(\'kendaraan\')"]').classList.add("active");
     renderVehicles();
     
     $("hero-eyebrow").textContent = "MONITORING ARMADA & JATUH TEMPO";
@@ -449,7 +447,7 @@ function switchTab(tabName) {
     $("hero-subtitle").textContent = "Informasi lengkap kendaraan dinas operasional Sekretariat, estimasi jadwal service, jatuh tempo Pajak/STNK.";
   } else if (tabName === "bbm") {
     $("panel-bbm").style.display = "block";
-    document.querySelector('.tab-btn[onclick="switchTab(\'bbm\')"]').classList.add("active");
+    document.querySelector('.ews-tab[onclick="switchTab(\'bbm\')"]').classList.add("active");
     renderDashboard();
     
     $("hero-eyebrow").textContent = "ANALIS KONSUMSI BBM";

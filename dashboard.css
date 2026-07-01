@@ -2309,3 +2309,33 @@ html.dark .ekspor-insight-card {
   border-color: rgba(59, 130, 246, 0.2) !important;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
 }
+
+/* ── KENDARAAN ACCORDION & SELECT DARK OVERRIDES ── */
+html.dark .bidang-accordion-item {
+  background: var(--ink2) !important;
+  border-color: var(--border) !important;
+}
+html.dark .bidang-accordion-header {
+  background: rgba(30, 41, 59, 0.4) !important;
+}
+html.dark .bidang-accordion-header:hover {
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+html.dark .bidang-accordion-body {
+  background: rgba(15, 23, 42, 0.3) !important;
+  border-top-color: var(--border) !important;
+}
+html.dark .bidang-detail-table th {
+  background: rgba(30, 41, 59, 0.6) !important;
+  color: var(--text) !important;
+  border-bottom-color: var(--border) !important;
+}
+html.dark .bidang-detail-table td {
+  border-bottom-color: var(--border) !important;
+  color: var(--text) !important;
+}
+html.dark select.filter-control,
+html.dark select.filter-control option {
+  background-color: var(--ink2) !important;
+  color: var(--text) !important;
+}
