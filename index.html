@@ -71,26 +71,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
 
 /* ── SKY DECORATIONS (clouds & birds) ── */
 .sky-decor { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-.cloud {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 99px;
-  filter: blur(2px);
-  animation: drift 35s linear infinite;
-}
-.cloud::before, .cloud::after {
-  content: '';
-  position: absolute;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-}
-.cloud-1 { width: 50px; height: 16px; top: 15%; left: -60px; animation-delay: 0s; }
-.cloud-1::before { width: 24px; height: 24px; top: -12px; left: 8px; }
-.cloud-1::after  { width: 20px; height: 20px; top: -8px;  left: 22px; }
-.cloud-2 { width: 70px; height: 20px; top: 35%; left: -80px; animation-duration: 45s; animation-delay: -15s; opacity: 0.6; }
-.cloud-2::before { width: 32px; height: 32px; top: -16px; left: 10px; }
-.cloud-2::after  { width: 24px; height: 24px; top: -10px; left: 30px; }
-@keyframes drift { from { left: -80px; } to { left: 100%; } }
+
 
 .bird { position: absolute; width: 14px; height: 10px; color: rgba(0, 85, 170, 0.2); animation: fly 22s linear infinite; }
 .bird-1 { top: 12%; left: -20px; animation-delay: 4s; }
@@ -362,8 +343,8 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
         </div>
         <div class="sky-decor">
         
-          <div class="cloud cloud-1"></div>
-          <div class="cloud cloud-2"></div>
+          
+          
           <div class="bird bird-1">
             <svg viewBox="0 0 24 24">
               <path class="bird-wings" d="M2 12 C 6 6, 12 12, 12 12 C 12 12, 18 6, 22 12" />
